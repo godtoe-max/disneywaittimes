@@ -2743,10 +2743,13 @@ function updateAlertsCountBadge() {
 
 function playChimeSound() {
   try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    if (!audioCtx || audioCtx.state === 'suspended') {
-      audioCtx = new AudioContext();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioCtx) {
+      audioCtx = new AudioContextClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
     }
     
     // Pleasant 3-tone arpeggio (C5 -> E5 -> G5)
@@ -2761,7 +2764,7 @@ function playChimeSound() {
       osc.frequency.setValueAtTime(freq, now + idx * 0.12);
       
       gain.gain.setValueAtTime(0, now + idx * 0.12);
-      gain.gain.linearRampToValueAtTime(0.18, now + idx * 0.12 + 0.03);
+      gain.gain.linearRampToValueAtTime(0.22, now + idx * 0.12 + 0.03);
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.4);
       
       osc.connect(gain);
@@ -3318,15 +3321,19 @@ function renderSettingsActiveAlertsList() {
       `;
     } else {
       // Ride Wait Alert
-      const liveRide = state.rides.find((r) => r.id === alert.ride_id);
+      const liveRide = (state.rides || []).find((r) =>
+        String(r.id) === String(alert.ride_id) ||
+        Number(r.id) === Number(alert.ride_id) ||
+        (alert.ride_name && r.name && r.name.toLowerCase().trim() === alert.ride_name.toLowerCase().trim())
+      );
       const liveWait = liveRide ? (liveRide.is_open ? `${liveRide.wait_time} min` : 'Closed') : '--';
-      const isUnderThreshold = liveRide && liveRide.is_open && liveRide.wait_time <= alert.threshold;
+      const isUnderThreshold = liveRide && liveRide.is_open && Number(liveRide.wait_time) <= Number(alert.threshold);
 
       return `
         <div class="active-alert-item ${isUnderThreshold ? 'goal-met' : ''}" data-alert-id="${alert.id}">
           <div class="alert-item-info">
             <span class="alert-item-title">🎢 ${escapeHtml(alert.ride_name)}</span>
-            <span class="alert-item-meta">🏰 ${escapeHtml(alert.park_name)} • Live Standby: <strong class="${isUnderThreshold ? 'text-success' : 'text-cyan'}">${liveWait}</strong></span>
+            <span class="alert-item-meta">🏰 ${escapeHtml(alert.park_name)} • Live Standby: <strong class="${isUnderThreshold ? 'text-success font-bold' : 'text-cyan'}">${liveWait}</strong></span>
             <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px; flex-wrap:wrap;">
               <span class="alert-item-threshold-pill">🎯 Goal: &le; ${alert.threshold} min</span>
               ${isUnderThreshold 
@@ -3357,7 +3364,7 @@ function evaluateAlerts() {
 
     if (alert.type === 'park_crowd') {
       // Evaluate Park Crowd Alert
-      const park = state.parks.find((p) => p.id === alert.park_id);
+      const park = (state.parks || []).find((p) => String(p.id) === String(alert.park_id) || Number(p.id) === Number(alert.park_id));
       if (!park || !park.crowd_level) return;
 
       const currentLevel = park.crowd_level.level || 'normal';
@@ -3368,7 +3375,8 @@ function evaluateAlerts() {
         if (alert.last_notified_level !== currentLevel) {
           sendPushNotification(
             `🏰 Crowd Alert: ${park.name}!`,
-            `Great news! ${park.name} has dropped to ${park.crowd_level.badge_text} with an average wait of only ${park.avg_wait_time} mins!`
+            `Great news! ${park.name} has dropped to ${park.crowd_level.badge_text} with an average wait of only ${park.avg_wait_time} mins!`,
+            { parkId: park.id }
           );
           alert.last_notified_level = currentLevel;
           alert.last_notified_at = new Date().toISOString();
@@ -3383,20 +3391,30 @@ function evaluateAlerts() {
       }
     } else {
       // Evaluate Ride Wait Drop Alert
-      const ride = state.rides.find((r) => r.id === alert.ride_id);
+      const ride = (state.rides || []).find((r) =>
+        String(r.id) === String(alert.ride_id) ||
+        Number(r.id) === Number(alert.ride_id) ||
+        (alert.ride_name && r.name && r.name.toLowerCase().trim() === alert.ride_name.toLowerCase().trim())
+      );
       if (!ride) return;
 
-      if (ride.is_open && ride.wait_time <= alert.threshold) {
-        if (alert.last_notified_wait !== ride.wait_time) {
+      const isOpen = Boolean(ride.is_open);
+      const waitTime = Number(ride.wait_time) || 0;
+      const targetThreshold = Number(alert.threshold) || 30;
+
+      // Check threshold drop condition
+      if (isOpen && waitTime <= targetThreshold) {
+        if (alert.last_notified_wait !== waitTime) {
           sendPushNotification(
             `🔔 Wait Dropped: ${ride.name}!`,
-            `Standby line is down to ${ride.wait_time} mins (Target: ≤ ${alert.threshold}m) at ${ride.park_name}! Head over now! 🚀`
+            `Standby line is down to ${waitTime} min (Goal: ≤ ${targetThreshold}m) at ${ride.park_name}! Head over now! 🚀`,
+            { rideId: ride.id }
           );
-          alert.last_notified_wait = ride.wait_time;
+          alert.last_notified_wait = waitTime;
           alert.last_notified_at = new Date().toISOString();
           stateModified = true;
         }
-      } else if (ride.is_open && ride.wait_time > alert.threshold) {
+      } else if (isOpen && waitTime > targetThreshold) {
         if (alert.last_notified_wait !== null) {
           alert.last_notified_wait = null;
           stateModified = true;
@@ -3404,14 +3422,15 @@ function evaluateAlerts() {
       }
 
       // Reopening alert
-      if (alert.notify_reopen && alert.was_down && ride.is_open) {
+      if (alert.notify_reopen && alert.was_down && isOpen) {
         sendPushNotification(
           `✨ Reopened: ${ride.name}!`,
-          `${ride.name} is back up and running with a ${ride.wait_time} min wait at ${ride.park_name}!`
+          `${ride.name} is back up and running with a ${waitTime} min wait at ${ride.park_name}!`,
+          { rideId: ride.id }
         );
         alert.was_down = false;
         stateModified = true;
-      } else if (!ride.is_open) {
+      } else if (!isOpen) {
         alert.was_down = true;
       }
     }
