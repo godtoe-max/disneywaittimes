@@ -2449,3 +2449,216 @@ body {
   transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   TAB 5: Settings & Alert Center Styles
+   ========================================================================== */
+.settings-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .settings-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-box {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: var(--transition-fast);
+}
+
+.settings-box:hover {
+  border-color: rgba(26, 115, 232, 0.4);
+  box-shadow: var(--shadow-md);
+}
+
+.settings-box-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.box-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.bg-blue-subtle {
+  background: var(--blue-light);
+}
+
+.bg-gold-subtle {
+  background: var(--sun-light);
+}
+
+.settings-box-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.settings-box-desc {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+@media (max-width: 580px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+.form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.settings-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.settings-live-stat-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 0.88rem;
+}
+
+.settings-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slider-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+/* Crowd Target Selector */
+.crowd-target-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crowd-target-chip {
+  background: var(--bg-surface-soft);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition-fast);
+}
+
+.crowd-target-chip:hover {
+  border-color: var(--blue-primary);
+  background: #ffffff;
+}
+
+.crowd-target-chip.active {
+  border-color: var(--blue-primary);
+  background: var(--blue-light);
+  box-shadow: var(--shadow-xs);
+}
+
+.crowd-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-empty { background-color: #10b981; }
+.dot-light { background-color: #3b82f6; }
+.dot-normal { background-color: #f59e0b; }
+
+.crowd-target-chip div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.crowd-target-chip small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+

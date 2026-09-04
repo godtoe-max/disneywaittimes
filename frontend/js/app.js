@@ -413,9 +413,13 @@ function initEventListeners() {
     });
   });
 
-  // Wait Time Alerts: Modal Triggers & Controls
+  // Wait Time Alerts: Header button opens Settings Tab directly
   const alertsDrawerBtn = document.getElementById('alertsDrawerBtn');
-  if (alertsDrawerBtn) alertsDrawerBtn.addEventListener('click', openActiveAlertsModal);
+  if (alertsDrawerBtn) {
+    alertsDrawerBtn.addEventListener('click', () => {
+      switchTab('tab-settings');
+    });
+  }
 
   const closeAlertModalBtn = document.getElementById('closeAlertModalBtn');
   if (closeAlertModalBtn) closeAlertModalBtn.addEventListener('click', closeSetAlertModal);
@@ -435,7 +439,7 @@ function initEventListeners() {
   const testNotificationBtn = document.getElementById('testNotificationBtn');
   if (testNotificationBtn) testNotificationBtn.addEventListener('click', testNotification);
 
-  // Threshold slider live display update
+  // Modal Threshold slider live display update
   const thresholdSlider = document.getElementById('thresholdSlider');
   const thresholdDisplay = document.getElementById('thresholdDisplay');
   if (thresholdSlider) {
@@ -449,16 +453,19 @@ function initEventListeners() {
     });
   }
 
-  // Preset threshold chips
-  document.querySelectorAll('.preset-threshold-chip').forEach((chip) => {
+  // Modal Preset threshold chips
+  document.querySelectorAll('#alertModal .preset-threshold-chip').forEach((chip) => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('.preset-threshold-chip').forEach((c) => c.classList.remove('active'));
+      document.querySelectorAll('#alertModal .preset-threshold-chip').forEach((c) => c.classList.remove('active'));
       chip.classList.add('active');
       const val = parseInt(chip.getAttribute('data-threshold'), 10);
       if (thresholdSlider) thresholdSlider.value = val;
       if (thresholdDisplay) thresholdDisplay.textContent = `${val} mins`;
     });
   });
+
+  // Settings Tab: Controls & Event Handlers
+  initSettingsTabListeners();
 
   // Close modals on background overlay click
   document.querySelectorAll('.modal-overlay').forEach((overlay) => {
@@ -496,6 +503,9 @@ function switchTab(tabId) {
   }
   if (tabId === 'tab-recommendations') {
     renderRecommendations();
+  }
+  if (tabId === 'tab-settings') {
+    renderSettingsTab();
   }
 
   // Scroll to top of tab view smoothly
@@ -2570,10 +2580,11 @@ function renderLeastBusyDays(data) {
 }
 
 /* ==========================================================================
-   Wait Time Alerts & Notifications System
+   Wait Time Alerts & Notifications System (Rides & Park Crowd Levels)
    ========================================================================== */
 const ALERTS_STORAGE_KEY = 'disney_wait_alerts';
 let audioCtx = null;
+let selectedSettingsCrowdTarget = 'empty';
 
 function loadAlertsFromStorage() {
   try {
@@ -2597,14 +2608,20 @@ function saveAlertsToStorage() {
     console.warn('Failed to save alerts to storage:', e);
   }
   updateAlertsCountBadge();
+  renderSettingsActiveAlertsList();
 }
 
 function updateAlertsCountBadge() {
-  const badge = document.getElementById('activeAlertsCountBadge');
-  if (badge) {
-    const activeCount = state.alerts.filter((a) => a.is_active !== false).length;
-    badge.textContent = activeCount;
-  }
+  const activeCount = (state.alerts || []).filter((a) => a.is_active !== false).length;
+  
+  const headerBadge = document.getElementById('activeAlertsCountBadge');
+  if (headerBadge) headerBadge.textContent = activeCount;
+
+  const settingsBadge = document.getElementById('settingsAlertsCountBadge');
+  if (settingsBadge) settingsBadge.textContent = activeCount;
+
+  const totalCountEl = document.getElementById('settingsTotalAlertsCount');
+  if (totalCountEl) totalCountEl.textContent = `${activeCount} Active Watcher${activeCount === 1 ? '' : 's'}`;
 }
 
 function playChimeSound() {
@@ -2702,6 +2719,424 @@ function sendPushNotification(title, body) {
   }
 }
 
+/* ==========================================================================
+   Tab 5: Settings & Alert Center Initialization & Logic
+   ========================================================================== */
+function initSettingsTabListeners() {
+  const parkSelect = document.getElementById('settingsParkSelect');
+  const rideSelect = document.getElementById('settingsRideSelect');
+  const slider = document.getElementById('settingsThresholdSlider');
+  const display = document.getElementById('settingsThresholdDisplay');
+  const saveRideBtn = document.getElementById('settingsSaveRideAlertBtn');
+
+  const crowdParkSelect = document.getElementById('settingsCrowdParkSelect');
+  const saveCrowdBtn = document.getElementById('settingsSaveCrowdAlertBtn');
+  const testBtn = document.getElementById('settingsTestChimeBtn');
+  const enablePushBtn = document.getElementById('settingsEnablePushBtn');
+
+  if (parkSelect) {
+    parkSelect.addEventListener('change', () => {
+      populateSettingsRidesDropdown(parseInt(parkSelect.value, 10));
+    });
+  }
+
+  if (rideSelect) {
+    rideSelect.addEventListener('change', () => {
+      updateSettingsSelectedRideInfo();
+    });
+  }
+
+  if (slider) {
+    slider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      if (display) display.textContent = `${val} mins`;
+      document.querySelectorAll('#settingsPresetChips .preset-threshold-chip').forEach((c) => {
+        const cVal = parseInt(c.getAttribute('data-threshold'), 10);
+        c.classList.toggle('active', cVal === val);
+      });
+    });
+  }
+
+  document.querySelectorAll('#settingsPresetChips .preset-threshold-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#settingsPresetChips .preset-threshold-chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      const val = parseInt(chip.getAttribute('data-threshold'), 10);
+      if (slider) slider.value = val;
+      if (display) display.textContent = `${val} mins`;
+    });
+  });
+
+  if (saveRideBtn) {
+    saveRideBtn.addEventListener('click', saveSettingsRideAlert);
+  }
+
+  // Crowd target chips
+  document.querySelectorAll('#settingsCrowdTargetSelector .crowd-target-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#settingsCrowdTargetSelector .crowd-target-chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      selectedSettingsCrowdTarget = chip.getAttribute('data-level');
+    });
+  });
+
+  if (crowdParkSelect) {
+    crowdParkSelect.addEventListener('change', () => {
+      updateSettingsSelectedParkCrowd();
+    });
+  }
+
+  if (saveCrowdBtn) {
+    saveCrowdBtn.addEventListener('click', saveSettingsCrowdAlert);
+  }
+
+  if (testBtn) {
+    testBtn.addEventListener('click', testNotification);
+  }
+
+  if (enablePushBtn) {
+    enablePushBtn.addEventListener('click', async () => {
+      const granted = await requestPushPermission();
+      if (granted) {
+        enablePushBtn.classList.add('hidden');
+        showToast('Push Notifications Active', 'You will now receive alerts directly on your device screen! ✨', '✅');
+      }
+    });
+  }
+}
+
+function renderSettingsTab() {
+  const parkSelect = document.getElementById('settingsParkSelect');
+  const parkId = parkSelect ? parseInt(parkSelect.value, 10) : 6;
+  populateSettingsRidesDropdown(parkId);
+  updateSettingsSelectedParkCrowd();
+  renderSettingsActiveAlertsList();
+
+  // Push notification permission button visibility
+  const enablePushBtn = document.getElementById('settingsEnablePushBtn');
+  if (enablePushBtn) {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      enablePushBtn.classList.remove('hidden');
+    } else {
+      enablePushBtn.classList.add('hidden');
+    }
+  }
+}
+
+function populateSettingsRidesDropdown(parkId = 6) {
+  const rideSelect = document.getElementById('settingsRideSelect');
+  if (!rideSelect) return;
+  rideSelect.innerHTML = '';
+
+  const parkRides = state.rides.filter((r) => r.park_id === parkId && r.is_ride !== false && isQueueRide(r.name));
+
+  if (parkRides.length === 0) {
+    rideSelect.innerHTML = '<option value="" disabled selected>No attractions found in this park</option>';
+    return;
+  }
+
+  parkRides.forEach((ride) => {
+    const opt = document.createElement('option');
+    opt.value = ride.id;
+    opt.textContent = `${ride.name} (${ride.is_open ? `${ride.wait_time}m` : 'Closed'})`;
+    rideSelect.appendChild(opt);
+  });
+
+  updateSettingsSelectedRideInfo();
+}
+
+function updateSettingsSelectedRideInfo() {
+  const rideSelect = document.getElementById('settingsRideSelect');
+  const waitValEl = document.getElementById('settingsSelectedRideWaitVal');
+  if (!rideSelect || !waitValEl) return;
+
+  const rideId = parseInt(rideSelect.value, 10);
+  const ride = state.rides.find((r) => r.id === rideId);
+
+  if (ride) {
+    if (ride.is_open) {
+      waitValEl.textContent = `${ride.wait_time} min standby`;
+      waitValEl.className = 'text-gold font-bold';
+    } else {
+      waitValEl.textContent = 'Closed (Down)';
+      waitValEl.className = 'text-danger font-bold';
+    }
+  } else {
+    waitValEl.textContent = '-- min';
+  }
+}
+
+function updateSettingsSelectedParkCrowd() {
+  const crowdParkSelect = document.getElementById('settingsCrowdParkSelect');
+  const crowdValEl = document.getElementById('settingsSelectedParkCrowdVal');
+  if (!crowdParkSelect || !crowdValEl) return;
+
+  const parkId = parseInt(crowdParkSelect.value, 10);
+  const park = state.parks.find((p) => p.id === parkId);
+
+  if (park && park.crowd_level) {
+    crowdValEl.className = `crowd-badge ${park.crowd_level.level}`;
+    crowdValEl.textContent = `${park.crowd_level.badge_text} (${park.avg_wait_time}m avg wait)`;
+  } else {
+    crowdValEl.textContent = '--';
+  }
+}
+
+async function saveSettingsRideAlert() {
+  const rideSelect = document.getElementById('settingsRideSelect');
+  if (!rideSelect || !rideSelect.value) return;
+
+  const rideId = parseInt(rideSelect.value, 10);
+  const ride = state.rides.find((r) => r.id === rideId);
+  if (!ride) return;
+
+  const slider = document.getElementById('settingsThresholdSlider');
+  const reopenCb = document.getElementById('settingsNotifyReopenCheckbox');
+  const threshold = slider ? parseInt(slider.value, 10) : 30;
+  const notifyReopen = reopenCb ? reopenCb.checked : true;
+
+  if ('Notification' in window && Notification.permission === 'default') {
+    await requestPushPermission();
+  }
+
+  const existingIdx = state.alerts.findIndex((a) => a.type === 'ride' && a.ride_id === ride.id);
+  const newAlert = {
+    id: existingIdx >= 0 ? state.alerts[existingIdx].id : `ride_alert_${Date.now()}`,
+    type: 'ride',
+    ride_id: ride.id,
+    ride_name: ride.name,
+    park_id: ride.park_id,
+    park_name: ride.park_name,
+    land_name: ride.land_name || 'General',
+    threshold: threshold,
+    notify_reopen: notifyReopen,
+    is_active: true,
+    last_notified_wait: null,
+    was_down: !ride.is_open,
+    created_at: new Date().toISOString(),
+  };
+
+  if (existingIdx >= 0) {
+    state.alerts[existingIdx] = newAlert;
+  } else {
+    state.alerts.push(newAlert);
+  }
+
+  saveAlertsToStorage();
+
+  showToast(
+    `🔔 Wait Alert Set: ${ride.name}`,
+    `You'll be alerted when wait drops to ≤ ${threshold}m${notifyReopen ? ' or reopens' : ''}!`,
+    '✅'
+  );
+  playChimeSound();
+}
+
+async function saveSettingsCrowdAlert() {
+  const crowdParkSelect = document.getElementById('settingsCrowdParkSelect');
+  if (!crowdParkSelect) return;
+
+  const parkId = parseInt(crowdParkSelect.value, 10);
+  const park = state.parks.find((p) => p.id === parkId);
+  if (!park) return;
+
+  const targetLevel = selectedSettingsCrowdTarget || 'empty';
+  const targetLabel = targetLevel === 'empty' ? 'Empty / Walk-on (<25m)' : (targetLevel === 'light' ? 'Light (<39m)' : 'Normal (<52m)');
+
+  if ('Notification' in window && Notification.permission === 'default') {
+    await requestPushPermission();
+  }
+
+  const existingIdx = state.alerts.findIndex((a) => a.type === 'park_crowd' && a.park_id === park.id);
+  const newAlert = {
+    id: existingIdx >= 0 ? state.alerts[existingIdx].id : `crowd_alert_${Date.now()}`,
+    type: 'park_crowd',
+    park_id: park.id,
+    park_name: park.name,
+    target_level: targetLevel,
+    target_label: targetLabel,
+    is_active: true,
+    last_notified_level: null,
+    created_at: new Date().toISOString(),
+  };
+
+  if (existingIdx >= 0) {
+    state.alerts[existingIdx] = newAlert;
+  } else {
+    state.alerts.push(newAlert);
+  }
+
+  saveAlertsToStorage();
+
+  showToast(
+    `🏰 Crowd Alert Set: ${park.name}`,
+    `You'll be alerted as soon as ${park.name} drops to ${targetLabel}!`,
+    '✅'
+  );
+  playChimeSound();
+}
+
+function renderSettingsActiveAlertsList() {
+  const container = document.getElementById('settingsActiveAlertsContainer');
+  if (!container) return;
+
+  if (!state.alerts || state.alerts.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="padding: 30px 20px; text-align: center; background:var(--bg-surface); border:1px dashed var(--border-subtle); border-radius:var(--radius-lg);">
+        <div class="empty-state-icon" style="font-size: 2.2rem; margin-bottom: 8px;">🔔</div>
+        <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">No Active Alerts Configured</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 400px; margin: 0 auto;">
+          Use the cards above to configure ride wait drops or park crowd level notifications.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = state.alerts.map((alert) => {
+    if (alert.type === 'park_crowd') {
+      const park = state.parks.find((p) => p.id === alert.park_id);
+      const currentCrowd = park ? (park.crowd_level ? park.crowd_level.badge_text : 'Normal') : '--';
+      const currentAvg = park ? `${park.avg_wait_time}m avg` : '';
+
+      return `
+        <div class="active-alert-item" data-alert-id="${alert.id}">
+          <div class="alert-item-info">
+            <span class="alert-item-title">🏰 ${escapeHtml(alert.park_name)} (Park Crowd Alert)</span>
+            <span class="alert-item-meta">Live Crowd: <strong class="text-cyan">${escapeHtml(currentCrowd)} (${currentAvg})</strong></span>
+            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
+              <span class="alert-item-threshold-pill" style="background:var(--sun-light); color:#b45309;">🎯 Target: ${escapeHtml(alert.target_label || alert.target_level)}</span>
+            </div>
+          </div>
+          <div class="alert-item-actions">
+            <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Delete Alert">🗑️ Remove</button>
+          </div>
+        </div>
+      `;
+    } else {
+      // Ride Wait Alert
+      const liveRide = state.rides.find((r) => r.id === alert.ride_id);
+      const liveWait = liveRide ? (liveRide.is_open ? `${liveRide.wait_time} min` : 'Closed') : '--';
+      const isUnderThreshold = liveRide && liveRide.is_open && liveRide.wait_time <= alert.threshold;
+
+      return `
+        <div class="active-alert-item" data-alert-id="${alert.id}">
+          <div class="alert-item-info">
+            <span class="alert-item-title">🎢 ${escapeHtml(alert.ride_name)}</span>
+            <span class="alert-item-meta">🏰 ${escapeHtml(alert.park_name)} • Live: <strong class="${isUnderThreshold ? 'text-success' : 'text-cyan'}">${liveWait}</strong></span>
+            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
+              <span class="alert-item-threshold-pill">🎯 Goal: &le; ${alert.threshold} min</span>
+              ${alert.notify_reopen ? '<span class="status-badge open" style="font-size:0.7rem; padding: 2px 6px;">✨ Reopen Alert</span>' : ''}
+            </div>
+          </div>
+          <div class="alert-item-actions">
+            <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Delete Alert">🗑️ Remove</button>
+          </div>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+function evaluateAlerts() {
+  if (!state.alerts || state.alerts.length === 0) return;
+
+  let stateModified = false;
+  const CROWD_RANK = { empty: 1, light: 2, normal: 3, busy: 4 };
+
+  state.alerts.forEach((alert) => {
+    if (alert.is_active === false) return;
+
+    if (alert.type === 'park_crowd') {
+      // Evaluate Park Crowd Alert
+      const park = state.parks.find((p) => p.id === alert.park_id);
+      if (!park || !park.crowd_level) return;
+
+      const currentLevel = park.crowd_level.level || 'normal';
+      const currentRank = CROWD_RANK[currentLevel] || 3;
+      const targetRank = CROWD_RANK[alert.target_level] || 1;
+
+      if (currentRank <= targetRank) {
+        if (alert.last_notified_level !== currentLevel) {
+          sendPushNotification(
+            `🏰 Crowd Alert: ${park.name}!`,
+            `Great news! ${park.name} has dropped to ${park.crowd_level.badge_text} with an average wait of only ${park.avg_wait_time} mins!`
+          );
+          alert.last_notified_level = currentLevel;
+          alert.last_notified_at = new Date().toISOString();
+          stateModified = true;
+        }
+      } else {
+        // Reset notification so future drop will trigger again
+        if (alert.last_notified_level !== null) {
+          alert.last_notified_level = null;
+          stateModified = true;
+        }
+      }
+    } else {
+      // Evaluate Ride Wait Drop Alert
+      const ride = state.rides.find((r) => r.id === alert.ride_id);
+      if (!ride) return;
+
+      if (ride.is_open && ride.wait_time <= alert.threshold) {
+        if (alert.last_notified_wait !== ride.wait_time) {
+          sendPushNotification(
+            `🔔 Wait Dropped: ${ride.name}!`,
+            `Standby line is down to ${ride.wait_time} mins (Target: ≤ ${alert.threshold}m) at ${ride.park_name}! Head over now! 🚀`
+          );
+          alert.last_notified_wait = ride.wait_time;
+          alert.last_notified_at = new Date().toISOString();
+          stateModified = true;
+        }
+      } else if (ride.is_open && ride.wait_time > alert.threshold) {
+        if (alert.last_notified_wait !== null) {
+          alert.last_notified_wait = null;
+          stateModified = true;
+        }
+      }
+
+      // Reopening alert
+      if (alert.notify_reopen && alert.was_down && ride.is_open) {
+        sendPushNotification(
+          `✨ Reopened: ${ride.name}!`,
+          `${ride.name} is back up and running with a ${ride.wait_time} min wait at ${ride.park_name}!`
+        );
+        alert.was_down = false;
+        stateModified = true;
+      } else if (!ride.is_open) {
+        alert.was_down = true;
+      }
+    }
+  });
+
+  if (stateModified) {
+    saveAlertsToStorage();
+  }
+}
+
+function testNotification() {
+  playChimeSound();
+  showToast('🔊 Test Notification Alert', 'Magical chime and alerts are working perfectly! ✨', '🔔');
+  if ('Notification' in window) {
+    if (Notification.permission === 'granted') {
+      new Notification('🏰 Disney Wait Alert Test', {
+        body: 'Alerts are working on your device! You will get notified when wait times or park crowd levels drop. ✨',
+        icon: 'https://emojicdn.elk.sh/🏰',
+      });
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((perm) => {
+        if (perm === 'granted') {
+          new Notification('🏰 Disney Wait Alert Test', {
+            body: 'Alerts are working on your device! You will get notified when wait times or park crowd levels drop. ✨',
+            icon: 'https://emojicdn.elk.sh/🏰',
+          });
+        }
+      });
+    }
+  }
+}
+
+// Quick modal helpers
 function openSetAlertModal(rideId) {
   const ride = state.rides.find((r) => r.id === Number(rideId));
   if (!ride) return;
@@ -2730,8 +3165,7 @@ function openSetAlertModal(rideId) {
     }
   }
 
-  // Check if there is an existing alert for this ride
-  const existingAlert = state.alerts.find((a) => a.ride_id === ride.id);
+  const existingAlert = state.alerts.find((a) => a.type === 'ride' && a.ride_id === ride.id);
   const defaultThreshold = existingAlert ? existingAlert.threshold : (ride.wait_time > 30 ? Math.min(60, Math.floor(ride.wait_time / 10) * 10 - 10) : 25);
   const finalThreshold = Math.max(5, defaultThreshold || 30);
 
@@ -2739,13 +3173,11 @@ function openSetAlertModal(rideId) {
   if (display) display.textContent = `${finalThreshold} mins`;
   if (reopenCb) reopenCb.checked = existingAlert ? existingAlert.notify_reopen !== false : true;
 
-  // Sync preset chip active states
-  document.querySelectorAll('.preset-threshold-chip').forEach((chip) => {
+  document.querySelectorAll('#alertModal .preset-threshold-chip').forEach((chip) => {
     const val = parseInt(chip.getAttribute('data-threshold'), 10);
     chip.classList.toggle('active', val === finalThreshold);
   });
 
-  // Check browser notification permission status
   if ('Notification' in window && Notification.permission !== 'granted') {
     if (noticeBox) noticeBox.classList.remove('hidden');
   } else {
@@ -2772,15 +3204,14 @@ async function saveCurrentAlert() {
   const threshold = slider ? parseInt(slider.value, 10) : 30;
   const notifyReopen = reopenCb ? reopenCb.checked : true;
 
-  // Request browser permission if needed
   if ('Notification' in window && Notification.permission === 'default') {
     await requestPushPermission();
   }
 
-  // Check if alert already exists for this ride
-  const existingIdx = state.alerts.findIndex((a) => a.ride_id === ride.id);
+  const existingIdx = state.alerts.findIndex((a) => a.type === 'ride' && a.ride_id === ride.id);
   const newAlert = {
-    id: existingIdx >= 0 ? state.alerts[existingIdx].id : `alert_${Date.now()}`,
+    id: existingIdx >= 0 ? state.alerts[existingIdx].id : `ride_alert_${Date.now()}`,
+    type: 'ride',
     ride_id: ride.id,
     ride_name: ride.name,
     park_id: ride.park_id,
@@ -2812,127 +3243,12 @@ async function saveCurrentAlert() {
 }
 
 function openActiveAlertsModal() {
-  const modal = document.getElementById('activeAlertsModal');
-  if (!modal) return;
-  renderActiveAlertsList();
-  modal.classList.remove('hidden');
+  switchTab('tab-settings');
 }
 
 function closeActiveAlertsModal() {
   const modal = document.getElementById('activeAlertsModal');
   if (modal) modal.classList.add('hidden');
-}
-
-function renderActiveAlertsList() {
-  const listContainer = document.getElementById('activeAlertsList');
-  if (!listContainer) return;
-
-  if (state.alerts.length === 0) {
-    listContainer.innerHTML = `
-      <div class="empty-state" style="padding: 30px 20px; text-align: center;">
-        <div class="empty-state-icon" style="font-size: 2.2rem; margin-bottom: 8px;">🔔</div>
-        <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">No Active Alerts</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 360px; margin: 0 auto;">
-          Click the 🔔 button on any attraction or recommendation card to set a wait time threshold alert.
-        </p>
-      </div>
-    `;
-    return;
-  }
-
-  listContainer.innerHTML = state.alerts.map((alert) => {
-    const liveRide = state.rides.find((r) => r.id === alert.ride_id);
-    const liveWait = liveRide ? (liveRide.is_open ? `${liveRide.wait_time} min` : 'Closed') : '--';
-    const isUnderThreshold = liveRide && liveRide.is_open && liveRide.wait_time <= alert.threshold;
-
-    return `
-      <div class="active-alert-item" data-alert-id="${alert.id}">
-        <div class="alert-item-info">
-          <span class="alert-item-title">${escapeHtml(alert.ride_name)}</span>
-          <span class="alert-item-meta">🏰 ${escapeHtml(alert.park_name)} • Live: <strong class="${isUnderThreshold ? 'text-success' : 'text-cyan'}">${liveWait}</strong></span>
-          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-            <span class="alert-item-threshold-pill">🎯 Goal: &le; ${alert.threshold} min</span>
-            ${alert.notify_reopen ? '<span class="status-badge open" style="font-size:0.7rem; padding: 2px 6px;">✨ Reopen Alert</span>' : ''}
-          </div>
-        </div>
-        <div class="alert-item-actions">
-          <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Delete Alert">🗑️ Remove</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function evaluateAlerts() {
-  if (!state.alerts || state.alerts.length === 0 || !state.rides || state.rides.length === 0) {
-    return;
-  }
-
-  let stateModified = false;
-
-  state.alerts.forEach((alert) => {
-    if (alert.is_active === false) return;
-
-    const ride = state.rides.find((r) => r.id === alert.ride_id);
-    if (!ride) return;
-
-    // Condition 1: Ride is operating and wait time is at or below threshold
-    if (ride.is_open && ride.wait_time <= alert.threshold) {
-      if (alert.last_notified_wait !== ride.wait_time) {
-        sendPushNotification(
-          `🔔 Wait Dropped: ${ride.name}!`,
-          `Standby line is down to ${ride.wait_time} mins (Target: ≤ ${alert.threshold}m) at ${ride.park_name}! Head over now! 🚀`
-        );
-        alert.last_notified_wait = ride.wait_time;
-        alert.last_notified_at = new Date().toISOString();
-        stateModified = true;
-      }
-    } else if (ride.is_open && ride.wait_time > alert.threshold) {
-      // If wait time rose back above threshold, reset last_notified_wait so next drop notifies again
-      if (alert.last_notified_wait !== null) {
-        alert.last_notified_wait = null;
-        stateModified = true;
-      }
-    }
-
-    // Condition 2: Ride reopened from downtime
-    if (alert.notify_reopen && alert.was_down && ride.is_open) {
-      sendPushNotification(
-        `✨ Reopened: ${ride.name}!`,
-        `${ride.name} is back up and running with a ${ride.wait_time} min wait at ${ride.park_name}!`
-      );
-      alert.was_down = false;
-      stateModified = true;
-    } else if (!ride.is_open) {
-      alert.was_down = true;
-    }
-  });
-
-  if (stateModified) {
-    saveAlertsToStorage();
-  }
-}
-
-function testNotification() {
-  playChimeSound();
-  showToast('🔊 Test Notification Alert', 'Magical chime and alerts are working perfectly! ✨', '🔔');
-  if ('Notification' in window) {
-    if (Notification.permission === 'granted') {
-      new Notification('🏰 Disney Wait Alert Test', {
-        body: 'Alerts are working on your device! You will get notified when wait times drop. ✨',
-        icon: 'https://emojicdn.elk.sh/🏰',
-      });
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then((perm) => {
-        if (perm === 'granted') {
-          new Notification('🏰 Disney Wait Alert Test', {
-            body: 'Alerts are working on your device! You will get notified when wait times drop. ✨',
-            icon: 'https://emojicdn.elk.sh/🏰',
-          });
-        }
-      });
-    }
-  }
 }
 
 // Global window helpers for inline onclick handlers
@@ -2943,7 +3259,7 @@ window.openSetAlertModal = function (rideId) {
 window.deleteAlert = function (alertId) {
   state.alerts = state.alerts.filter((a) => a.id !== alertId);
   saveAlertsToStorage();
-  renderActiveAlertsList();
 };
+
 
 
