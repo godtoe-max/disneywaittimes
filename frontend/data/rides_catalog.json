@@ -5,7 +5,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 829,
@@ -13,7 +14,8 @@
     "park_id": 5,
     "land_name": "World Showcase",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 2495,
@@ -21,7 +23,8 @@
     "park_id": 5,
     "land_name": "World Celebration",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 2679,
@@ -29,7 +32,8 @@
     "park_id": 5,
     "land_name": "World Showcase",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 466,
@@ -37,7 +41,8 @@
     "park_id": 5,
     "land_name": "World Showcase",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 10916,
@@ -45,7 +50,8 @@
     "park_id": 5,
     "land_name": "World Discovery",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 155,
@@ -53,7 +59,8 @@
     "park_id": 5,
     "land_name": "World Celebration",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 12387,
@@ -61,7 +68,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 156,
@@ -69,7 +77,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6701,
@@ -77,7 +86,8 @@
     "park_id": 5,
     "land_name": "World Showcase",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13627,
@@ -85,7 +95,8 @@
     "park_id": 5,
     "land_name": "World Celebration",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 158,
@@ -93,7 +104,8 @@
     "park_id": 5,
     "land_name": "World Discovery",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 10914,
@@ -101,7 +113,8 @@
     "park_id": 5,
     "land_name": "World Showcase",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 10915,
@@ -109,7 +122,8 @@
     "park_id": 5,
     "land_name": "World Showcase",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 13782,
@@ -117,7 +131,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 16467,
@@ -125,7 +140,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 159,
@@ -133,7 +149,8 @@
     "park_id": 5,
     "land_name": "World Celebration",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 160,
@@ -141,7 +158,8 @@
     "park_id": 5,
     "land_name": "World Discovery",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 10900,
@@ -149,7 +167,8 @@
     "park_id": 5,
     "land_name": "World Discovery",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 153,
@@ -157,7 +176,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 152,
@@ -165,7 +185,8 @@
     "park_id": 5,
     "land_name": "World Nature",
     "park_name": "EPCOT",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 133,
@@ -173,7 +194,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1184,
@@ -181,7 +203,8 @@
     "park_id": 6,
     "land_name": "Adventureland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 248,
@@ -189,7 +212,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 130,
@@ -197,7 +221,8 @@
     "park_id": 6,
     "land_name": "Frontierland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 131,
@@ -205,7 +230,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13764,
@@ -213,7 +239,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 13763,
@@ -221,7 +248,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1214,
@@ -229,7 +257,8 @@
     "park_id": 6,
     "land_name": "Frontierland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 132,
@@ -237,7 +266,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 128,
@@ -245,7 +275,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 140,
@@ -253,7 +284,8 @@
     "park_id": 6,
     "land_name": "Liberty Square",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 134,
@@ -261,7 +293,8 @@
     "park_id": 6,
     "land_name": "Adventureland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 135,
@@ -269,7 +302,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1188,
@@ -277,7 +311,8 @@
     "park_id": 6,
     "land_name": "Main Street, U.S.A.",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 147,
@@ -285,7 +320,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6700,
@@ -293,7 +329,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 144,
@@ -301,7 +338,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 145,
@@ -309,7 +347,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 17526,
@@ -317,7 +356,8 @@
     "park_id": 6,
     "land_name": "General",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 14928,
@@ -325,7 +365,8 @@
     "park_id": 6,
     "land_name": "Other",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 14927,
@@ -333,7 +374,8 @@
     "park_id": 6,
     "land_name": "Other",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 146,
@@ -341,7 +383,8 @@
     "park_id": 6,
     "land_name": "Main Street, U.S.A.",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6699,
@@ -349,7 +392,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 171,
@@ -357,7 +401,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 125,
@@ -365,7 +410,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 136,
@@ -373,7 +419,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 137,
@@ -381,7 +428,8 @@
     "park_id": 6,
     "land_name": "Adventureland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 161,
@@ -389,7 +437,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 129,
@@ -397,7 +446,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 138,
@@ -405,7 +455,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 355,
@@ -413,7 +464,8 @@
     "park_id": 6,
     "land_name": "Adventureland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 11527,
@@ -421,7 +473,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 126,
@@ -429,7 +482,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 356,
@@ -437,7 +491,8 @@
     "park_id": 6,
     "land_name": "Liberty Square",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 141,
@@ -445,7 +500,8 @@
     "park_id": 6,
     "land_name": "Adventureland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 142,
@@ -453,7 +509,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13630,
@@ -461,7 +518,8 @@
     "park_id": 6,
     "land_name": "Frontierland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 143,
@@ -469,7 +527,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1190,
@@ -477,7 +536,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 127,
@@ -485,7 +545,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1181,
@@ -493,7 +554,8 @@
     "park_id": 6,
     "land_name": "Fantasyland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1189,
@@ -501,7 +563,8 @@
     "park_id": 6,
     "land_name": "Main Street, U.S.A.",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 457,
@@ -509,7 +572,8 @@
     "park_id": 6,
     "land_name": "Tomorrowland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 334,
@@ -517,7 +581,8 @@
     "park_id": 6,
     "land_name": "Adventureland",
     "park_name": "Magic Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 5477,
@@ -525,7 +590,8 @@
     "park_id": 7,
     "land_name": "Toy Story Land",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1176,
@@ -533,7 +599,8 @@
     "park_id": 7,
     "land_name": "Sunset Boulevard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 16641,
@@ -541,7 +608,8 @@
     "park_id": 7,
     "land_name": "Animation Courtyard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 1174,
@@ -549,7 +617,8 @@
     "park_id": 7,
     "land_name": "Echo Lake",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6702,
@@ -557,7 +626,8 @@
     "park_id": 7,
     "land_name": "Echo Lake",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 12430,
@@ -565,7 +635,8 @@
     "park_id": 7,
     "land_name": "Animation Courtyard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6704,
@@ -573,7 +644,8 @@
     "park_id": 7,
     "land_name": "Commissary Lane",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 12425,
@@ -581,7 +653,8 @@
     "park_id": 7,
     "land_name": "Pixar Plaza",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6703,
@@ -589,7 +662,8 @@
     "park_id": 7,
     "land_name": "Echo Lake",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6361,
@@ -597,7 +671,8 @@
     "park_id": 7,
     "land_name": "Hollywood Boulevard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6368,
@@ -605,7 +680,8 @@
     "park_id": 7,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 10902,
@@ -613,7 +689,8 @@
     "park_id": 7,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 16343,
@@ -621,7 +698,8 @@
     "park_id": 7,
     "land_name": "Sunset Boulevard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 16342,
@@ -629,7 +707,8 @@
     "park_id": 7,
     "land_name": "Sunset Boulevard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 5476,
@@ -637,7 +716,8 @@
     "park_id": 7,
     "land_name": "Toy Story Land",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 120,
@@ -645,7 +725,8 @@
     "park_id": 7,
     "land_name": "Echo Lake",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 6369,
@@ -653,7 +734,8 @@
     "park_id": 7,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 14531,
@@ -661,7 +743,8 @@
     "park_id": 7,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 14859,
@@ -669,7 +752,8 @@
     "park_id": 7,
     "land_name": "Animation Courtyard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 123,
@@ -677,7 +761,8 @@
     "park_id": 7,
     "land_name": "Sunset Boulevard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 117,
@@ -685,7 +770,8 @@
     "park_id": 7,
     "land_name": "Pixar Plaza",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 7333,
@@ -693,7 +779,8 @@
     "park_id": 7,
     "land_name": "Echo Lake",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 5145,
@@ -701,7 +788,8 @@
     "park_id": 7,
     "land_name": "Animation Courtyard",
     "park_name": "Disney's Hollywood Studios",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13806,
@@ -709,7 +797,8 @@
     "park_id": 8,
     "land_name": "Conservation Station",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 4439,
@@ -717,7 +806,8 @@
     "park_id": 8,
     "land_name": "Pandora - The World of Avatar",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 16545,
@@ -725,7 +815,8 @@
     "park_id": 8,
     "land_name": "Conservation Station",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13811,
@@ -733,7 +824,8 @@
     "park_id": 8,
     "land_name": "Discovery Island",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 110,
@@ -741,7 +833,8 @@
     "park_id": 8,
     "land_name": "Asia",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 14533,
@@ -749,7 +842,8 @@
     "park_id": 8,
     "land_name": "Asia",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 10921,
@@ -757,7 +851,8 @@
     "park_id": 8,
     "land_name": "Asia",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 657,
@@ -765,7 +860,8 @@
     "park_id": 8,
     "land_name": "Africa",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 10920,
@@ -773,7 +869,8 @@
     "park_id": 8,
     "land_name": "Dinoland U.S.A",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 651,
@@ -781,7 +878,8 @@
     "park_id": 8,
     "land_name": "Africa",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": false
   },
   {
     "id": 112,
@@ -789,7 +887,8 @@
     "park_id": 8,
     "land_name": "Asia",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 113,
@@ -797,7 +896,8 @@
     "park_id": 8,
     "land_name": "Africa",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 116,
@@ -805,7 +905,8 @@
     "park_id": 8,
     "land_name": "Discovery Island",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 12451,
@@ -813,7 +914,8 @@
     "park_id": 8,
     "land_name": "Discovery Island",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 4438,
@@ -821,7 +923,8 @@
     "park_id": 8,
     "land_name": "Pandora - The World of Avatar",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13812,
@@ -829,7 +932,8 @@
     "park_id": 8,
     "land_name": "The Oasis",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13751,
@@ -837,7 +941,8 @@
     "park_id": 8,
     "land_name": "Discovery Island",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 13808,
@@ -845,7 +950,8 @@
     "park_id": 8,
     "land_name": "The Oasis",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 655,
@@ -853,7 +959,8 @@
     "park_id": 8,
     "land_name": "Africa",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 14943,
@@ -861,7 +968,8 @@
     "park_id": 8,
     "land_name": "Discovery Island",
     "park_name": "Disney's Animal Kingdom",
-    "resort": "Walt Disney World"
+    "resort": "Walt Disney World",
+    "is_ride": true
   },
   {
     "id": 307,
@@ -869,7 +977,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 12428,
@@ -877,7 +986,8 @@
     "park_id": 16,
     "land_name": "Adventureland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 285,
@@ -885,7 +995,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 287,
@@ -893,7 +1004,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 317,
@@ -901,7 +1013,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 323,
@@ -909,7 +1022,8 @@
     "park_id": 16,
     "land_name": "Frontierland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 16254,
@@ -917,7 +1031,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 273,
@@ -925,7 +1040,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 303,
@@ -933,7 +1049,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 324,
@@ -941,7 +1058,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 304,
@@ -949,7 +1067,8 @@
     "park_id": 16,
     "land_name": "Bayou Country",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 274,
@@ -957,7 +1076,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 674,
@@ -965,7 +1085,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 13814,
@@ -973,7 +1094,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 275,
@@ -981,7 +1103,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 276,
@@ -989,7 +1112,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 679,
@@ -997,7 +1121,8 @@
     "park_id": 16,
     "land_name": "Frontierland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 11980,
@@ -1005,7 +1130,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 690,
@@ -1013,7 +1139,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 325,
@@ -1021,7 +1148,8 @@
     "park_id": 16,
     "land_name": "New Orleans Square",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 326,
@@ -1029,7 +1157,8 @@
     "park_id": 16,
     "land_name": "Adventureland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 296,
@@ -1037,7 +1166,8 @@
     "park_id": 16,
     "land_name": "Adventureland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 277,
@@ -1045,7 +1175,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 278,
@@ -1053,7 +1184,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 686,
@@ -1061,7 +1193,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 691,
@@ -1069,7 +1202,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 456,
@@ -1077,7 +1211,8 @@
     "park_id": 16,
     "land_name": "Frontierland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 279,
@@ -1085,7 +1220,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 6711,
@@ -1093,7 +1229,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 11526,
@@ -1101,7 +1238,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 327,
@@ -1109,7 +1247,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 709,
@@ -1117,7 +1256,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 6339,
@@ -1125,7 +1265,8 @@
     "park_id": 16,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 10903,
@@ -1133,7 +1274,8 @@
     "park_id": 16,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 684,
@@ -1141,7 +1283,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 280,
@@ -1149,7 +1292,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 14915,
@@ -1157,7 +1301,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 281,
@@ -1165,7 +1310,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 282,
@@ -1173,7 +1319,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 331,
@@ -1181,7 +1328,8 @@
     "park_id": 16,
     "land_name": "Frontierland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 289,
@@ -1189,7 +1337,8 @@
     "park_id": 16,
     "land_name": "New Orleans Square",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 16627,
@@ -1197,7 +1346,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 332,
@@ -1205,7 +1355,8 @@
     "park_id": 16,
     "land_name": "Mickey's Toontown",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 328,
@@ -1213,7 +1364,8 @@
     "park_id": 16,
     "land_name": "Frontierland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 687,
@@ -1221,7 +1373,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 283,
@@ -1229,7 +1382,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 284,
@@ -1237,7 +1391,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 286,
@@ -1245,7 +1400,8 @@
     "park_id": 16,
     "land_name": "Tomorrowland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 6340,
@@ -1253,7 +1409,8 @@
     "park_id": 16,
     "land_name": "Star Wars: Galaxy's Edge",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 305,
@@ -1261,7 +1418,8 @@
     "park_id": 16,
     "land_name": "Fantasyland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 695,
@@ -1269,7 +1427,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 306,
@@ -1277,7 +1436,8 @@
     "park_id": 16,
     "land_name": "Bayou Country",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 14168,
@@ -1285,7 +1445,8 @@
     "park_id": 16,
     "land_name": "Bayou Country",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 14326,
@@ -1293,7 +1454,8 @@
     "park_id": 16,
     "land_name": "Bayou Country",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 14923,
@@ -1301,7 +1463,8 @@
     "park_id": 16,
     "land_name": "Main Street U.S.A",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 288,
@@ -1309,7 +1472,8 @@
     "park_id": 16,
     "land_name": "Adventureland",
     "park_name": "Disneyland Park",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 321,
@@ -1317,7 +1481,8 @@
     "park_id": 17,
     "land_name": "Hollywood Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 866,
@@ -1325,7 +1490,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 298,
@@ -1333,7 +1499,8 @@
     "park_id": 17,
     "land_name": "Paradise Gardens Park",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 319,
@@ -1341,7 +1508,8 @@
     "park_id": 17,
     "land_name": "Paradise Gardens Park",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 302,
@@ -1349,7 +1517,8 @@
     "park_id": 17,
     "land_name": "Grizzly Peak",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 329,
@@ -1357,7 +1526,8 @@
     "park_id": 17,
     "land_name": "Avengers Campus",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 5146,
@@ -1365,7 +1535,8 @@
     "park_id": 17,
     "land_name": "Halloween",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 322,
@@ -1373,7 +1544,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 10906,
@@ -1381,7 +1553,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 6643,
@@ -1389,7 +1562,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 310,
@@ -1397,7 +1571,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 300,
@@ -1405,7 +1580,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 2608,
@@ -1413,7 +1589,8 @@
     "park_id": 17,
     "land_name": "Cars Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 4723,
@@ -1421,7 +1598,8 @@
     "park_id": 17,
     "land_name": "Halloween",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 6440,
@@ -1429,7 +1607,8 @@
     "park_id": 17,
     "land_name": "Hollywood Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 291,
@@ -1437,7 +1616,8 @@
     "park_id": 17,
     "land_name": "Hollywood Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 311,
@@ -1445,7 +1625,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 5557,
@@ -1453,7 +1634,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 295,
@@ -1461,7 +1643,8 @@
     "park_id": 17,
     "land_name": "Cars Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 10904,
@@ -1469,7 +1652,8 @@
     "park_id": 17,
     "land_name": "Cars Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 293,
@@ -1477,7 +1661,8 @@
     "park_id": 17,
     "land_name": "Grizzly Peak",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 301,
@@ -1485,7 +1670,8 @@
     "park_id": 17,
     "land_name": "Paradise Gardens Park",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 10905,
@@ -1493,7 +1679,8 @@
     "park_id": 17,
     "land_name": "Paradise Gardens Park",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 17129,
@@ -1501,7 +1688,8 @@
     "park_id": 17,
     "land_name": "Grizzly Peak",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 868,
@@ -1509,7 +1697,8 @@
     "park_id": 17,
     "land_name": "Hollywood Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 869,
@@ -1517,7 +1706,8 @@
     "park_id": 17,
     "land_name": "Pacific Wharf",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 316,
@@ -1525,7 +1715,8 @@
     "park_id": 17,
     "land_name": "Paradise Gardens Park",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 313,
@@ -1533,7 +1724,8 @@
     "park_id": 17,
     "land_name": "Pixar Pier",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 294,
@@ -1541,7 +1733,8 @@
     "park_id": 17,
     "land_name": "Hollywood Land",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 7292,
@@ -1549,7 +1742,8 @@
     "park_id": 17,
     "land_name": "Halloween",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 8843,
@@ -1557,7 +1751,8 @@
     "park_id": 17,
     "land_name": "Avengers Campus",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   },
   {
     "id": 10907,
@@ -1565,7 +1760,8 @@
     "park_id": 17,
     "land_name": "Avengers Campus",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": false
   },
   {
     "id": 11528,
@@ -1573,6 +1769,7 @@
     "park_id": 17,
     "land_name": "Paradise Gardens Park",
     "park_name": "Disney California Adventure",
-    "resort": "Disneyland Resort"
+    "resort": "Disneyland Resort",
+    "is_ride": true
   }
 ]

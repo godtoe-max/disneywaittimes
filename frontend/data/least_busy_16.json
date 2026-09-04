@@ -9,7 +9,7 @@
       "formatted_date": "Friday, Sep 04, 2026",
       "short_date": "Sep 04",
       "day_of_week": "Friday",
-      "avg_wait": 4.9,
+      "avg_wait": 5.9,
       "peak_wait": 45,
       "min_wait": 0,
       "crowd_level": {
@@ -21,8 +21,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 12.9
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 13.1
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -47,8 +47,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 30.3
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 25.6
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -73,8 +73,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 34.2
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 28.9
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -99,8 +99,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.6
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.4
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -125,8 +125,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.6
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.4
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -151,8 +151,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.8
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.7
       },
       "holiday": "Regular Operating Day",
       "season": "MEMORIAL DAY",
@@ -177,8 +177,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.8
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.7
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -203,8 +203,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.8
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.7
       },
       "holiday": "Regular Operating Day",
       "season": "SEPTEMBER LOW",
@@ -229,8 +229,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.8
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.7
       },
       "holiday": "Regular Operating Day",
       "season": "SEPTEMBER LOW",
@@ -255,8 +255,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 117.1
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.9
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -284,7 +284,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 158.4
+        "pct_of_normal": 133.8
       },
       "holiday": "Christmas Eve",
       "season": "CHRISTMAS PEAK",
@@ -310,7 +310,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 157.9
+        "pct_of_normal": 133.3
       },
       "holiday": "New Year's Eve",
       "season": "CHRISTMAS PEAK",
@@ -336,7 +336,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 146.8
+        "pct_of_normal": 124.0
       },
       "holiday": "Low-Crowd Fall Tuesday",
       "season": "FALL",
@@ -362,7 +362,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 146.6
+        "pct_of_normal": 123.8
       },
       "holiday": "Labor Day",
       "season": "FALL",
@@ -388,7 +388,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 146.3
+        "pct_of_normal": 123.6
       },
       "holiday": "1",
       "season": "SPRING",
@@ -414,8 +414,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 112.9
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 95.3
       }
     },
     {
@@ -432,14 +432,14 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 117.1
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.9
       }
     },
     {
       "day_index": 4,
       "day_name": "Friday",
-      "avg_wait": 46.8,
+      "avg_wait": 46.9,
       "samples": 10,
       "crowd_level": {
         "level": "normal",
@@ -450,8 +450,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 123.2
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 104.2
       }
     },
     {
@@ -460,16 +460,16 @@
       "avg_wait": 47.4,
       "samples": 7,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 124.7
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 105.3
       }
     },
     {
@@ -478,16 +478,16 @@
       "avg_wait": 48.0,
       "samples": 9,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 126.3
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 106.7
       }
     },
     {
@@ -496,16 +496,16 @@
       "avg_wait": 48.6,
       "samples": 12,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 127.9
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 108.0
       }
     },
     {
@@ -514,16 +514,16 @@
       "avg_wait": 49.9,
       "samples": 7,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 131.3
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 110.9
       }
     }
   ],

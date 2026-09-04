@@ -15,7 +15,7 @@ from backend.services import (
     get_ride_history,
     get_attraction_historical_deepdive,
 )
-from backend.ride_tiers import RIDE_TIERS
+from backend.ride_tiers import RIDE_TIERS, is_queue_ride
 
 def export_all():
     output_dir = os.path.join(os.path.dirname(__file__), "frontend", "data")
@@ -99,7 +99,11 @@ def export_all():
         LEFT JOIN lands l ON r.land_id = l.id
         ORDER BY r.park_id, r.name
     """)
-    catalog = [dict(r) for r in cursor.fetchall()]
+    catalog_raw = [dict(r) for r in cursor.fetchall()]
+    catalog = []
+    for r in catalog_raw:
+        r["is_ride"] = is_queue_ride(r["name"])
+        catalog.append(r)
     with open(os.path.join(output_dir, "rides_catalog.json"), "w", encoding="utf-8") as f:
         json.dump(catalog, f, indent=2)
     print(f"Exported {len(parks)} parks and {len(catalog)} rides to catalog JSON")

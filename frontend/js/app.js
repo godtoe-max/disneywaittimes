@@ -17,6 +17,7 @@ const state = {
   parkFilter: 'all',
   recParkFilter: 'all',
   recCategoryFilter: 'all',
+  rideTypeFilter: 'rides', // 'rides' (159 real rides) or 'all' (197 total exhibits/shows)
   viewMode: 'cards', // 'cards' or 'table'
   searchQuery: '',
   openOnly: false,
@@ -28,6 +29,24 @@ const state = {
   isSyncing: false,
   rideCurvesCache: null,
 };
+
+// Patterns for walkthroughs, static exhibits, play areas, and continuous non-rides
+const NON_QUEUE_PATTERNS = [
+  'splash \'n\' soak', 'treehouse', 'shootin\'', 'shootin exposition', 'arcade',
+  'sorcerer\'s workshop', 'bakery tour', 'single rider', 'main street cinema',
+  'the disney gallery', 'how-to-play yard', 'duck pond', 'a magical life',
+  'sleeping beauty castle walkthrough', 'redwood creek challenge', 'tom sawyer island',
+  'discovery island trails', 'gorilla falls exploration trail', 'maharajah jungle trek',
+  'swiss family treehouse', 'animation academy', 'games of pixar pier',
+  'walt disney\'s enchanted tiki room', 'the hall of presidents', 'carousel of progress',
+  'country bear musical jamboree', 'turtle talk'
+];
+
+function isQueueRide(name) {
+  if (!name) return false;
+  const nl = name.toLowerCase();
+  return !NON_QUEUE_PATTERNS.some(p => nl.includes(p));
+}
 
 // Park display metadata
 const PARK_META = {
@@ -267,6 +286,16 @@ function initEventListeners() {
     });
   });
 
+  // Ride type filter (Rides Only vs All Exhibits)
+  document.querySelectorAll('.ride-type-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ride-type-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.rideTypeFilter = btn.getAttribute('data-ride-type');
+      renderAttractionsTable();
+    });
+  });
+
   // Open only checkbox
   const openOnlyCb = document.getElementById('openOnlyCheckbox');
   openOnlyCb.addEventListener('change', (e) => {
@@ -450,12 +479,12 @@ async function fetchAllData(isBackground = false) {
       } catch (e) {}
 
       const parkDefs = [
-        { id: 6, name: 'Magic Kingdom', resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 38.0 },
-        { id: 5, name: 'EPCOT', resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 32.0 },
-        { id: 7, name: "Disney's Hollywood Studios", resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 40.0 },
-        { id: 8, name: "Disney's Animal Kingdom", resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 32.0 },
-        { id: 16, name: 'Disneyland Park', resort: 'Disneyland Resort', timezone: 'America/Los_Angeles', baseline: 38.0 },
-        { id: 17, name: 'Disney California Adventure', resort: 'Disneyland Resort', timezone: 'America/Los_Angeles', baseline: 40.0 },
+        { id: 6, name: 'Magic Kingdom', resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 45.0 },
+        { id: 5, name: 'EPCOT', resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 40.0 },
+        { id: 7, name: "Disney's Hollywood Studios", resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 48.0 },
+        { id: 8, name: "Disney's Animal Kingdom", resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 40.0 },
+        { id: 16, name: 'Disneyland Park', resort: 'Disneyland Resort', timezone: 'America/Los_Angeles', baseline: 45.0 },
+        { id: 17, name: 'Disney California Adventure', resort: 'Disneyland Resort', timezone: 'America/Los_Angeles', baseline: 48.0 },
       ];
 
       parks = [];
@@ -468,6 +497,7 @@ async function fetchAllData(isBackground = false) {
           if (!qRes.ok) continue;
           const qData = await qRes.json();
           let parkTotal = 0, parkOpen = 0, parkDown = 0, totalWait = 0, maxWait = 0, topRide = 'None';
+          let parkTotalReal = 0, parkOpenReal = 0, totalWaitReal = 0;
           const allParkRides = [];
 
           (qData.lands || []).forEach((l) => {
@@ -478,7 +508,17 @@ async function fetchAllData(isBackground = false) {
           allParkRides.forEach((r) => {
             parkTotal++;
             const isOpen = Boolean(r.is_open);
+            const isRide = isQueueRide(r.name);
             const waitTime = isOpen ? (r.wait_time || 0) : 0;
+
+            if (isRide) {
+              parkTotalReal++;
+              if (isOpen) {
+                parkOpenReal++;
+                totalWaitReal += waitTime;
+              }
+            }
+
             if (isOpen) {
               parkOpen++;
               totalWait += waitTime;
@@ -506,23 +546,25 @@ async function fetchAllData(isBackground = false) {
               land_name: r.land_name,
               wait_time: waitTime,
               is_open: isOpen,
+              is_ride: isRide,
               last_updated: r.updated_at || new Date().toISOString(),
             });
           });
 
-          const avgWait = parkOpen > 0 ? Math.round((totalWait / parkOpen) * 10) / 10 : 0;
+          // Calculate average wait strictly across open real rides
+          const avgWait = parkOpenReal > 0 ? Math.round((totalWaitReal / parkOpenReal) * 10) / 10 : 0;
           let crowdLevel = { level: 'normal', tier: 'NORMAL', badge_text: '🟡 Normal (Typical)' };
-          if (avgWait < 18) crowdLevel = { level: 'empty', tier: 'EMPTY', badge_text: '🟢 Empty (Walk-on)' };
-          else if (avgWait < 33) crowdLevel = { level: 'light', tier: 'LIGHT', badge_text: '🔵 Light (Below Normal)' };
-          else if (avgWait > 46) crowdLevel = { level: 'busy', tier: 'BUSY', badge_text: '🔴 Busy (Heavy Queues)' };
+          if (avgWait < 25) crowdLevel = { level: 'empty', tier: 'EMPTY', badge_text: '🟢 Empty (Walk-on)' };
+          else if (avgWait < 39) crowdLevel = { level: 'light', tier: 'LIGHT', badge_text: '🔵 Light (Below Normal)' };
+          else if (avgWait >= 52) crowdLevel = { level: 'busy', tier: 'BUSY', badge_text: '🔴 Busy (Heavy Queues)' };
 
           parks.push({
             id: p.id,
             name: p.name,
             resort: p.resort,
             timezone: p.timezone,
-            total_rides: parkTotal,
-            open_rides: parkOpen,
+            total_rides: parkTotalReal,
+            open_rides: parkOpenReal,
             down_rides: parkDown,
             avg_wait_time: avgWait,
             max_wait_time: maxWait,
@@ -605,6 +647,7 @@ function renderRecommendations() {
   );
 
   const filteredRides = state.rides.filter((r) => {
+    if (r.is_ride === false || !isQueueRide(r.name)) return false; // Exclude non-rides / exhibits
     if (isResortFiltered && !targetParkIds.has(r.park_id)) return false;
     if (state.recParkFilter !== 'all' && String(r.park_id) !== state.recParkFilter) return false;
     return true;
@@ -791,11 +834,12 @@ function renderResortBanner() {
   const relevantRides = state.rides.filter((r) => targetParkIds.has(r.park_id));
   const relevantDowntimes = state.downtimes.filter((dt) => targetParkIds.has(dt.park_id));
 
-  const totalRides = relevantRides.length;
-  const openRides = relevantRides.filter((r) => r.is_open).length;
+  const realRides = relevantRides.filter((r) => r.is_ride !== false && isQueueRide(r.name));
+  const totalRides = realRides.length;
+  const openRides = realRides.filter((r) => r.is_open).length;
   const downRides = relevantDowntimes.length;
 
-  const openWaits = relevantRides.filter((r) => r.is_open).map((r) => r.wait_time);
+  const openWaits = realRides.filter((r) => r.is_open).map((r) => r.wait_time);
   const avgWait = openWaits.length > 0
     ? Math.round(openWaits.reduce((a, b) => a + b, 0) / openWaits.length)
     : 0;
@@ -807,16 +851,21 @@ function renderResortBanner() {
   document.getElementById('allRidesCount').textContent = totalRides;
   document.getElementById('downtimesCountBadge').textContent = downRides;
 
-  // Calculate live crowd level
+  const realCountBadge = document.getElementById('realRidesCountBadge');
+  const allCountBadge = document.getElementById('allAttractionsCountBadge');
+  if (realCountBadge) realCountBadge.textContent = realRides.length;
+  if (allCountBadge) allCountBadge.textContent = relevantRides.length;
+
+  // Calculate live crowd level on real rides
   let crowdClass = 'normal';
   let crowdText = '🟡 Normal (Typical)';
-  if (avgWait < 18) {
+  if (avgWait < 25) {
     crowdClass = 'empty';
     crowdText = '🟢 Empty (Walk-on)';
-  } else if (avgWait < 33) {
+  } else if (avgWait < 39) {
     crowdClass = 'light';
     crowdText = '🔵 Light (Below Normal)';
-  } else if (avgWait < 47) {
+  } else if (avgWait < 52) {
     crowdClass = 'normal';
     crowdText = '🟡 Normal (Typical)';
   } else {
@@ -1246,6 +1295,10 @@ function renderAttractionsTable() {
 
   // Filter rides
   let filtered = state.rides.filter((r) => {
+    // Ride Type filter: 'rides' (real moving rides only) vs 'all' (all exhibits/shows)
+    if (state.rideTypeFilter === 'rides' && (r.is_ride === false || !isQueueRide(r.name))) {
+      return false;
+    }
     // Resort filter (when all parks is selected)
     if (isResortFiltered && state.parkFilter === 'all' && !targetParkIds.has(r.park_id)) {
       return false;
@@ -1342,7 +1395,8 @@ function renderAttractionsTable() {
 
   const countEl = document.getElementById('filteredCount');
   if (countEl) {
-    countEl.textContent = `Showing ${filtered.length} attractions`;
+    const label = state.rideTypeFilter === 'rides' ? 'real moving rides' : 'attractions & exhibits';
+    countEl.textContent = `Showing ${filtered.length} ${label}`;
   }
 
   renderAttractionsCards(filtered);

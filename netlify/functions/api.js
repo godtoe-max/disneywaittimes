@@ -26,23 +26,40 @@ try {
   console.error('Error loading static historical data files:', e);
 }
 
+const NON_QUEUE_PATTERNS = [
+  'splash \'n\' soak', 'treehouse', 'shootin\'', 'shootin exposition', 'arcade',
+  'sorcerer\'s workshop', 'bakery tour', 'single rider', 'main street cinema',
+  'the disney gallery', 'how-to-play yard', 'duck pond', 'a magical life',
+  'sleeping beauty castle walkthrough', 'redwood creek challenge', 'tom sawyer island',
+  'discovery island trails', 'gorilla falls exploration trail', 'maharajah jungle trek',
+  'swiss family treehouse', 'animation academy', 'games of pixar pier',
+  'walt disney\'s enchanted tiki room', 'the hall of presidents', 'carousel of progress',
+  'country bear musical jamboree', 'turtle talk'
+];
+
+function isQueueRide(name) {
+  if (!name) return false;
+  const nl = name.toLowerCase();
+  return !NON_QUEUE_PATTERNS.some(p => nl.includes(p));
+}
+
 const PARK_DEFS = [
-  { id: 6, name: "Magic Kingdom", resort: "Walt Disney World", timezone: "America/New_York", baseline: 38.0 },
-  { id: 5, name: "EPCOT", resort: "Walt Disney World", timezone: "America/New_York", baseline: 32.0 },
-  { id: 7, name: "Disney's Hollywood Studios", resort: "Walt Disney World", timezone: "America/New_York", baseline: 40.0 },
-  { id: 8, name: "Disney's Animal Kingdom", resort: "Walt Disney World", timezone: "America/New_York", baseline: 32.0 },
-  { id: 16, name: "Disneyland Park", resort: "Disneyland Resort", timezone: "America/Los_Angeles", baseline: 38.0 },
-  { id: 17, name: "Disney California Adventure", resort: "Disneyland Resort", timezone: "America/Los_Angeles", baseline: 40.0 },
+  { id: 6, name: "Magic Kingdom", resort: "Walt Disney World", timezone: "America/New_York", baseline: 45.0 },
+  { id: 5, name: "EPCOT", resort: "Walt Disney World", timezone: "America/New_York", baseline: 40.0 },
+  { id: 7, name: "Disney's Hollywood Studios", resort: "Walt Disney World", timezone: "America/New_York", baseline: 48.0 },
+  { id: 8, name: "Disney's Animal Kingdom", resort: "Walt Disney World", timezone: "America/New_York", baseline: 40.0 },
+  { id: 16, name: "Disneyland Park", resort: "Disneyland Resort", timezone: "America/Los_Angeles", baseline: 45.0 },
+  { id: 17, name: "Disney California Adventure", resort: "Disneyland Resort", timezone: "America/Los_Angeles", baseline: 48.0 },
 ];
 
 function calculateCrowdLevel(avgWait, parkId) {
-  let baseline = 36.0;
+  let baseline = 44.0;
   const p = PARK_DEFS.find(x => x.id === parkId);
   if (p) baseline = p.baseline;
 
   const ratio = baseline > 0 ? (avgWait / baseline) : 1.0;
 
-  if (avgWait < 18 || ratio < 0.60) {
+  if (avgWait < 25 || ratio < 0.60) {
     return {
       level: "empty",
       tier: "EMPTY",
@@ -52,10 +69,10 @@ function calculateCrowdLevel(avgWait, parkId) {
       color: "#10b981",
       bg_color: "rgba(16, 185, 129, 0.15)",
       icon: "🟢",
-      description: "Near-zero lines across most attractions! Exceptional walk-on conditions.",
+      description: "Near-zero lines across major rides! Exceptional walk-on conditions.",
       pct_of_normal: Math.round(ratio * 1000) / 10,
     };
-  } else if (avgWait < 33 || ratio < 0.85) {
+  } else if (avgWait < 39 || ratio < 0.85) {
     return {
       level: "light",
       tier: "LIGHT",
@@ -65,10 +82,10 @@ function calculateCrowdLevel(avgWait, parkId) {
       color: "#06b6d4",
       bg_color: "rgba(6, 182, 212, 0.15)",
       icon: "🔵",
-      description: "Significantly shorter lines than usual. Great day for standby riding without long waits.",
+      description: "Significantly shorter lines on moving rides. Great day for standby riding without long waits.",
       pct_of_normal: Math.round(ratio * 1000) / 10,
     };
-  } else if (avgWait < 47 || ratio <= 1.18) {
+  } else if (avgWait < 52 || ratio <= 1.18) {
     return {
       level: "normal",
       tier: "NORMAL",
@@ -78,7 +95,7 @@ function calculateCrowdLevel(avgWait, parkId) {
       color: "#f59e0b",
       bg_color: "rgba(245, 158, 11, 0.15)",
       icon: "🟡",
-      description: "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
+      description: "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
       pct_of_normal: Math.round(ratio * 1000) / 10,
     };
   } else {
@@ -120,7 +137,8 @@ async function fetchLiveQueueTimes() {
       let parkTotalRides = 0;
       let parkOpenRides = 0;
       let parkDownRides = 0;
-      let totalWait = 0;
+      let totalRealRideWait = 0;
+      let openRealRides = 0;
       let maxWait = 0;
       let topRideName = "None";
 
@@ -142,10 +160,14 @@ async function fetchLiveQueueTimes() {
         parkTotalRides++;
         const isOpen = Boolean(r.is_open);
         const waitTime = isOpen ? (r.wait_time || 0) : 0;
+        const isRide = isQueueRide(r.name);
 
         if (isOpen) {
           parkOpenRides++;
-          totalWait += waitTime;
+          if (isRide) {
+            openRealRides++;
+            totalRealRideWait += waitTime;
+          }
           if (waitTime > maxWait) {
             maxWait = waitTime;
             topRideName = r.name;
@@ -171,11 +193,12 @@ async function fetchLiveQueueTimes() {
           land_name: r.land_name,
           wait_time: waitTime,
           is_open: isOpen,
+          is_ride: isRide,
           last_updated: r.updated_at || new Date().toISOString(),
         });
       }
 
-      const avgWait = parkOpenRides > 0 ? Math.round((totalWait / parkOpenRides) * 10) / 10 : 0;
+      const avgWait = openRealRides > 0 ? Math.round((totalRealRideWait / openRealRides) * 10) / 10 : 0;
       const crowd = calculateCrowdLevel(avgWait, p.id);
 
       parkSummaries.push({
@@ -186,6 +209,7 @@ async function fetchLiveQueueTimes() {
         total_rides: parkTotalRides,
         open_rides: parkOpenRides,
         down_rides: parkDownRides,
+        open_real_rides: openRealRides,
         avg_wait_time: avgWait,
         max_wait_time: maxWait,
         top_ride_name: topRideName,

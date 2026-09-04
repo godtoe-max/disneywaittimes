@@ -9,7 +9,7 @@
       "formatted_date": "Friday, Sep 04, 2026",
       "short_date": "Sep 04",
       "day_of_week": "Friday",
-      "avg_wait": 3.3,
+      "avg_wait": 4.9,
       "peak_wait": 80,
       "min_wait": 0,
       "crowd_level": {
@@ -21,8 +21,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 8.2
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 10.2
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -47,8 +47,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 26.7
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 22.3
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -73,8 +73,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 42.8
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 35.6
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -91,16 +91,16 @@
       "peak_wait": 104,
       "min_wait": 13,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 118.8
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.0
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -117,16 +117,16 @@
       "peak_wait": 105,
       "min_wait": 12,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 118.8
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.0
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -143,16 +143,16 @@
       "peak_wait": 106,
       "min_wait": 14,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 118.8
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.0
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -169,16 +169,16 @@
       "peak_wait": 108,
       "min_wait": 14,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 119.0
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.2
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -195,16 +195,16 @@
       "peak_wait": 105,
       "min_wait": 12,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 119.0
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.2
       },
       "holiday": "Regular Operating Day",
       "season": "SPRING",
@@ -221,16 +221,16 @@
       "peak_wait": 109,
       "min_wait": 11,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 119.0
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.2
       },
       "holiday": "Regular Operating Day",
       "season": "SEPTEMBER LOW",
@@ -247,16 +247,16 @@
       "peak_wait": 109,
       "min_wait": 11,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 119.0
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 99.2
       },
       "holiday": "Regular Operating Day",
       "season": "SEPTEMBER LOW",
@@ -284,7 +284,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 160.8
+        "pct_of_normal": 134.0
       },
       "holiday": "New Year's Eve",
       "season": "CHRISTMAS PEAK",
@@ -310,7 +310,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 160.2
+        "pct_of_normal": 133.5
       },
       "holiday": "Christmas Eve",
       "season": "CHRISTMAS PEAK",
@@ -336,7 +336,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 150.0
+        "pct_of_normal": 125.0
       },
       "holiday": "Halloween",
       "season": "FALL",
@@ -362,7 +362,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 149.3
+        "pct_of_normal": 124.4
       },
       "holiday": "Thanksgiving",
       "season": "HOLIDAY",
@@ -388,7 +388,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 149.0
+        "pct_of_normal": 124.2
       },
       "holiday": "1",
       "season": "SPRING",
@@ -414,8 +414,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 116.3
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 96.9
       }
     },
     {
@@ -424,34 +424,34 @@
       "avg_wait": 47.4,
       "samples": 11,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 118.5
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 98.8
       }
     },
     {
       "day_index": 4,
       "day_name": "Friday",
-      "avg_wait": 49.9,
+      "avg_wait": 50.0,
       "samples": 10,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 124.8
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 104.2
       }
     },
     {
@@ -460,16 +460,16 @@
       "avg_wait": 50.7,
       "samples": 7,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 126.8
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 105.6
       }
     },
     {
@@ -478,16 +478,16 @@
       "avg_wait": 51.4,
       "samples": 9,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 128.5
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 107.1
       }
     },
     {
@@ -496,16 +496,16 @@
       "avg_wait": 52.1,
       "samples": 12,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 130.2
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 108.5
       }
     },
     {
@@ -514,16 +514,16 @@
       "avg_wait": 53.4,
       "samples": 7,
       "crowd_level": {
-        "level": "busy",
-        "tier": "BUSY",
-        "label": "Busy / Heavy",
-        "badge_text": "\ud83d\udd34 Busy (Heavy Queues)",
-        "score": 4,
-        "color": "#ef4444",
-        "bg_color": "rgba(239, 68, 68, 0.15)",
-        "icon": "\ud83d\udd34",
-        "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 133.5
+        "level": "normal",
+        "tier": "NORMAL",
+        "label": "Normal / Moderate",
+        "badge_text": "\ud83d\udfe1 Normal (Typical)",
+        "score": 3,
+        "color": "#f59e0b",
+        "bg_color": "rgba(245, 158, 11, 0.15)",
+        "icon": "\ud83d\udfe1",
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 111.2
       }
     }
   ],

@@ -5,32 +5,6 @@
   "total_dates_analyzed": 363,
   "top_least_busy_days": [
     {
-      "date": "2026-09-04",
-      "formatted_date": "Friday, Sep 04, 2026",
-      "short_date": "Sep 04",
-      "day_of_week": "Friday",
-      "avg_wait": 11.8,
-      "peak_wait": 65,
-      "min_wait": 0,
-      "crowd_level": {
-        "level": "empty",
-        "tier": "EMPTY",
-        "label": "Empty / Walk-on",
-        "badge_text": "\ud83d\udfe2 Empty (Walk-on)",
-        "score": 1,
-        "color": "#10b981",
-        "bg_color": "rgba(16, 185, 129, 0.15)",
-        "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 31.1
-      },
-      "holiday": "Regular Operating Day",
-      "season": "REGULAR",
-      "weather_high": 78.0,
-      "weather_low": 60.0,
-      "school_in_session_pct": 85.0
-    },
-    {
       "date": "2026-08-29",
       "formatted_date": "Saturday, Aug 29, 2026",
       "short_date": "Aug 29",
@@ -47,8 +21,34 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 32.4
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 27.3
+      },
+      "holiday": "Regular Operating Day",
+      "season": "REGULAR",
+      "weather_high": 78.0,
+      "weather_low": 60.0,
+      "school_in_session_pct": 85.0
+    },
+    {
+      "date": "2026-09-04",
+      "formatted_date": "Friday, Sep 04, 2026",
+      "short_date": "Sep 04",
+      "day_of_week": "Friday",
+      "avg_wait": 12.4,
+      "peak_wait": 90,
+      "min_wait": 0,
+      "crowd_level": {
+        "level": "empty",
+        "tier": "EMPTY",
+        "label": "Empty / Walk-on",
+        "badge_text": "\ud83d\udfe2 Empty (Walk-on)",
+        "score": 1,
+        "color": "#10b981",
+        "bg_color": "rgba(16, 185, 129, 0.15)",
+        "icon": "\ud83d\udfe2",
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 27.6
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -73,8 +73,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 38.2
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 32.2
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -99,8 +99,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 43.4
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 36.7
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -125,8 +125,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 47.6
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 40.2
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -151,8 +151,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 47.9
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 40.4
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -177,8 +177,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 48.4
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 40.9
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -203,8 +203,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 50.5
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 42.7
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -229,8 +229,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 52.1
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 44.0
       },
       "holiday": "Regular Operating Day",
       "season": "SEPTEMBER LOW",
@@ -255,8 +255,8 @@
         "color": "#10b981",
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 55.5
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 46.9
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -284,7 +284,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 185.3
+        "pct_of_normal": 156.4
       },
       "holiday": "Regular Operating Day",
       "season": "SUMMER BREAK",
@@ -310,7 +310,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 183.2
+        "pct_of_normal": 154.7
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -336,7 +336,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 182.4
+        "pct_of_normal": 154.0
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -362,7 +362,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 182.1
+        "pct_of_normal": 153.8
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -388,7 +388,7 @@
         "bg_color": "rgba(239, 68, 68, 0.15)",
         "icon": "\ud83d\udd34",
         "description": "Heavy wait times across major attractions. Lightning Lane or rope drop strategy strongly advised.",
-        "pct_of_normal": 178.9
+        "pct_of_normal": 151.1
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -414,8 +414,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 106.1
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 89.6
       }
     },
     {
@@ -432,8 +432,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 106.3
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 89.8
       }
     },
     {
@@ -450,8 +450,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 107.1
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 90.4
       }
     },
     {
@@ -468,8 +468,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 108.2
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 91.3
       }
     },
     {
@@ -486,8 +486,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 111.3
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 94.0
       }
     },
     {
@@ -504,8 +504,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 113.2
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 95.6
       }
     },
     {
@@ -522,8 +522,8 @@
         "color": "#f59e0b",
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
-        "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 121.1
+        "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
+        "pct_of_normal": 102.2
       }
     }
   ],

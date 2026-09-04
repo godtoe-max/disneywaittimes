@@ -87,12 +87,12 @@
       </div>
       <div class="banner-divider"></div>
       <div class="banner-stat">
-        <div class="stat-label">Total Attractions</div>
-        <div class="stat-value" id="totalRidesVal">197</div>
+        <div class="stat-label">Total Real Rides</div>
+        <div class="stat-value" id="totalRidesVal">159</div>
       </div>
       <div class="banner-divider"></div>
       <div class="banner-stat">
-        <div class="stat-label">Operating Now</div>
+        <div class="stat-label">Operating Rides</div>
         <div class="stat-value text-success" id="openRidesVal">--</div>
       </div>
       <div class="banner-divider"></div>
@@ -102,12 +102,12 @@
       </div>
       <div class="banner-divider"></div>
       <div class="banner-stat">
-        <div class="stat-label">Resort Avg Wait</div>
+        <div class="stat-label">Real Ride Avg Wait</div>
         <div class="stat-value text-gold" id="resortAvgWaitVal">-- min</div>
       </div>
       <div class="banner-divider"></div>
       <div class="banner-stat">
-        <div class="stat-label">Live Crowd Level</div>
+        <div class="stat-label">True Crowd Level</div>
         <div class="stat-value" id="resortCrowdLevelVal">
           <span class="crowd-badge crowd-badge-light" id="resortCrowdBadge">
             <span class="status-dot"></span> Light (Below Normal)
@@ -291,10 +291,14 @@
           </div>
 
           <div class="status-toggles">
+            <div class="ride-type-toggle" id="rideTypeToggle">
+              <button id="filterRealRidesBtn" class="ride-type-btn active" data-ride-type="rides">🎢 Rides Only (<span id="realRidesCountBadge">159</span>)</button>
+              <button id="filterAllAttractionsBtn" class="ride-type-btn" data-ride-type="all">🎡 All Exhibits (<span id="allAttractionsCountBadge">197</span>)</button>
+            </div>
             <label class="checkbox-container">
               <input type="checkbox" id="openOnlyCheckbox">
               <span class="checkbox-checkmark"></span>
-              Open Attractions Only
+              Open Only
             </label>
             <span class="results-count" id="filteredCount">Showing 0 attractions</span>
           </div>

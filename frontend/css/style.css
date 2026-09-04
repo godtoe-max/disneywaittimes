@@ -872,6 +872,38 @@ body {
   border-color: var(--cyan-400);
 }
 
+.ride-type-toggle {
+  display: inline-flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 3px;
+}
+
+.ride-type-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  padding: 6px 13px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ride-type-btn:hover {
+  color: var(--text-primary);
+}
+
+.ride-type-btn.active {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--cyan-400);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
 .checkbox-container {
   display: inline-flex;
   align-items: center;

@@ -28,6 +28,23 @@ PARK_FALLBACK_ANCHORS: Dict[int, int] = {
     17: 329,   # Disney California Adventure: Guardians of the Galaxy
 }
 
+# Patterns for walkthroughs, static exhibits, play areas, and single rider duplicates
+NON_QUEUE_PATTERNS = [
+    'splash \'n\' soak', 'treehouse', 'shootin\'', 'shootin exposition', 'arcade',
+    'sorcerer\'s workshop', 'bakery tour', 'single rider', 'main street cinema',
+    'the disney gallery', 'how-to-play yard', 'duck pond', 'a magical life',
+    'sleeping beauty castle walkthrough', 'redwood creek challenge', 'tom sawyer island',
+    'discovery island trails', 'gorilla falls exploration trail', 'maharajah jungle trek',
+    'swiss family treehouse', 'animation academy', 'games of pixar pier',
+    'walt disney\'s enchanted tiki room', 'the hall of presidents', 'carousel of progress',
+    'country bear musical jamboree', 'turtle talk'
+]
+
+def is_queue_ride(name: str) -> bool:
+    """Return True if the attraction is a true moving ride with a physical queue line."""
+    nl = name.lower()
+    return not any(p in nl for p in NON_QUEUE_PATTERNS)
+
 # Master Ride Tier Registry
 # Fields:
 # - name: clean attraction name

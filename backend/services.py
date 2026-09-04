@@ -7,6 +7,7 @@ from typing import Dict, Any, List, Optional
 import random
 
 from backend.database import get_connection, get_db
+from backend.ride_tiers import is_queue_ride
 
 # Disney World parks operating timezone offset (US Eastern, UTC-4 during EDT, UTC-5 during EST)
 EDT_OFFSET_HOURS = -4
@@ -19,23 +20,23 @@ def get_park_utc_offset(park_id: int) -> int:
 
 def calculate_crowd_level(avg_wait: float, park_id: Optional[int] = None) -> Dict[str, Any]:
     """
-    Classify crowd intensity into:
-    - EMPTY: Ghost town / walk-on conditions (< 20 min or < 60% of baseline)
-    - LIGHT: Below normal wait times (20–32 min or 60%–85% of baseline)
-    - NORMAL: Typical / moderate volume (33–46 min or 85%–115% of baseline)
-    - BUSY: Heavy / peak wait times (> 46 min or > 115% of baseline)
+    Classify crowd intensity for actual queue-based moving rides into:
+    - EMPTY: Ghost town / walk-on conditions (< 25 min or < 60% of baseline)
+    - LIGHT: Below normal wait times (25–38 min or 60%–85% of baseline)
+    - NORMAL: Typical / moderate volume (39–51 min or 85%–118% of baseline)
+    - BUSY: Heavy / peak wait times (>= 52 min or > 118% of baseline)
     """
-    baseline = 36.0
+    baseline = 44.0
     if park_id in (6, 16):  # Magic Kingdom, Disneyland
-        baseline = 38.0
+        baseline = 45.0
     elif park_id in (7, 17):  # Hollywood Studios, DCA
-        baseline = 40.0
+        baseline = 48.0
     elif park_id in (5, 8):  # EPCOT, Animal Kingdom
-        baseline = 32.0
+        baseline = 40.0
 
     ratio = (avg_wait / baseline) if baseline > 0 else 1.0
 
-    if avg_wait < 18 or ratio < 0.60:
+    if avg_wait < 25 or ratio < 0.60:
         return {
             "level": "empty",
             "tier": "EMPTY",
@@ -45,10 +46,10 @@ def calculate_crowd_level(avg_wait: float, park_id: Optional[int] = None) -> Dic
             "color": "#10b981",
             "bg_color": "rgba(16, 185, 129, 0.15)",
             "icon": "🟢",
-            "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
+            "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
             "pct_of_normal": round(ratio * 100, 1),
         }
-    elif avg_wait < 33 or ratio < 0.85:
+    elif avg_wait < 39 or ratio < 0.85:
         return {
             "level": "light",
             "tier": "LIGHT",
@@ -58,10 +59,10 @@ def calculate_crowd_level(avg_wait: float, park_id: Optional[int] = None) -> Dic
             "color": "#06b6d4",
             "bg_color": "rgba(6, 182, 212, 0.15)",
             "icon": "🔵",
-            "description": "Significantly shorter lines than usual. Great day for standby riding without long waits.",
+            "description": "Significantly shorter lines on moving rides. Great day for standby riding without long waits.",
             "pct_of_normal": round(ratio * 100, 1),
         }
-    elif avg_wait < 47 or ratio <= 1.18:
+    elif avg_wait < 52 or ratio <= 1.18:
         return {
             "level": "normal",
             "tier": "NORMAL",
@@ -71,7 +72,7 @@ def calculate_crowd_level(avg_wait: float, park_id: Optional[int] = None) -> Dic
             "color": "#f59e0b",
             "bg_color": "rgba(245, 158, 11, 0.15)",
             "icon": "🟡",
-            "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
+            "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
             "pct_of_normal": round(ratio * 100, 1),
         }
     else:
@@ -90,11 +91,14 @@ def calculate_crowd_level(avg_wait: float, park_id: Optional[int] = None) -> Dic
 
 def get_parks_summary() -> List[Dict[str, Any]]:
     """
-    Get high-level summary cards for each park with live wait averages,
-    open ride count, down count, and highest wait attraction.
+    Get high-level summary cards for each park with live wait averages
+    computed ONLY on actual queue-based rides (excluding walkthroughs/exhibits).
     """
     conn = get_connection()
     try:
+        # Fetch all parks
+        parks_rows = conn.execute("SELECT id, name, COALESCE(resort, 'Walt Disney World') as resort, COALESCE(timezone, 'America/New_York') as timezone FROM parks ORDER BY id").fetchall()
+
         # Get latest observation per ride
         query = """
             WITH latest_obs AS (
@@ -103,64 +107,77 @@ def get_parks_summary() -> List[Dict[str, Any]]:
                 FROM wait_times wt
             )
             SELECT 
-                p.id as park_id,
-                p.name as park_name,
-                COALESCE(p.resort, 'Walt Disney World') as resort,
-                COALESCE(p.timezone, 'America/New_York') as timezone,
-                COUNT(r.id) as total_rides,
-                SUM(CASE WHEN lo.is_open = 1 THEN 1 ELSE 0 END) as open_rides,
-                SUM(CASE WHEN lo.is_open = 0 THEN 1 ELSE 0 END) as down_rides,
-                ROUND(AVG(CASE WHEN lo.is_open = 1 THEN lo.wait_time_minutes ELSE NULL END), 1) as avg_wait_time,
-                MAX(CASE WHEN lo.is_open = 1 THEN lo.wait_time_minutes ELSE 0 END) as max_wait_time,
-                MAX(lo.timestamp_utc) as last_updated
-            FROM parks p
-            LEFT JOIN rides r ON r.park_id = p.id
-            LEFT JOIN latest_obs lo ON lo.ride_id = r.id AND lo.rn = 1
-            GROUP BY p.id, p.name, p.resort, p.timezone
-            ORDER BY p.id;
+                r.id as ride_id,
+                r.name as ride_name,
+                r.park_id,
+                COALESCE(lo.wait_time_minutes, 0) as wait_time,
+                COALESCE(lo.is_open, 0) as is_open,
+                lo.timestamp_utc
+            FROM rides r
+            LEFT JOIN latest_obs lo ON lo.ride_id = r.id AND lo.rn = 1;
         """
-        rows = conn.execute(query).fetchall()
-        
-        parks_list = []
-        for r in rows:
-            park_id = r["park_id"]
-            avg_wait = r["avg_wait_time"] if r["avg_wait_time"] is not None else 0
-            
-            # Find the ride with the highest wait time in this park
-            top_ride_row = conn.execute("""
-                WITH latest_obs AS (
-                    SELECT wt.ride_id, wt.wait_time_minutes, wt.is_open,
-                           ROW_NUMBER() OVER (PARTITION BY wt.ride_id ORDER BY wt.timestamp_utc DESC) as rn
-                    FROM wait_times wt
-                )
-                SELECT r.name, lo.wait_time_minutes
-                FROM rides r
-                JOIN latest_obs lo ON lo.ride_id = r.id AND lo.rn = 1
-                WHERE r.park_id = ? AND lo.is_open = 1
-                ORDER BY lo.wait_time_minutes DESC
-                LIMIT 1;
-            """, (park_id,)).fetchone()
+        all_obs = conn.execute(query).fetchall()
 
-            top_ride_name = top_ride_row["name"] if top_ride_row else "None"
-            top_ride_wait = top_ride_row["wait_time_minutes"] if top_ride_row else 0
-            
+        # Group observations by park
+        park_obs_map = {p["id"]: [] for p in parks_rows}
+        for obs in all_obs:
+            if obs["park_id"] in park_obs_map:
+                park_obs_map[obs["park_id"]].append(obs)
+
+        parks_list = []
+        for p in parks_rows:
+            park_id = p["id"]
+            p_rides = park_obs_map.get(park_id, [])
+
+            total_rides_count = 0
+            open_rides_count = 0
+            down_rides_count = 0
+            total_real_ride_wait = 0
+            open_real_rides_count = 0
+            max_wait_time = 0
+            top_ride_name = "None"
+            last_updated = None
+
+            for r in p_rides:
+                r_name = r["ride_name"]
+                is_open = bool(r["is_open"])
+                wait_val = r["wait_time"] if is_open else 0
+                is_real_ride = is_queue_ride(r_name)
+
+                if r["timestamp_utc"] and (last_updated is None or r["timestamp_utc"] > last_updated):
+                    last_updated = r["timestamp_utc"]
+
+                total_rides_count += 1
+                if is_open:
+                    open_rides_count += 1
+                    if is_real_ride:
+                        open_real_rides_count += 1
+                        total_real_ride_wait += wait_val
+                    if wait_val > max_wait_time:
+                        max_wait_time = wait_val
+                        top_ride_name = r_name
+                else:
+                    down_rides_count += 1
+
+            avg_wait = round(total_real_ride_wait / open_real_rides_count, 1) if open_real_rides_count > 0 else 0
             crowd_info = calculate_crowd_level(avg_wait, park_id)
 
             parks_list.append({
                 "id": park_id,
-                "name": r["park_name"],
-                "resort": r["resort"] if "resort" in r.keys() else ("Disneyland Resort" if park_id in (16, 17) else "Walt Disney World"),
-                "timezone": r["timezone"] if "timezone" in r.keys() else ("America/Los_Angeles" if park_id in (16, 17) else "America/New_York"),
-                "total_rides": r["total_rides"] or 0,
-                "open_rides": r["open_rides"] or 0,
-                "down_rides": r["down_rides"] or 0,
+                "name": p["name"],
+                "resort": p["resort"],
+                "timezone": p["timezone"],
+                "total_rides": total_rides_count,
+                "open_rides": open_rides_count,
+                "down_rides": down_rides_count,
+                "open_real_rides": open_real_rides_count,
                 "avg_wait_time": avg_wait,
-                "max_wait_time": top_ride_wait,
+                "max_wait_time": max_wait_time,
                 "top_ride_name": top_ride_name,
                 "crowd_level": crowd_info,
-                "last_updated": r["last_updated"],
+                "last_updated": last_updated,
             })
-            
+
         return parks_list
     finally:
         conn.close()
@@ -316,6 +333,7 @@ def get_all_rides(
                 "land_name": r["land_name"],
                 "wait_time": r["wait_time"],
                 "is_open": is_open,
+                "is_ride": is_queue_ride(r["ride_name"]),
                 "last_updated": r["timestamp_utc"],
             })
         return results
