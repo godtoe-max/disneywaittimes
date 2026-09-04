@@ -31,32 +31,6 @@
       "school_in_session_pct": 85.0
     },
     {
-      "date": "2026-09-04",
-      "formatted_date": "Friday, Sep 04, 2026",
-      "short_date": "Sep 04",
-      "day_of_week": "Friday",
-      "avg_wait": 10.2,
-      "peak_wait": 120,
-      "min_wait": 0,
-      "crowd_level": {
-        "level": "empty",
-        "tier": "EMPTY",
-        "label": "Empty / Walk-on",
-        "badge_text": "\ud83d\udfe2 Empty (Walk-on)",
-        "score": 1,
-        "color": "#10b981",
-        "bg_color": "rgba(16, 185, 129, 0.15)",
-        "icon": "\ud83d\udfe2",
-        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
-        "pct_of_normal": 21.2
-      },
-      "holiday": "Regular Operating Day",
-      "season": "REGULAR",
-      "weather_high": 78.0,
-      "weather_low": 60.0,
-      "school_in_session_pct": 85.0
-    },
-    {
       "date": "2026-09-03",
       "formatted_date": "Thursday, Sep 03, 2026",
       "short_date": "Sep 03",
@@ -75,6 +49,32 @@
         "icon": "\ud83d\udfe2",
         "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
         "pct_of_normal": 21.5
+      },
+      "holiday": "Regular Operating Day",
+      "season": "REGULAR",
+      "weather_high": 78.0,
+      "weather_low": 60.0,
+      "school_in_session_pct": 85.0
+    },
+    {
+      "date": "2026-09-04",
+      "formatted_date": "Friday, Sep 04, 2026",
+      "short_date": "Sep 04",
+      "day_of_week": "Friday",
+      "avg_wait": 10.4,
+      "peak_wait": 120,
+      "min_wait": 0,
+      "crowd_level": {
+        "level": "empty",
+        "tier": "EMPTY",
+        "label": "Empty / Walk-on",
+        "badge_text": "\ud83d\udfe2 Empty (Walk-on)",
+        "score": 1,
+        "color": "#10b981",
+        "bg_color": "rgba(16, 185, 129, 0.15)",
+        "icon": "\ud83d\udfe2",
+        "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
+        "pct_of_normal": 21.7
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",

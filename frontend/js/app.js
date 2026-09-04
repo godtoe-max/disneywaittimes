@@ -1156,11 +1156,10 @@ function renderWaitCurveChart(data) {
     return null;
   });
 
-  // Create whimsical magic gradient for today's curve fill
-  const magicGrad = ctx.createLinearGradient(0, 0, 0, 350);
-  magicGrad.addColorStop(0, 'rgba(192, 132, 252, 0.45)');
-  magicGrad.addColorStop(0.6, 'rgba(56, 189, 248, 0.15)');
-  magicGrad.addColorStop(1, 'rgba(56, 189, 248, 0.00)');
+  // Create bright sunny blue gradient for today's curve fill
+  const skyGrad = ctx.createLinearGradient(0, 0, 0, 350);
+  skyGrad.addColorStop(0, 'rgba(26, 115, 232, 0.22)');
+  skyGrad.addColorStop(1, 'rgba(26, 115, 232, 0.00)');
 
   // Destroy previous chart if exists
   if (state.chart) {
@@ -1175,11 +1174,11 @@ function renderWaitCurveChart(data) {
         {
           label: "Today's Live Wait",
           data: todayPoints,
-          borderColor: '#C084FC',
-          backgroundColor: magicGrad,
+          borderColor: '#1a73e8',
+          backgroundColor: skyGrad,
           borderWidth: 3.5,
-          pointBackgroundColor: '#F472B6',
-          pointBorderColor: '#FFFFFF',
+          pointBackgroundColor: '#1a73e8',
+          pointBorderColor: '#ffffff',
           pointBorderWidth: 2,
           pointRadius: 5.5,
           pointHoverRadius: 8,
@@ -1190,11 +1189,12 @@ function renderWaitCurveChart(data) {
         {
           label: 'Historical Hourly Average',
           data: historicalPoints,
-          borderColor: '#FBBF24',
-          borderWidth: 2.4,
+          borderColor: '#f59e0b',
+          borderWidth: 2.5,
           borderDash: [6, 4],
-          pointBackgroundColor: '#FBBF24',
-          pointBorderColor: '#181338',
+          pointBackgroundColor: '#f59e0b',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 1.5,
           pointRadius: 4.5,
           pointHoverRadius: 7,
           fill: false,
@@ -1218,7 +1218,7 @@ function renderWaitCurveChart(data) {
           backgroundColor: 'rgba(15, 23, 42, 0.95)',
           titleColor: '#F8FAFC',
           bodyColor: '#94A3B8',
-          borderColor: 'rgba(255, 255, 255, 0.1)',
+          borderColor: '#e2e8f0',
           borderWidth: 1,
           padding: 12,
           boxPadding: 6,
@@ -1248,13 +1248,14 @@ function renderWaitCurveChart(data) {
       scales: {
         x: {
           grid: {
-            color: 'rgba(255, 255, 255, 0.05)',
+            color: '#f1f5f9',
           },
           ticks: {
-            color: '#94A3B8',
+            color: '#64748b',
             font: {
               family: 'Plus Jakarta Sans',
               size: 11,
+              weight: '600',
             },
           },
         },
@@ -1262,13 +1263,14 @@ function renderWaitCurveChart(data) {
           min: 0,
           suggestedMax: 60,
           grid: {
-            color: 'rgba(255, 255, 255, 0.06)',
+            color: '#e2e8f0',
           },
           ticks: {
-            color: '#94A3B8',
+            color: '#64748b',
             font: {
               family: 'Plus Jakarta Sans',
               size: 11,
+              weight: '600',
             },
             callback: function (val) {
               return `${val}m`;

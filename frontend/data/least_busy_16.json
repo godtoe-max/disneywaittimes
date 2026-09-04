@@ -9,7 +9,7 @@
       "formatted_date": "Friday, Sep 04, 2026",
       "short_date": "Sep 04",
       "day_of_week": "Friday",
-      "avg_wait": 5.9,
+      "avg_wait": 6.0,
       "peak_wait": 45,
       "min_wait": 0,
       "crowd_level": {
@@ -22,7 +22,7 @@
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
         "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
-        "pct_of_normal": 13.1
+        "pct_of_normal": 13.3
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
