@@ -1,0 +1,49 @@
+name: Daily Disney Historical Data Sync
+
+on:
+  schedule:
+    # Run once daily at 04:00 UTC (Midnight Eastern / 9:00 PM Pacific)
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  daily_sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ingest Daily Park Observations
+        run: |
+          python -c "
+          import asyncio
+          from backend.worker import poll_all_parks, init_db
+          async def run():
+              init_db()
+              await poll_all_parks()
+          asyncio.run(run())
+          "
+
+      - name: Recalculate Historical Curves & Best Days
+        run: |
+          python export_static_data.py
+
+      - name: Commit and Push Updated Historical Feeds
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Nightly Automated Sync: Update Disney historical trends and best days intelligence"
+          file_pattern: "frontend/data/* wait_times.db"
