@@ -53,3 +53,17 @@ self.addEventListener('message', (event) => {
     });
   }
 });
+
+// Handle periodic background sync (Android PWA background polling)
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'disney-waits-poll') {
+    event.waitUntil(
+      self.clients.matchAll({ type: 'window' }).then((clientList) => {
+        clientList.forEach((client) => {
+          client.postMessage({ type: 'POLL_NOW' });
+        });
+      })
+    );
+  }
+});
+

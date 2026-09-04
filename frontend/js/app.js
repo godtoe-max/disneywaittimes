@@ -161,7 +161,7 @@ function initLiveClock() {
 function initPollingTimer() {
   const countdownEl = document.getElementById('pollCountdown');
 
-  setInterval(() => {
+  function tick() {
     state.pollSecondsRemaining -= 1;
     if (state.pollSecondsRemaining <= 0) {
       state.pollSecondsRemaining = 300;
@@ -173,14 +173,42 @@ function initPollingTimer() {
     if (countdownEl) {
       countdownEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
     }
-  }, 1000);
+  }
+
+  // Use dedicated background Web Worker timer to bypass mobile browser main-thread throttling
+  try {
+    const blob = new Blob([`
+      let timer = null;
+      self.onmessage = function(e) {
+        if (e.data === 'start') {
+          if (timer) clearInterval(timer);
+          timer = setInterval(() => self.postMessage('tick'), 1000);
+        } else if (e.data === 'stop') {
+          if (timer) clearInterval(timer);
+        }
+      };
+    `], { type: 'application/javascript' });
+    const worker = new Worker(URL.createObjectURL(blob));
+    worker.onmessage = () => tick();
+    worker.postMessage('start');
+  } catch (e) {
+    setInterval(tick, 1000);
+  }
+
+  // Listen for Service Worker background sync triggers
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'POLL_NOW') {
+        fetchAllData(true);
+      }
+    });
+  }
 }
 
 function initVisibilityWatcher() {
   // When mobile phone screen turns back on or user returns to the tab, immediately refresh
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      state.pollSecondsRemaining = 300;
       fetchAllData(true);
     }
   });
