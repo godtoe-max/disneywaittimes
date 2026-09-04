@@ -61,7 +61,7 @@
       "formatted_date": "Friday, Sep 04, 2026",
       "short_date": "Sep 04",
       "day_of_week": "Friday",
-      "avg_wait": 6.9,
+      "avg_wait": 7.2,
       "peak_wait": 55,
       "min_wait": 0,
       "crowd_level": {
@@ -74,7 +74,7 @@
         "bg_color": "rgba(16, 185, 129, 0.15)",
         "icon": "\ud83d\udfe2",
         "description": "Near-zero lines across most attractions! Exceptional walk-on conditions.",
-        "pct_of_normal": 21.6
+        "pct_of_normal": 22.5
       },
       "holiday": "Regular Operating Day",
       "season": "REGULAR",
@@ -421,7 +421,7 @@
     {
       "day_index": 4,
       "day_name": "Friday",
-      "avg_wait": 36.3,
+      "avg_wait": 36.4,
       "samples": 52,
       "crowd_level": {
         "level": "normal",
@@ -433,7 +433,7 @@
         "bg_color": "rgba(245, 158, 11, 0.15)",
         "icon": "\ud83d\udfe1",
         "description": "Standard crowd volume. Headliners have typical lines, secondary rides are manageable.",
-        "pct_of_normal": 113.4
+        "pct_of_normal": 113.8
       }
     },
     {

@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Disney World Live Wait Times &amp; Crowd Tracker</title>
-  <meta name="description" content="Real-time Disney World wait times, time-series curves vs historical averages, and attraction downtime analytics across Magic Kingdom, EPCOT, Hollywood Studios, and Animal Kingdom.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Disney Magic Wait Times &amp; Park Companion</title>
+  <meta name="description" content="Magical real-time Disney World &amp; Disneyland wait tracker, smart ride recommendations, crowd curves, and downtime intelligence.">
+  <meta name="theme-color" content="#0b1021">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Disney Waits">
   
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Chart.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
@@ -18,23 +22,22 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Ambient background glow elements -->
+  <!-- Ambient background glow elements & starry night sparkles -->
   <div class="glow-orb orb-1"></div>
   <div class="glow-orb orb-2"></div>
   <div class="glow-orb orb-3"></div>
+  <div class="stars-particle-container"></div>
 
   <div class="app-container">
-    <!-- Top Header -->
+    <!-- Top Magical Header -->
     <header class="app-header">
       <div class="header-brand">
-        <div class="brand-badge">
-          <svg class="sparkle-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z" />
-          </svg>
+        <div class="brand-badge" title="Pixie Dust Magic">
+          <span class="brand-castle-icon">🏰</span>
         </div>
         <div>
-          <h1 class="brand-title">Disney World <span class="gradient-text">Wait Times Tracker</span></h1>
-          <p class="brand-subtitle">Real-time queue tracking, downtime intelligence, and time-series historical curves</p>
+          <h1 class="brand-title">Disney Magic <span class="gradient-text">Wait Times</span> ✨</h1>
+          <p class="brand-subtitle">Your real-time park navigator, crowd gauge &amp; ride recommendation companion</p>
         </div>
       </div>
 
@@ -60,11 +63,11 @@
       </div>
     </header>
 
-    <!-- Resort Toggle Switcher -->
+    <!-- Resort Toggle Switcher (Thumb-friendly Carousel) -->
     <div class="resort-selector-container">
       <button class="resort-btn active" data-resort="all" id="resortAllBtn">
         <span class="resort-btn-icon">🌐</span>
-        <span class="resort-btn-label">All Disney Parks (6)</span>
+        <span class="resort-btn-label">All Parks (6)</span>
       </button>
       <button class="resort-btn" data-resort="Walt Disney World" id="resortWdwBtn">
         <span class="resort-btn-icon">🏰</span>
@@ -80,12 +83,12 @@
     <section class="resort-banner">
       <div class="banner-stat">
         <div class="stat-label">Resort Status</div>
-        <div class="stat-value" id="resortStatusVal"><span class="badge badge-success">Parks Operating</span></div>
+        <div class="stat-value" id="resortStatusVal"><span class="badge badge-success">Parks Open ✨</span></div>
       </div>
       <div class="banner-divider"></div>
       <div class="banner-stat">
         <div class="stat-label">Total Attractions</div>
-        <div class="stat-value" id="totalRidesVal">--</div>
+        <div class="stat-value" id="totalRidesVal">197</div>
       </div>
       <div class="banner-divider"></div>
       <div class="banner-stat">
@@ -113,51 +116,84 @@
       </div>
     </section>
 
-    <!-- 4 Parks Overview Cards Grid -->
+    <!-- 6 Parks Overview Cards Grid (Swipeable on Mobile) -->
     <section class="parks-grid" id="parksCardsContainer">
-      <!-- Injected via JavaScript -->
       <div class="park-card-skeleton"></div>
       <div class="park-card-skeleton"></div>
       <div class="park-card-skeleton"></div>
       <div class="park-card-skeleton"></div>
     </section>
 
-    <!-- Navigation Tabs -->
-    <nav class="tabs-nav" aria-label="Dashboard Views">
-      <button class="tab-btn active" data-tab="tab-trends" id="tabTrendsBtn">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-        </svg>
-        Wait Curves &amp; Historical Analysis
+    <!-- Desktop Tabs Navigation -->
+    <nav class="tabs-nav desktop-tabs" aria-label="Dashboard Views">
+      <button class="tab-btn active" data-tab="tab-recommendations" id="tabRecommendationsBtn">
+        <span class="tab-icon">🎯</span>
+        Ride Now Recommendations
+      </button>
+      <button class="tab-btn" data-tab="tab-trends" id="tabTrendsBtn">
+        <span class="tab-icon">📈</span>
+        Wait Curves &amp; History
       </button>
       <button class="tab-btn" data-tab="tab-attractions" id="tabAttractionsBtn">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
-        All Attractions Directory (<span id="allRidesCount">--</span>)
+        <span class="tab-icon">🎢</span>
+        All Attractions (<span id="allRidesCount">--</span>)
       </button>
       <button class="tab-btn" data-tab="tab-downtimes" id="tabDowntimesBtn">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
-        Downtime Tracker (<span id="downtimesCountBadge">0</span>)
+        <span class="tab-icon">⚠️</span>
+        Downtimes (<span id="downtimesCountBadge">0</span>)
       </button>
       <button class="tab-btn" data-tab="tab-history" id="tabHistoryBtn">
-        <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        Historical Open Data Archive (<span id="historicalRecordsCountBadge">891k+</span>)
+        <span class="tab-icon">📅</span>
+        Historical Archive &amp; Sweet Spots
       </button>
     </nav>
 
+    <!-- TAB 0: SMART RIDE RECOMMENDATIONS (HERO FEATURE FOR MOBILE IN-PARK) -->
+    <section class="tab-pane active" id="tab-recommendations">
+      <div class="card recommendations-card">
+        <div class="recommendations-hero">
+          <div class="hero-text-wrap">
+            <div class="magical-badge">✨ PARK GENIE NAVIGATOR</div>
+            <h2 class="card-title">What to Ride Right Now</h2>
+            <p class="card-desc">Real-time bargains, walk-on alerts, and shortest queue opportunities based on 5-year hourly averages.</p>
+          </div>
+          <div class="rec-summary-pill" id="recSummaryPill">
+            <span class="sparkle-emoji">⚡</span>
+            <span id="recSummaryCount">Calculating bargains...</span>
+          </div>
+        </div>
+
+        <!-- Filter bar for Park & Strategy -->
+        <div class="rec-filter-section">
+          <div class="rec-park-chips" id="recParkChips">
+            <button class="rec-chip active" data-park="all">🏰 All Parks</button>
+            <button class="rec-chip" data-park="6">🏰 Magic Kingdom</button>
+            <button class="rec-chip" data-park="5">🌐 EPCOT</button>
+            <button class="rec-chip" data-park="7">🎬 Hollywood Studios</button>
+            <button class="rec-chip" data-park="8">🌳 Animal Kingdom</button>
+            <button class="rec-chip" data-park="16">✨ Disneyland</button>
+            <button class="rec-chip" data-park="17">🎡 California Adv.</button>
+          </div>
+
+          <div class="rec-category-chips" id="recCategoryChips">
+            <button class="category-chip active" data-category="all">✨ All Recommendations</button>
+            <button class="category-chip" data-category="bargain">🔥 Bargain Deals (Below Avg)</button>
+            <button class="category-chip" data-category="walkon">🚀 Walk-Ons (&le;15m)</button>
+            <button class="category-chip" data-category="surge">⏳ Ride Before Surge</button>
+            <button class="category-chip" data-category="headliner">👑 E-Ticket Headliners</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Recommendations Grid -->
+        <div class="recommendations-grid" id="recommendationsGrid">
+          <div class="park-card-skeleton" style="height: 180px; border-radius: 16px;"></div>
+          <div class="park-card-skeleton" style="height: 180px; border-radius: 16px;"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- TAB 1: WAIT CURVES & HISTORICAL ANALYSIS -->
-    <section class="tab-pane active" id="tab-trends">
+    <section class="tab-pane" id="tab-trends">
       <div class="card trends-card">
         <div class="trends-header">
           <div>
@@ -176,7 +212,6 @@
         <!-- Quick Flagship Ride Shortcut Chips -->
         <div class="quick-chips" id="quickChipsContainer">
           <span class="chips-label">Popular Flagships:</span>
-          <!-- Dynamic buttons for Space Mountain, Cosmic Rewind, Rise of Resistance, Flight of Passage, TRON -->
         </div>
 
         <!-- Selected Ride KPI Strip -->
@@ -234,83 +269,158 @@
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" id="attractionSearch" placeholder="Search by attraction name or land..." class="search-input">
+            <input type="text" id="attractionSearch" placeholder="Search attraction or land..." class="search-input">
             <button id="clearSearchBtn" class="clear-btn hidden">&times;</button>
           </div>
 
-          <div class="filter-group">
-            <button class="filter-pill active" data-park-filter="all">All Parks</button>
-            <button class="filter-pill" data-park-filter="6">Magic Kingdom</button>
-            <button class="filter-pill" data-park-filter="5">EPCOT</button>
-            <button class="filter-pill" data-park-filter="7">Hollywood Studios</button>
-            <button class="filter-pill" data-park-filter="8">Animal Kingdom</button>
-            <button class="filter-pill" data-park-filter="16">Disneyland</button>
-            <button class="filter-pill" data-park-filter="17">California Adventure</button>
+          <div class="filter-group-row">
+            <div class="filter-group">
+              <button class="filter-pill active" data-park-filter="all">All Parks</button>
+              <button class="filter-pill" data-park-filter="6">Magic Kingdom</button>
+              <button class="filter-pill" data-park-filter="5">EPCOT</button>
+              <button class="filter-pill" data-park-filter="7">Hollywood Studios</button>
+              <button class="filter-pill" data-park-filter="8">Animal Kingdom</button>
+              <button class="filter-pill" data-park-filter="16">Disneyland</button>
+              <button class="filter-pill" data-park-filter="17">California Adv.</button>
+            </div>
+
+            <div class="view-mode-toggle">
+              <button id="viewCardsBtn" class="mode-btn active" title="Card View">📱 Cards</button>
+              <button id="viewTableBtn" class="mode-btn" title="Table View">📊 Table</button>
+            </div>
           </div>
 
-          <div class="status-toggle-group">
+          <div class="status-toggles">
             <label class="checkbox-container">
               <input type="checkbox" id="openOnlyCheckbox">
               <span class="checkbox-checkmark"></span>
-              Open Only
+              Open Attractions Only
             </label>
+            <span class="results-count" id="filteredCount">Showing 0 attractions</span>
           </div>
         </div>
 
-        <!-- Attractions Grid / Table -->
-        <div class="table-responsive">
+        <!-- Mobile Touch Cards Container (Default for Mobile) -->
+        <div class="attractions-cards-grid" id="attractionsCardsGrid">
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <!-- Table View Container -->
+        <div class="table-responsive hidden" id="attractionsTableContainer">
           <table class="attractions-table" id="attractionsTable">
             <thead>
               <tr>
-                <th data-sort="name">Attraction <span class="sort-indicator">&#x21C5;</span></th>
-                <th data-sort="park">Park <span class="sort-indicator">&#x21C5;</span></th>
-                <th data-sort="land">Land <span class="sort-indicator">&#x21C5;</span></th>
-                <th data-sort="status">Status <span class="sort-indicator">&#x21C5;</span></th>
-                <th data-sort="wait" class="text-right">Live Wait <span class="sort-indicator">&#x21C5;</span></th>
+                <th data-sort="name">Attraction Name <span class="sort-arrow">↕</span></th>
+                <th data-sort="park">Park <span class="sort-arrow">↕</span></th>
+                <th>Land</th>
+                <th data-sort="wait" class="text-right">Live Wait <span class="sort-arrow">↕</span></th>
+                <th data-sort="status" class="text-center">Status <span class="sort-arrow">↕</span></th>
                 <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody id="attractionsTableBody">
-              <!-- Rendered via JS -->
+              <!-- Injected via JavaScript -->
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: DOWNTIME TRACKER -->
+    <!-- TAB 3: DOWNTIMES TRACKER -->
     <section class="tab-pane" id="tab-downtimes">
       <div class="card downtimes-card">
         <div class="downtimes-header">
           <div>
-            <h2 class="card-title text-danger-heading">
-              <span class="downtime-pulse-dot"></span>
-              Current Attraction Downtimes
+            <h2 class="card-title text-danger">
+              <span class="danger-pulse-dot"></span>
+              Active Attraction Downtimes
             </h2>
-            <p class="card-desc">Attractions currently reported closed during regular park operating hours with downtime duration tracking.</p>
+            <p class="card-desc">Attractions currently closed or temporarily non-operational during regular operating hours.</p>
           </div>
-          <div class="downtime-count-pill" id="downtimeSummaryPill">
-            <span id="downtimeSummaryText">0 Attractions Down</span>
+          <div class="downtimes-summary-pill" id="downtimesSummaryPill">
+            <span id="downPillCount">0</span> Rides Currently Down
           </div>
         </div>
 
-        <div class="downtimes-grid" id="downtimesGrid">
-          <!-- Rendered via JS -->
+        <div class="downtimes-grid" id="downtimesContainer">
+          <!-- Injected via JavaScript -->
         </div>
       </div>
     </section>
 
-    <!-- TAB 4: HISTORICAL ARCHIVES (PARK -> RIDE -> DAY EXPLORER) -->
+    <!-- TAB 4: HISTORICAL ARCHIVES & LEAST BUSY DAYS -->
     <section class="tab-pane" id="tab-history">
       <div class="card history-card">
+        <!-- Showcase: Least Busy Days of the Year -->
+        <div class="least-busy-showcase-section" id="leastBusySection">
+          <div class="section-title-wrap">
+            <div class="section-badge text-cyan">✨ HISTORICAL CROWD INTELLIGENCE</div>
+            <h3 class="section-heading">Least Busy Days of the Year &amp; Sweet Spots</h3>
+            <p class="section-desc">
+              Discover the lowest-crowd dates, best days of the week, and top seasonal sweet spots for any individual Disney park.
+            </p>
+          </div>
+
+          <!-- Park Selector Pills -->
+          <div class="least-busy-park-bar" id="leastBusyParkBar">
+            <button class="least-busy-park-btn active" data-park-id="6">🏰 Magic Kingdom</button>
+            <button class="least-busy-park-btn" data-park-id="5">🌐 EPCOT</button>
+            <button class="least-busy-park-btn" data-park-id="7">🎬 Hollywood Studios</button>
+            <button class="least-busy-park-btn" data-park-id="8">🌳 Animal Kingdom</button>
+            <button class="least-busy-park-btn" data-park-id="16">✨ Disneyland</button>
+            <button class="least-busy-park-btn" data-park-id="17">🎡 California Adv.</button>
+          </div>
+
+          <!-- Main Least Busy Content Grid -->
+          <div class="least-busy-content-container" id="leastBusyContainer">
+            <div class="park-card-skeleton" style="height: 220px; border-radius: 16px;"></div>
+          </div>
+        </div>
+
+        <!-- Multi-Ride Wishlist & Lightning Lane Evaluator -->
+        <div class="wishlist-planner-section" id="wishlistPlannerSection" style="margin-top:40px;">
+          <div class="section-title-wrap">
+            <div class="section-badge text-gold">FAMILY PLANNING ENGINE</div>
+            <h3 class="section-heading">Multi-Ride Wishlist &amp; Lightning Lane ROI Evaluator</h3>
+            <p class="section-desc">
+              Pick your family's 3 to 5 must-do attractions. The engine will calculate your total standby line time and evaluate whether Lightning Lane is worth the cost.
+            </p>
+          </div>
+
+          <div class="wishlist-controls-bar">
+            <div class="control-group">
+              <label class="control-label">Family Size:</label>
+              <select id="wishlistFamilySize" class="select-input select-sm">
+                <option value="2">2 Guests ($54)</option>
+                <option value="3">3 Guests ($81)</option>
+                <option value="4">4 Guests ($108)</option>
+                <option value="5" selected>5 Guests ($135)</option>
+                <option value="6">6 Guests ($162)</option>
+                <option value="8">8 Guests ($216)</option>
+              </select>
+            </div>
+            <button id="evaluateWishlistBtn" class="btn btn-sm btn-primary">⚡ Evaluate Lightning Lane ROI</button>
+          </div>
+
+          <!-- Checklist Grid of Attractions in Current Park -->
+          <div class="wishlist-rides-grid" id="wishlistRidesGrid">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Wishlist Evaluation Results Card -->
+          <div class="wishlist-results-card hidden" id="wishlistResultsCard">
+            <!-- Dynamic verdict, standby meter, cost analysis, and ride breakdown table -->
+          </div>
+        </div>
+
         <!-- Archive Header Stats -->
-        <div class="archive-header">
+        <div class="archive-header" style="margin-top:45px;">
           <div>
             <h2 class="card-title text-gold">
               <span class="gold-pulse-dot"></span>
               Historical Attraction &amp; Day Explorer
             </h2>
-            <p class="card-desc">Select a park, choose an attraction, then pick any calendar day to inspect its full wait time curve and crowd conditions.</p>
+            <p class="card-desc">Select a park, choose an attraction, then pick any calendar day to inspect its full historical wait time curve.</p>
           </div>
           <div class="archive-stat-pills">
             <span class="archive-badge"><strong id="histTotalRecords">891,365</strong> Observations</span>
@@ -321,57 +431,30 @@
 
         <!-- 3-STEP SELECTION BAR -->
         <div class="step-workflow-container">
-          <!-- Step 1: Select Park -->
           <div class="step-box">
             <div class="step-label"><span class="step-num">1</span> Select Park</div>
             <div class="step-park-buttons" id="histParkButtons">
-              <button class="step-park-btn active" data-park="6">
-                <span class="park-btn-icon">🏰</span>
-                <span>Magic Kingdom</span>
-              </button>
-              <button class="step-park-btn" data-park="5">
-                <span class="park-btn-icon">🌐</span>
-                <span>EPCOT</span>
-              </button>
-              <button class="step-park-btn" data-park="7">
-                <span class="park-btn-icon">🎬</span>
-                <span>Hollywood Studios</span>
-              </button>
-              <button class="step-park-btn" data-park="8">
-                <span class="park-btn-icon">🌳</span>
-                <span>Animal Kingdom</span>
-              </button>
-              <button class="step-park-btn" data-park="16">
-                <span class="park-btn-icon">✨</span>
-                <span>Disneyland</span>
-              </button>
-              <button class="step-park-btn" data-park="17">
-                <span class="park-btn-icon">🎡</span>
-                <span>DCA</span>
-              </button>
+              <button class="step-park-btn active" data-park="6">🏰 Magic Kingdom</button>
+              <button class="step-park-btn" data-park="5">🌐 EPCOT</button>
+              <button class="step-park-btn" data-park="7">🎬 Hollywood Studios</button>
+              <button class="step-park-btn" data-park="8">🌳 Animal Kingdom</button>
+              <button class="step-park-btn" data-park="16">✨ Disneyland</button>
+              <button class="step-park-btn" data-park="17">🎡 California Adv.</button>
             </div>
           </div>
 
-          <!-- Step 2: Select Attraction -->
           <div class="step-box">
             <div class="step-label"><span class="step-num">2</span> Select Attraction</div>
             <select id="histAttractionPicker" class="select-input select-step">
-              <!-- Injected via JS based on selected park -->
+              <!-- Injected via JS -->
             </select>
-            <div id="attractionArchiveNotice" class="step-hint-badge">
-              <!-- e.g. "⭐ 10-Year TouringPlans Archive (109k records)" -->
-            </div>
           </div>
 
-          <!-- Step 3: Choose Date -->
           <div class="step-box">
             <div class="step-label"><span class="step-num">3</span> Choose a Particular Day</div>
             <div class="date-picker-wrap">
               <input type="date" id="histDayPicker" class="date-input" value="2021-04-04">
               <button id="loadDayBtn" class="btn btn-sm btn-primary">View Day Curve</button>
-            </div>
-            <div id="dateRangeHint" class="step-hint-badge text-gold">
-              <!-- e.g. "Archive covers 2021-01-01 to Present" -->
             </div>
           </div>
         </div>
@@ -380,276 +463,50 @@
         <div class="day-presets-bar">
           <span class="presets-label">Popular Event Days:</span>
           <div class="presets-buttons-wrap" id="dayPresetsContainer">
-            <button class="preset-chip active" data-date="2021-04-04">🐰 Easter Sunday 2021</button>
-            <button class="preset-chip" data-date="2021-07-04">🇺🇸 4th of July 2021</button>
-            <button class="preset-chip" data-date="2021-09-14">🍂 Low-Crowd Fall Tuesday</button>
-            <button class="preset-chip" data-date="2021-11-25">🦃 Thanksgiving 2021</button>
-            <button class="preset-chip" data-date="2021-12-25">🎄 Christmas Day 2021</button>
-            <button class="preset-chip" data-date="2026-09-02">📅 Today's Live Data</button>
+            <button class="preset-chip active" data-date="2021-04-04">🐰 Easter Sunday</button>
+            <button class="preset-chip" data-date="2021-07-04">🇺🇸 4th of July</button>
+            <button class="preset-chip" data-date="2021-09-14">🍂 Low-Crowd Fall</button>
+            <button class="preset-chip" data-date="2021-11-25">🦃 Thanksgiving</button>
+            <button class="preset-chip" data-date="2021-12-25">🎄 Christmas Day</button>
           </div>
-        </div>
-
-        <!-- EMPTY STATE / MISSING DATA ALERT (Shown when no data on selected date) -->
-        <div id="dayEmptyAlert" class="empty-data-alert hidden">
-          <!-- Injected via JS -->
         </div>
 
         <!-- STEP 4: DAY DEEP DIVE & WAIT CURVE PANEL -->
         <div class="hist-day-panel" id="histDayPanel">
-          <!-- Day Context Banner -->
           <div class="day-context-banner">
             <div>
               <div class="day-badge-row">
                 <span class="badge badge-park" id="dayParkBadge">Magic Kingdom</span>
                 <span class="badge badge-source" id="daySourceBadge">⭐ Ground-Truth Archive</span>
-                <span class="badge badge-tier" id="dayTierBadge">D-Ticket</span>
                 <span class="badge badge-season" id="daySeasonBadge">EASTER PEAK</span>
-                <span class="badge badge-holiday" id="dayHolidayBadge">Easter Sunday</span>
               </div>
               <h3 class="day-main-title">
-                <span id="dayRideTitle">Seven Dwarfs Mine Train</span> on <span class="text-cyan" id="dayDateDisplay">Sunday, April 21, 2019</span>
+                <span id="dayRideTitle">Seven Dwarfs Mine Train</span> on <span class="text-cyan" id="dayDateDisplay">Sunday, April 4, 2021</span>
               </h3>
-            </div>
-
-            <div class="day-weather-hours" id="dayWeatherHours">
-              <div class="day-meta-pill">
-                <span class="meta-icon">⏰</span>
-                <span>Hours: <strong id="dayHoursVal">7:00 AM – 1:00 AM</strong></span>
-              </div>
-              <div class="day-meta-pill">
-                <span class="meta-icon">🌤️</span>
-                <span>Weather: <strong id="dayWeatherVal">84° / 68°F</strong></span>
-              </div>
-              <div class="day-meta-pill">
-                <span class="meta-icon">🏫</span>
-                <span>School Session: <strong id="daySchoolVal">0% (Holiday)</strong></span>
-              </div>
             </div>
           </div>
 
-          <!-- Day KPI Metric Cards -->
           <div class="day-kpi-grid">
             <div class="kpi-card">
-              <span class="kpi-label">Day's Avg Posted Wait</span>
+              <span class="kpi-label">Avg Posted Wait</span>
               <span class="kpi-value text-gold" id="dayAvgPostedVal">-- min</span>
-              <span class="kpi-sub">Official Disney wait time</span>
             </div>
             <div class="kpi-card">
-              <span class="kpi-label">Day's Avg Actual Wait</span>
+              <span class="kpi-label">Avg Actual Wait</span>
               <span class="kpi-value text-success" id="dayAvgActualVal">-- min</span>
-              <span class="kpi-sub" id="dayActualCountVal">-- timers recorded</span>
             </div>
             <div class="kpi-card">
-              <span class="kpi-label">Peak Wait of the Day</span>
+              <span class="kpi-label">Peak Wait of Day</span>
               <span class="kpi-value text-danger" id="dayPeakWaitVal">-- min</span>
-              <span class="kpi-sub" id="dayPeakTimeVal">at --:--</span>
             </div>
             <div class="kpi-card">
               <span class="kpi-label">Lowest Daytime Wait</span>
               <span class="kpi-value text-success" id="dayMinWaitVal">-- min</span>
-              <span class="kpi-sub" id="dayMinTimeVal">at --:--</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">Disney Wait Padding</span>
-              <span class="kpi-value text-cyan" id="dayPaddingVal">--%</span>
-              <span class="kpi-sub">Actual vs posted discount</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-label">Total Observations</span>
-              <span class="kpi-value" id="dayTotalObsVal">--</span>
-              <span class="kpi-sub">Recorded throughout day</span>
             </div>
           </div>
 
-          <!-- Actionable Day Strategy & Real-Wait Card -->
-          <div class="day-strategy-card" id="dayStrategyCard">
-            <div class="strategy-col">
-              <div class="strategy-label"><span class="strategy-icon">🎯</span> Best Time to Ride Window</div>
-              <div class="strategy-val text-success" id="stratBestTime">Before 10:15 AM or after 7:45 PM</div>
-              <div class="strategy-sub" id="stratBestWait">Expected wait: ~15 min</div>
-            </div>
-            <div class="strategy-col">
-              <div class="strategy-label"><span class="strategy-icon">🔥</span> Peak Rush Window</div>
-              <div class="strategy-val text-danger" id="stratPeakWindow">12:30 PM peak rush</div>
-              <div class="strategy-sub" id="stratPeakSavings">Saves ~35 min if avoided</div>
-            </div>
-            <div class="strategy-col">
-              <div class="strategy-label"><span class="strategy-icon">💡</span> Actual vs. Posted Reality</div>
-              <div class="strategy-val text-cyan" id="stratRealVsPosted">Expect ~38m actual wait when sign says 55m</div>
-              <div class="strategy-sub">Based on in-park rider timers</div>
-            </div>
-            <div class="strategy-col">
-              <div class="strategy-label"><span class="strategy-icon">⚡</span> Lightning Lane Advice</div>
-              <div class="strategy-val text-gold" id="stratLLAdvice">Recommended during midday</div>
-              <div class="strategy-sub" id="stratLLType">Multi Pass Eligible</div>
-            </div>
-          </div>
-
-          <!-- Day Wait Curve Chart -->
-          <div class="day-chart-wrapper">
-            <div class="box-title-row">
-              <h4>Wait Time Progression on <span id="chartDayDateLabel">Selected Day</span></h4>
-              <div class="chart-tag-group">
-                <span class="chart-tag-cyan">● Official Posted Wait</span>
-                <span class="chart-tag-green">● Real Actual Wait (Timer)</span>
-                <span class="chart-tag-amber">- - All-Time Average Baseline</span>
-              </div>
-            </div>
-            <div class="day-chart-canvas-container">
-              <canvas id="dayWaitCurveChart"></canvas>
-              <div id="dayChartOverlay" class="chart-overlay hidden">
-                <div class="spinner"></div>
-                <span>Loading day wait curve...</span>
-              </div>
-            </div>
-            <div class="chart-legend-custom">
-              <div class="legend-item">
-                <span class="legend-bullet cyan-solid"></span>
-                <span><strong>Official Posted Wait:</strong> Real measurements displayed on wait boards throughout this day</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-bullet" style="background:#10B981;"></span>
-                <span><strong>Real Actual Wait (Timer):</strong> In-park measurements logged by riders on this exact day</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-bullet gold-dashed"></span>
-                <span><strong>All-Time Average Baseline:</strong> Expected normal queue for this attraction to compare against</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Day Observations Table -->
-          <div class="day-table-section">
-            <div class="box-title-row">
-              <h4>Recorded Observations on this Day (<span id="dayObsTableCount">0</span> readings)</h4>
-            </div>
-            <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
-              <table class="attractions-table">
-                <thead>
-                  <tr>
-                    <th>Local Time (Orlando)</th>
-                    <th>Posted Wait</th>
-                    <th>Actual Wait (Lines Timer)</th>
-                    <th>Status</th>
-                    <th>Comparison vs Baseline</th>
-                  </tr>
-                </thead>
-                <tbody id="dayObsTableBody">
-                  <!-- Injected via JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Multi-Ride Wishlist & Lightning Lane Evaluator -->
-          <div class="wishlist-planner-section" id="wishlistPlannerSection">
-            <div class="section-title-wrap">
-              <div class="section-badge text-gold">FAMILY PLANNING ENGINE</div>
-              <h3 class="section-heading">Multi-Ride Wishlist & Lightning Lane ROI Evaluator</h3>
-              <p class="section-desc">
-                Pick your family's 3 to 5 must-do attractions on this date. The engine will calculate your total standby line time and determine whether investing in Lightning Lane makes financial sense for your family.
-              </p>
-            </div>
-
-            <div class="wishlist-controls-bar">
-              <div class="control-group">
-                <label class="control-label">Family Size:</label>
-                <select id="wishlistFamilySize" class="select-input select-sm">
-                  <option value="2">2 Guests ($54)</option>
-                  <option value="3">3 Guests ($81)</option>
-                  <option value="4">4 Guests ($108)</option>
-                  <option value="5" selected>5 Guests ($135)</option>
-                  <option value="6">6 Guests ($162)</option>
-                  <option value="8">8 Guests ($216)</option>
-                </select>
-              </div>
-              <button id="evaluateWishlistBtn" class="btn btn-sm btn-primary">⚡ Evaluate Wishlist & Lightning Lane</button>
-            </div>
-
-            <!-- Checklist Grid of Attractions in Current Park -->
-            <div class="wishlist-rides-grid" id="wishlistRidesGrid">
-              <!-- Dynamically populated via JS with checkboxes, tier badges, and names -->
-            </div>
-
-            <!-- Wishlist Evaluation Results Card -->
-            <div class="wishlist-results-card hidden" id="wishlistResultsCard">
-              <!-- Dynamic verdict, standby meter, cost analysis, and ride breakdown table -->
-            </div>
-          </div>
-        </div>
-
-        <!-- SECONDARY SECTION: DAY OF WEEK PATTERNS & CROWD CALENDAR -->
-        <div class="history-subheading" style="margin-top: 40px;">
-          <h3>Resort Crowd Calendar, Holiday Archive &amp; Sunday Mass Patterns</h3>
-          <p class="muted-label">Browse historical day-of-week averages (Sunday vs Saturday) and past crowd calendar holiday events.</p>
-        </div>
-
-        <div class="deepdive-analytics-row">
-          <!-- Day of Week List -->
-          <div class="deepdive-dow-box">
-            <div class="box-title-row">
-              <h4>Sunday Mass vs. Weekday Patterns</h4>
-              <span class="chart-tag text-gold">Sunday Planner</span>
-            </div>
-            <p class="box-desc">Historical average wait times by day of the week for <span id="dowRideName">Seven Dwarfs Mine Train</span> based on tens of thousands of park days.</p>
-            <div class="dow-list" id="ddDowList">
-              <!-- Injected via JS -->
-            </div>
-          </div>
-
-          <!-- Historical Crowd Calendar Table -->
-          <div class="deepdive-chart-box">
-            <div class="box-title-row">
-              <h4>Holiday Crowd &amp; Weather Archive</h4>
-              <label class="checkbox-container" style="font-size:0.78rem;">
-                <input type="checkbox" id="holidayOnlyCheckbox" checked>
-                <span class="checkbox-checkmark"></span>
-                Holidays Only
-              </label>
-            </div>
-            <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-              <table class="attractions-table" style="font-size:0.82rem;">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Holiday / Event</th>
-                    <th>Season</th>
-                    <th>Weather</th>
-                    <th>MK Hours</th>
-                  </tr>
-                </thead>
-                <tbody id="calendarTableBody">
-                  <!-- Injected via JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- TERTIARY SECTION: LEAST BUSY DAYS OF THE YEAR & OPTIMAL TRAVEL WINDOWS -->
-        <div class="least-busy-showcase-section" id="leastBusySection" style="margin-top: 45px;">
-          <div class="section-title-wrap">
-            <div class="section-badge text-cyan">HISTORICAL CROWD OPTIMIZER</div>
-            <h3 class="section-heading">Least Busy Days of the Year &amp; Optimal Travel Windows</h3>
-            <p class="section-desc">
-              Discover the lowest-crowd dates, best days of the week, and top seasonal sweet spots for any individual Disney park based on 5+ years of historical data.
-            </p>
-          </div>
-
-          <!-- Park Selector Pills -->
-          <div class="least-busy-park-bar" id="leastBusyParkBar">
-            <button class="least-busy-park-btn active" data-park-id="6">🏰 Magic Kingdom</button>
-            <button class="least-busy-park-btn" data-park-id="5">🌐 EPCOT</button>
-            <button class="least-busy-park-btn" data-park-id="7">🎬 Hollywood Studios</button>
-            <button class="least-busy-park-btn" data-park-id="8">🌳 Animal Kingdom</button>
-            <button class="least-busy-park-btn" data-park-id="16">✨ Disneyland Park</button>
-            <button class="least-busy-park-btn" data-park-id="17">🎡 Disney California Adv.</button>
-          </div>
-
-          <!-- Main Least Busy Content Grid -->
-          <div class="least-busy-content-container" id="leastBusyContainer">
-            <!-- Dynamic Top 10 Days Table, Day-of-Week Rankings, and 4 Seasonal Sweet Spot Cards -->
-            <div class="park-card-skeleton" style="height: 220px; border-radius: 16px;"></div>
+          <div class="chart-container" style="height:320px; margin-top:20px;">
+            <canvas id="dayCurveChart"></canvas>
           </div>
         </div>
       </div>
@@ -657,10 +514,34 @@
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p>Data provided via <a href="https://queue-times.com" target="_blank" rel="noopener">Queue-Times.com API</a>. Polling every 5 minutes with SQLite time-series persistence.</p>
-      <p class="footer-sub">Walt Disney World Resort &copy; Disney. Unofficial tracker built for queue analytics.</p>
+      <p>Data provided via <a href="https://queue-times.com" target="_blank" rel="noopener">Queue-Times.com API</a>. 5-minute background polling with 5-year historical intelligence.</p>
+      <p class="footer-sub">Walt Disney World &amp; Disneyland Resort &copy; Disney. Unofficial tracker built for mobile theme park navigation.</p>
     </footer>
   </div>
+
+  <!-- STICKY MOBILE BOTTOM NAVIGATION BAR (Thumb-Friendly on Phones) -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <button class="bottom-nav-btn active" data-tab="tab-recommendations">
+      <span class="nav-icon">🎯</span>
+      <span class="nav-label">Ride Now</span>
+    </button>
+    <button class="bottom-nav-btn" data-tab="tab-attractions">
+      <span class="nav-icon">🎢</span>
+      <span class="nav-label">Rides</span>
+    </button>
+    <button class="bottom-nav-btn" data-tab="tab-trends">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Curves</span>
+    </button>
+    <button class="bottom-nav-btn" data-tab="tab-downtimes">
+      <span class="nav-icon">⚠️</span>
+      <span class="nav-label">Down</span>
+    </button>
+    <button class="bottom-nav-btn" data-tab="tab-history">
+      <span class="nav-icon">⭐</span>
+      <span class="nav-label">Best Days</span>
+    </button>
+  </nav>
 
   <script src="js/app.js"></script>
 </body>

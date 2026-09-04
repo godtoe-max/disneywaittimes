@@ -13,8 +13,11 @@ const state = {
   histSelectedParkId: 6,    // Default: Magic Kingdom
   histSelectedDate: '2021-04-04', // Default: Easter Sunday 2021
   historyOverview: null,
-  activeTab: 'tab-trends',
+  activeTab: 'tab-recommendations',
   parkFilter: 'all',
+  recParkFilter: 'all',
+  recCategoryFilter: 'all',
+  viewMode: 'cards', // 'cards' or 'table'
   searchQuery: '',
   openOnly: false,
   sortColumn: 'wait',
@@ -23,6 +26,7 @@ const state = {
   dayChart: null,
   pollSecondsRemaining: 300,
   isSyncing: false,
+  rideCurvesCache: null,
 };
 
 // Park display metadata
@@ -166,13 +170,61 @@ function initEventListeners() {
   const syncBtn = document.getElementById('syncNowBtn');
   syncBtn.addEventListener('click', triggerManualSync);
 
-  // Tab switching
+  // Desktop Tab switching
   document.querySelectorAll('.tab-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
       switchTab(targetTab);
     });
   });
+
+  // Mobile Bottom Navigation Tab switching
+  document.querySelectorAll('.bottom-nav-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-tab');
+      switchTab(targetTab);
+    });
+  });
+
+  // Recommendations: Park Filter Chips
+  document.querySelectorAll('#recParkChips .rec-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#recParkChips .rec-chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      state.recParkFilter = chip.getAttribute('data-park');
+      renderRecommendations();
+    });
+  });
+
+  // Recommendations: Category Strategy Chips
+  document.querySelectorAll('#recCategoryChips .category-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#recCategoryChips .category-chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      state.recCategoryFilter = chip.getAttribute('data-category');
+      renderRecommendations();
+    });
+  });
+
+  // Attraction View Mode Toggle (Cards vs Table)
+  const viewCardsBtn = document.getElementById('viewCardsBtn');
+  const viewTableBtn = document.getElementById('viewTableBtn');
+  if (viewCardsBtn && viewTableBtn) {
+    viewCardsBtn.addEventListener('click', () => {
+      state.viewMode = 'cards';
+      viewCardsBtn.classList.add('active');
+      viewTableBtn.classList.remove('active');
+      document.getElementById('attractionsCardsGrid').classList.remove('hidden');
+      document.getElementById('attractionsTableContainer').classList.add('hidden');
+    });
+    viewTableBtn.addEventListener('click', () => {
+      state.viewMode = 'table';
+      viewTableBtn.classList.add('active');
+      viewCardsBtn.classList.remove('active');
+      document.getElementById('attractionsCardsGrid').classList.add('hidden');
+      document.getElementById('attractionsTableContainer').classList.remove('hidden');
+    });
+  }
 
   // Attraction search
   const searchInput = document.getElementById('attractionSearch');
@@ -201,6 +253,7 @@ function initEventListeners() {
       renderParksGrid();
       renderAttractionsTable();
       renderDowntimes();
+      renderRecommendations();
     });
   });
 
@@ -331,9 +384,18 @@ function initEventListeners() {
 
 function switchTab(tabId) {
   state.activeTab = tabId;
+
+  // Desktop buttons
   document.querySelectorAll('.tab-btn').forEach((btn) => {
     btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
   });
+
+  // Mobile bottom nav buttons
+  document.querySelectorAll('.bottom-nav-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+  });
+
+  // Panes
   document.querySelectorAll('.tab-pane').forEach((pane) => {
     pane.classList.toggle('active', pane.id === tabId);
   });
@@ -344,6 +406,12 @@ function switchTab(tabId) {
   if (tabId === 'tab-history' && state.dayChart) {
     setTimeout(() => state.dayChart.resize(), 100);
   }
+  if (tabId === 'tab-recommendations') {
+    renderRecommendations();
+  }
+
+  // Scroll to top of tab view smoothly
+  window.scrollTo({ top: 320, behavior: 'smooth' });
 }
 
 /* ==========================================================================
@@ -481,6 +549,7 @@ async function fetchAllData(isBackground = false) {
     renderDowntimes();
     renderHistoryArchive();
     renderHistoricalCalendar();
+    loadAndCalculateRecommendations();
     loadLeastBusyDays(state.histSelectedParkId || 6);
 
     // Default select Seven Dwarfs Mine Train (109,294 historical records)
@@ -495,6 +564,196 @@ async function fetchAllData(isBackground = false) {
     console.error('Error fetching dashboard data:', err);
   }
 }
+
+/* ==========================================================================
+   Smart Ride Recommendations ("Park Genie")
+   ========================================================================== */
+async function loadAndCalculateRecommendations() {
+  if (!state.rideCurvesCache) {
+    try {
+      const res = await fetch('data/ride_curves.json');
+      if (res.ok) {
+        state.rideCurvesCache = await res.json();
+      }
+    } catch (e) {
+      console.warn('Could not load ride curves cache:', e);
+    }
+  }
+
+  renderRecommendations();
+}
+
+function formatHourDisplay(h) {
+  const period = h < 12 ? 'AM' : 'PM';
+  const displayH = h <= 12 ? h : h - 12;
+  return `${displayH === 0 ? 12 : displayH} ${period}`;
+}
+
+function renderRecommendations() {
+  const container = document.getElementById('recommendationsGrid');
+  const summaryCountEl = document.getElementById('recSummaryCount');
+  if (!container) return;
+
+  const nowUtc = new Date();
+  const currentHourUtc = nowUtc.getUTCHours();
+
+  const isResortFiltered = state.selectedResort !== 'all';
+  const targetParkIds = new Set(
+    state.parks
+      .filter((p) => !isResortFiltered || p.resort === state.selectedResort)
+      .map((p) => p.id)
+  );
+
+  const filteredRides = state.rides.filter((r) => {
+    if (isResortFiltered && !targetParkIds.has(r.park_id)) return false;
+    if (state.recParkFilter !== 'all' && String(r.park_id) !== state.recParkFilter) return false;
+    return true;
+  });
+
+  const recommendations = [];
+
+  filteredRides.forEach((ride) => {
+    if (!ride.is_open) return; // Only recommend currently operating rides
+    const wait = ride.wait_time;
+    const parkOffset = (ride.park_id === 16 || ride.park_id === 17) ? -7 : -4;
+    const localHour = (currentHourUtc + parkOffset + 24) % 24;
+
+    let histAvg = null;
+    let nextAvg = null;
+
+    if (state.rideCurvesCache && state.rideCurvesCache[String(ride.id)]) {
+      const histData = state.rideCurvesCache[String(ride.id)];
+      const hourlyList = histData.hourly_averages || histData.curve || [];
+      const match = hourlyList.find((h) => (h.hour === localHour || h.local_hour === localHour));
+      if (match) histAvg = match.avg_wait_time || match.average_wait;
+
+      const nextMatch = hourlyList.find((h) => (h.hour === (localHour + 2) % 24 || h.local_hour === (localHour + 2) % 24));
+      if (nextMatch) nextAvg = nextMatch.avg_wait_time || nextMatch.average_wait;
+    }
+
+    const isFlagship = FLAGSHIP_KEYWORDS.some((kw) => ride.name.toLowerCase().includes(kw.toLowerCase()));
+
+    // 1. Bargain Deals: Wait time is at least 10 mins lower than typical historical average
+    if (histAvg !== null && histAvg >= 25 && (histAvg - wait) >= 10) {
+      const diff = Math.round(histAvg - wait);
+      recommendations.push({
+        ride,
+        type: 'bargain',
+        badgeClass: 'pill-bargain',
+        badgeText: `🔥 Save ~${diff}m vs. ${formatHourDisplay(localHour)} Avg!`,
+        score: diff * 2.5 + (isFlagship ? 20 : 0),
+        explanation: `Historical average right now is ${Math.round(histAvg)} mins. Standby line is moving significantly faster than normal!`,
+        diffMins: diff,
+        histAvg: Math.round(histAvg),
+      });
+    }
+
+    // 2. Walk-On Gems: Quality attractions with <= 15m wait
+    if (wait <= 15) {
+      recommendations.push({
+        ride,
+        type: 'walkon',
+        badgeClass: 'pill-walkon',
+        badgeText: wait <= 5 ? '🚀 Instant Walk-On!' : '⚡ Fast Line (&le;15m)',
+        score: 35 - wait + (isFlagship ? 25 : 0),
+        explanation: `Almost zero queue time! Perfect opportunity to ride with near-instant dispatch.`,
+        diffMins: 0,
+        histAvg: histAvg ? Math.round(histAvg) : 20,
+      });
+    }
+
+    // 3. Surge Warnings: Wait time is about to double in the next 1-2 hours
+    if (nextAvg !== null && wait < 35 && (nextAvg - wait) >= 15) {
+      const jump = Math.round(nextAvg - wait);
+      recommendations.push({
+        ride,
+        type: 'surge',
+        badgeClass: 'pill-surge',
+        badgeText: `⏳ Ride Now Before Surge (+${jump}m)!`,
+        score: jump * 1.8 + (isFlagship ? 15 : 0),
+        explanation: `Historical curves show queues surge to ~${Math.round(nextAvg)} mins in the next 1–2 hours. Ride now to beat the rush!`,
+        diffMins: jump,
+        histAvg: Math.round(nextAvg),
+      });
+    }
+
+    // 4. Headliner Sweet Spots: Major Flagship rides with below-normal wait
+    if (isFlagship && wait < 45) {
+      recommendations.push({
+        ride,
+        type: 'headliner',
+        badgeClass: 'pill-headliner',
+        badgeText: `👑 E-Ticket Sweet Spot`,
+        score: 45 + (50 - wait),
+        explanation: `Flagship headliner having a rare low standby window. High priority target for your park itinerary!`,
+        diffMins: histAvg ? Math.round(histAvg - wait) : 10,
+        histAvg: histAvg ? Math.round(histAvg) : 55,
+      });
+    }
+  });
+
+  // Filter by category
+  let finalRecs = recommendations;
+  if (state.recCategoryFilter !== 'all') {
+    finalRecs = finalRecs.filter((r) => r.type === state.recCategoryFilter);
+  }
+
+  // Deduplicate by ride ID, picking highest score recommendation
+  const deduped = new Map();
+  finalRecs.forEach((r) => {
+    if (!deduped.has(r.ride.id) || deduped.get(r.ride.id).score < r.score) {
+      deduped.set(r.ride.id, r);
+    }
+  });
+
+  const sortedRecs = Array.from(deduped.values()).sort((a, b) => b.score - a.score);
+
+  if (summaryCountEl) {
+    summaryCountEl.textContent = `${sortedRecs.length} Magical Opportunities Live`;
+  }
+
+  if (sortedRecs.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1; padding: 40px 20px; text-align: center;">
+        <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 10px;">🏰</div>
+        <h4 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 6px;">All Queues Standard</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 400px; margin: 0 auto;">No major bargains or surges right now. Browse the Attractions directory or choose another park filter above!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = sortedRecs.map((rec) => `
+    <div class="rec-card" data-ride-id="${rec.ride.id}">
+      <div class="rec-card-top">
+        <div class="rec-ride-info">
+          <span class="rec-ride-title">${escapeHtml(rec.ride.name)}</span>
+          <span class="rec-ride-park">🏰 ${escapeHtml(rec.ride.park_name)} • ${escapeHtml(rec.ride.land_name || 'General')}</span>
+        </div>
+        <div class="rec-wait-badge-box">
+          <span class="rec-wait-num">${rec.ride.wait_time}</span>
+          <span class="rec-wait-unit">mins</span>
+        </div>
+      </div>
+
+      <div class="rec-pill-row">
+        <span class="rec-strategy-pill ${rec.badgeClass}">${rec.badgeText}</span>
+      </div>
+
+      <p class="rec-explanation">${escapeHtml(rec.explanation)}</p>
+
+      <div class="rec-actions-row">
+        <span class="rec-delta-stat text-cyan">⚡ Standby: ${rec.ride.wait_time}m (vs ~${rec.histAvg}m)</span>
+        <button class="rec-curve-btn" onclick="window.openRideInTrends(${rec.ride.id})">📈 View Curve</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.openRideInTrends = function (rideId) {
+  selectRideForChart(rideId);
+  switchTab('tab-trends');
+};
 
 async function triggerManualSync() {
   if (state.isSyncing) return;
@@ -1079,6 +1338,68 @@ function renderAttractionsTable() {
     });
 
     tbody.appendChild(tr);
+  });
+
+  const countEl = document.getElementById('filteredCount');
+  if (countEl) {
+    countEl.textContent = `Showing ${filtered.length} attractions`;
+  }
+
+  renderAttractionsCards(filtered);
+}
+
+function renderAttractionsCards(filtered) {
+  const container = document.getElementById('attractionsCardsGrid');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1; padding: 30px; text-align: center;">
+        <div class="empty-state-icon">🔍</div>
+        <p>No attractions match your filter criteria.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach((r) => {
+    const card = document.createElement('div');
+    card.className = 'attraction-mobile-card';
+    card.setAttribute('data-ride-id', r.id);
+
+    let waitHtml = '';
+    if (!r.is_open) {
+      waitHtml = '<span class="attraction-card-wait-val closed">Closed</span>';
+    } else {
+      waitHtml = `<span class="attraction-card-wait-val">${r.wait_time}<small style="font-size:0.65rem; color:var(--text-muted); text-transform:uppercase; margin-left:2px;">min</small></span>`;
+    }
+
+    card.innerHTML = `
+      <div class="attraction-card-main">
+        <span class="attraction-card-name">${escapeHtml(r.name)}</span>
+        <div class="attraction-card-meta">
+          <span>🏰 ${escapeHtml(r.park_name)}</span>
+          <span>•</span>
+          <span>${escapeHtml(r.land_name || 'General')}</span>
+        </div>
+      </div>
+      <div class="attraction-card-right">
+        ${waitHtml}
+        ${
+          r.is_open
+            ? '<span class="status-badge open" style="font-size:0.7rem; padding:2px 8px;"><span class="status-dot open"></span> Open</span>'
+            : '<span class="status-badge closed" style="font-size:0.7rem; padding:2px 8px;"><span class="status-dot closed"></span> Down</span>'
+        }
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      selectRideForChart(r.id);
+      switchTab('tab-trends');
+    });
+
+    container.appendChild(card);
   });
 }
 
