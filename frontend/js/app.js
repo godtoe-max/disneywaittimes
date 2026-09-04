@@ -2726,6 +2726,7 @@ function saveAlertsToStorage() {
   }
   updateAlertsCountBadge();
   renderSettingsActiveAlertsList();
+  renderTriggeredAlertsBanner();
 }
 
 function updateAlertsCountBadge() {
@@ -3354,7 +3355,10 @@ function renderSettingsActiveAlertsList() {
 }
 
 function evaluateAlerts() {
-  if (!state.alerts || state.alerts.length === 0) return;
+  if (!state.alerts || state.alerts.length === 0) {
+    renderTriggeredAlertsBanner();
+    return;
+  }
 
   let stateModified = false;
   const CROWD_RANK = { empty: 1, light: 2, normal: 3, busy: 4 };
@@ -3372,10 +3376,15 @@ function evaluateAlerts() {
       const targetRank = CROWD_RANK[alert.target_level] || 1;
 
       if (currentRank <= targetRank) {
-        if (alert.last_notified_level !== currentLevel) {
+        const nowMs = Date.now();
+        const lastNotifiedMs = alert.last_notified_at ? new Date(alert.last_notified_at).getTime() : 0;
+        const fiveMinutesMs = 5 * 60 * 1000;
+        const shouldAlert = !alert.last_notified_at || (nowMs - lastNotifiedMs >= (fiveMinutesMs - 5000)) || (alert.last_notified_level !== currentLevel);
+
+        if (shouldAlert) {
           sendPushNotification(
-            `🏰 Crowd Alert: ${park.name}!`,
-            `Great news! ${park.name} has dropped to ${park.crowd_level.badge_text} with an average wait of only ${park.avg_wait_time} mins!`,
+            `🏰 Crowd Goal Reached: ${park.name}!`,
+            `Great news! ${park.name} is currently ${park.crowd_level.badge_text} with an average wait of only ${park.avg_wait_time} mins!`,
             { parkId: park.id }
           );
           alert.last_notified_level = currentLevel;
@@ -3384,8 +3393,9 @@ function evaluateAlerts() {
         }
       } else {
         // Reset notification so future drop will trigger again
-        if (alert.last_notified_level !== null) {
+        if (alert.last_notified_level !== null || alert.last_notified_at) {
           alert.last_notified_level = null;
+          alert.last_notified_at = null;
           stateModified = true;
         }
       }
@@ -3402,12 +3412,17 @@ function evaluateAlerts() {
       const waitTime = Number(ride.wait_time) || 0;
       const targetThreshold = Number(alert.threshold) || 30;
 
-      // Check threshold drop condition
+      // Check threshold drop condition (Re-alerts every 5 minutes while in goal zone)
       if (isOpen && waitTime <= targetThreshold) {
-        if (alert.last_notified_wait !== waitTime) {
+        const nowMs = Date.now();
+        const lastNotifiedMs = alert.last_notified_at ? new Date(alert.last_notified_at).getTime() : 0;
+        const fiveMinutesMs = 5 * 60 * 1000;
+        const shouldAlert = !alert.last_notified_at || (nowMs - lastNotifiedMs >= (fiveMinutesMs - 5000)) || (alert.last_notified_wait !== waitTime);
+
+        if (shouldAlert) {
           sendPushNotification(
-            `🔔 Wait Dropped: ${ride.name}!`,
-            `Standby line is down to ${waitTime} min (Goal: ≤ ${targetThreshold}m) at ${ride.park_name}! Head over now! 🚀`,
+            `🔔 Goal Reached: ${ride.name} (${waitTime}m)!`,
+            `Standby line is currently down to ${waitTime} min (Goal: ≤ ${targetThreshold}m) at ${ride.park_name}! Head over now! 🚀`,
             { rideId: ride.id }
           );
           alert.last_notified_wait = waitTime;
@@ -3415,8 +3430,9 @@ function evaluateAlerts() {
           stateModified = true;
         }
       } else if (isOpen && waitTime > targetThreshold) {
-        if (alert.last_notified_wait !== null) {
+        if (alert.last_notified_wait !== null || alert.last_notified_at) {
           alert.last_notified_wait = null;
+          alert.last_notified_at = null;
           stateModified = true;
         }
       }
@@ -3439,6 +3455,125 @@ function evaluateAlerts() {
   if (stateModified) {
     saveAlertsToStorage();
   }
+
+  renderTriggeredAlertsBanner();
+}
+
+/**
+ * Persistent Top Banner for Reached / Triggered Alerts
+ */
+function renderTriggeredAlertsBanner() {
+  const container = document.getElementById('triggeredAlertsBannerStrip');
+  if (!container) return;
+
+  if (!state.alerts || state.alerts.length === 0) {
+    container.innerHTML = '';
+    container.classList.add('hidden');
+    return;
+  }
+
+  const CROWD_RANK = { empty: 1, light: 2, normal: 3, busy: 4 };
+  const triggeredItems = [];
+
+  state.alerts.forEach((alert) => {
+    if (alert.is_active === false) return;
+
+    if (alert.type === 'park_crowd') {
+      const park = (state.parks || []).find((p) => String(p.id) === String(alert.park_id) || Number(p.id) === Number(alert.park_id));
+      if (!park || !park.crowd_level) return;
+      const currentLevel = park.crowd_level.level || 'normal';
+      const currentRank = CROWD_RANK[currentLevel] || 3;
+      const targetRank = CROWD_RANK[alert.target_level] || 1;
+
+      if (currentRank <= targetRank) {
+        triggeredItems.push({
+          alertId: alert.id,
+          type: 'park_crowd',
+          title: alert.park_name,
+          subtitle: `Park Crowd Goal Reached (${park.crowd_level.badge_text})`,
+          badgeWait: `${park.avg_wait_time}m avg`,
+          badgeGoal: `Goal: ${alert.target_label || alert.target_level}`,
+          parkId: alert.park_id,
+        });
+      }
+    } else {
+      const ride = (state.rides || []).find((r) =>
+        String(r.id) === String(alert.ride_id) ||
+        Number(r.id) === Number(alert.ride_id) ||
+        (alert.ride_name && r.name && r.name.toLowerCase().trim() === alert.ride_name.toLowerCase().trim())
+      );
+      if (!ride) return;
+
+      const isOpen = Boolean(ride.is_open);
+      const waitTime = Number(ride.wait_time) || 0;
+      const targetThreshold = Number(alert.threshold) || 30;
+
+      if (isOpen && waitTime <= targetThreshold) {
+        triggeredItems.push({
+          alertId: alert.id,
+          type: 'ride',
+          rideId: ride.id,
+          title: ride.name,
+          subtitle: `🏰 ${ride.park_name} • ${ride.land_name || 'General'}`,
+          badgeWait: `${waitTime} min standby`,
+          badgeGoal: `Goal: ≤ ${targetThreshold}m`,
+        });
+      }
+    }
+  });
+
+  if (triggeredItems.length === 0) {
+    container.innerHTML = '';
+    container.classList.add('hidden');
+    return;
+  }
+
+  container.classList.remove('hidden');
+  container.innerHTML = `
+    <div class="triggered-banner-header">
+      <div class="triggered-banner-title-box">
+        <div class="triggered-bell-pulse">🔔</div>
+        <div>
+          <h3 class="triggered-banner-title">
+            🌟 GOAL REACHED! (${triggeredItems.length} Alert${triggeredItems.length === 1 ? '' : 's'} Active Right Now)
+          </h3>
+          <p class="triggered-banner-subtitle">
+            Standby wait times have dropped into your target window! Alerts will chime every 5 minutes until dismissed.
+          </p>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button type="button" onclick="switchTab('tab-settings', true)" class="btn btn-sm btn-primary" style="font-size:0.8rem; padding:6px 12px;">
+          ⚙️ Manage All Alerts
+        </button>
+      </div>
+    </div>
+
+    <div class="triggered-cards-grid">
+      ${triggeredItems
+        .map((item) => `
+          <div class="triggered-alert-card">
+            <div class="triggered-card-info">
+              <span class="triggered-card-title">${escapeHtml(item.title)}</span>
+              <span class="triggered-card-meta">${escapeHtml(item.subtitle)}</span>
+              <div class="triggered-card-badges">
+                <span class="triggered-card-wait-badge">🟢 ${escapeHtml(item.badgeWait)}</span>
+                <span class="triggered-card-goal-badge">${escapeHtml(item.badgeGoal)}</span>
+              </div>
+            </div>
+            <div class="triggered-card-actions">
+              ${
+                item.type === 'ride'
+                  ? `<button type="button" class="btn-curve-alert" onclick="window.openRideInTrends(${item.rideId})" title="View wait time curve">📈 Curve</button>`
+                  : ''
+              }
+              <button type="button" class="btn-dismiss-alert" onclick="window.deleteAlert('${item.alertId}')" title="Remove this alert">🗑️ Dismiss</button>
+            </div>
+          </div>
+        `)
+        .join('')}
+    </div>
+  `;
 }
 
 async function testNotification() {

@@ -3175,6 +3175,201 @@ body {
   align-items: center;
 }
 
+/* ==========================================================================
+   Persistent Top Triggered Alerts Banner Strip
+   ========================================================================== */
+.triggered-alerts-banner-strip {
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #fefce8 0%, #ecfdf5 100%);
+  border: 2px solid #34d399;
+  border-radius: var(--radius-xl);
+  padding: 16px 20px;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15), 0 8px 10px -6px rgba(16, 185, 129, 0.1);
+  animation: bannerPulse 3s ease-in-out infinite alternate;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.triggered-alerts-banner-strip.hidden {
+  display: none !important;
+}
+
+@keyframes bannerPulse {
+  0% {
+    border-color: #34d399;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
+  }
+  100% {
+    border-color: #f59e0b;
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.25);
+  }
+}
+
+.triggered-banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.triggered-banner-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.triggered-bell-pulse {
+  font-size: 1.5rem;
+  background: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: ringBell 1.5s ease-in-out infinite;
+}
+
+@keyframes ringBell {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30%, 50% { transform: rotate(14deg); }
+  20%, 40% { transform: rotate(-14deg); }
+  60% { transform: rotate(0deg); }
+}
+
+.triggered-banner-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #065f46;
+  margin: 0;
+}
+
+.triggered-banner-subtitle {
+  font-size: 0.84rem;
+  color: #047857;
+  margin: 0;
+}
+
+.triggered-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+}
+
+.triggered-alert-card {
+  background: #ffffff;
+  border: 1.5px solid #a7f3d0;
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition-fast);
+}
+
+.triggered-alert-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: #34d399;
+}
+
+.triggered-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.triggered-card-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.triggered-card-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.triggered-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.triggered-card-wait-badge {
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #86efac;
+}
+
+.triggered-card-goal-badge {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.triggered-card-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-dismiss-alert {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  border-radius: var(--radius-md);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-dismiss-alert:hover {
+  background: #fecaca;
+  transform: scale(1.03);
+}
+
+.btn-curve-alert {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #15803d;
+  border-radius: var(--radius-md);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-curve-alert:hover {
+  background: #dcfce7;
+}
+
+
 
 
 
