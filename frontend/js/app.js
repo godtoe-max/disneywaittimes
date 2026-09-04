@@ -30,6 +30,8 @@ const state = {
   rideCurvesCache: null,
   alerts: [],
   currentAlertRideId: null,
+  userCoords: null,
+  selectedRestParkId: 6,
 };
 
 // Patterns for walkthroughs, static exhibits, play areas, and continuous non-rides
@@ -466,6 +468,37 @@ function initEventListeners() {
 
   // Settings Tab: Controls & Event Handlers
   initSettingsTabListeners();
+
+  // Shaded Rest & Oasis Finder modal triggers
+  const needRestBtn = document.getElementById('needRestBtn');
+  if (needRestBtn) {
+    needRestBtn.addEventListener('click', () => {
+      openRestFinderModal(state.parkFilter !== 'all' ? parseInt(state.parkFilter, 10) : (state.selectedRestParkId || 6));
+    });
+  }
+
+  const closeRestModalBtn = document.getElementById('closeRestModalBtn');
+  if (closeRestModalBtn) closeRestModalBtn.addEventListener('click', closeRestFinderModal);
+
+  const closeRestModalFooterBtn = document.getElementById('closeRestModalFooterBtn');
+  if (closeRestModalFooterBtn) closeRestModalFooterBtn.addEventListener('click', closeRestFinderModal);
+
+  const gpsLocationTriggerBtn = document.getElementById('gpsLocationTriggerBtn');
+  if (gpsLocationTriggerBtn) {
+    gpsLocationTriggerBtn.addEventListener('click', () => {
+      acquireGpsLocation(true);
+    });
+  }
+
+  document.querySelectorAll('#restParkChips .rec-chip').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#restParkChips .rec-chip').forEach((c) => c.classList.remove('active'));
+      chip.classList.add('active');
+      const parkId = parseInt(chip.getAttribute('data-park'), 10);
+      state.selectedRestParkId = parkId;
+      renderRestSpots(parkId, state.userCoords);
+    });
+  });
 
   // Close modals on background overlay click
   document.querySelectorAll('.modal-overlay').forEach((overlay) => {
@@ -2930,6 +2963,10 @@ async function saveSettingsRideAlert() {
     '✅'
   );
   playChimeSound();
+
+  evaluateAlerts();
+  renderSettingsActiveAlertsList();
+  renderActiveAlerts();
 }
 
 async function saveSettingsCrowdAlert() {
@@ -2974,6 +3011,10 @@ async function saveSettingsCrowdAlert() {
     '✅'
   );
   playChimeSound();
+
+  evaluateAlerts();
+  renderSettingsActiveAlertsList();
+  renderActiveAlerts();
 }
 
 function renderSettingsActiveAlertsList() {
@@ -3240,6 +3281,10 @@ async function saveCurrentAlert() {
     '✅'
   );
   playChimeSound();
+
+  evaluateAlerts();
+  renderSettingsActiveAlertsList();
+  renderActiveAlerts();
 }
 
 function openActiveAlertsModal() {
@@ -3251,6 +3296,805 @@ function closeActiveAlertsModal() {
   if (modal) modal.classList.add('hidden');
 }
 
+/* ==========================================================================
+   Shaded Rest & Oasis Finder (with Real-Time GPS Geolocation)
+   ========================================================================== */
+
+const REST_SPOTS_DB = [
+  // Magic Kingdom (Park ID: 6)
+  {
+    id: 'mk_columbia_2f',
+    park_id: 6,
+    park_name: 'Magic Kingdom',
+    land: 'Liberty Square',
+    name: 'Columbia Harbour House (2nd Floor Dining Room)',
+    lat: 28.4199,
+    lng: -81.5831,
+    ac: true,
+    shaded: true,
+    seating: 'Padded booths & quiet tables',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Ice-Cold A/C • Outlets • Castle / Liberty Sq Views',
+    description: 'Head upstairs! Almost nobody goes to the second floor. Super icy A/C, huge windows overlooking Liberty Square & Fantasyland, and charging outlets along the walls.',
+  },
+  {
+    id: 'mk_hall_of_presidents',
+    park_id: 6,
+    park_name: 'Magic Kingdom',
+    land: 'Liberty Square',
+    name: 'Hall of Presidents Grand Rotunda',
+    lat: 28.4194,
+    lng: -81.5828,
+    ac: true,
+    shaded: true,
+    seating: 'Carpeted benches & plush seating',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Sub-Zero A/C • Carpet Seating • Continuous Entry',
+    description: 'One of the best indoor chill spots in all of Magic Kingdom. Massive museum rotunda, carpeted floors, sub-zero air conditioning, and continuous show entry.',
+  },
+  {
+    id: 'mk_storybook_circus_tent',
+    park_id: 6,
+    park_name: 'Magic Kingdom',
+    land: 'Fantasyland',
+    name: "Storybook Circus Tent Lounge (Pete's Silly Sideshow)",
+    lat: 28.4208,
+    lng: -81.5788,
+    ac: true,
+    shaded: true,
+    seating: 'Air-conditioned benches & phone charging stations',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Dedicated Phone Charging • Cold A/C • Bathrooms',
+    description: 'Tucked behind Big Top Souvenirs, this area has dedicated charging stations built into tree stump benches and powerful indoor A/C.',
+  },
+  {
+    id: 'mk_tortuga_tavern',
+    park_id: 6,
+    park_name: 'Magic Kingdom',
+    land: 'Adventureland',
+    name: 'Tortuga Tavern Shaded Breezeway',
+    lat: 28.4185,
+    lng: -81.5843,
+    ac: false,
+    shaded: true,
+    seating: 'Deep shaded Spanish colonial courtyard & fans',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Directly Opposite Pirates • Breezy Shade • Fans',
+    description: 'Directly across from Pirates of the Caribbean. Shaded arches, cool breezes, water fountains nearby, and rarely crowded outside peak lunch hours.',
+  },
+  {
+    id: 'mk_tomorrowland_terrace',
+    park_id: 6,
+    park_name: 'Magic Kingdom',
+    land: 'Tomorrowland',
+    name: 'Tomorrowland Terrace Covered Pavilion',
+    lat: 28.4184,
+    lng: -81.5800,
+    ac: false,
+    shaded: true,
+    seating: 'Spacious covered patio seating with fans',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Huge Covered Area • Castle Water Views • Ceiling Fans',
+    description: 'Massive covered pavilion between Main Street and Tomorrowland with breezy lake views of Cinderella Castle and large ceiling fans.',
+  },
+  {
+    id: 'mk_sleepy_hollow',
+    park_id: 6,
+    park_name: 'Magic Kingdom',
+    land: 'Liberty Square',
+    name: 'Sleepy Hollow Shaded Brick Terrace',
+    lat: 28.4188,
+    lng: -81.5821,
+    ac: false,
+    shaded: true,
+    seating: 'Shaded brick patio overlooking moat',
+    outlets: false,
+    restrooms: false,
+    quiet_level: 'Medium',
+    highlight: 'Castle Moat Views • Shaded Canopy • Quiet Water',
+    description: 'Breezy brick terrace with stunning close-up views of Cinderella Castle and gentle water sounds from the moat.',
+  },
+
+  // EPCOT (Park ID: 5)
+  {
+    id: 'ep_seas_observation',
+    park_id: 5,
+    park_name: 'EPCOT',
+    land: 'World Nature',
+    name: 'The Seas with Nemo (2nd Floor Aquarium Observation)',
+    lat: 28.3758,
+    lng: -81.5519,
+    ac: true,
+    shaded: true,
+    seating: 'Observation carpet & benches overlooking 5.7M gal tank',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Icy Cold A/C • Giant Aquarium • Dim & Relaxing',
+    description: 'Dark, cool, and peaceful. Watch manatees, sea turtles, and sharks glide by in icy air conditioning.',
+  },
+  {
+    id: 'ep_connections_lounge',
+    park_id: 5,
+    park_name: 'EPCOT',
+    land: 'World Celebration',
+    name: 'Connections Eatery & Cafe Seating Lounge',
+    lat: 28.3742,
+    lng: -81.5498,
+    ac: true,
+    shaded: true,
+    seating: 'Modern cushioned booths & high-top tables',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'USB & AC Outlets Every Booth • Strong A/C • Starbucks',
+    description: 'Abundant AC, floor-to-ceiling windows, and almost every booth is equipped with USB and AC charging outlets.',
+  },
+  {
+    id: 'ep_morocco_courtyard',
+    park_id: 5,
+    park_name: 'EPCOT',
+    land: 'World Showcase',
+    name: 'Morocco Pavilion Courtyard & Gallery',
+    lat: 28.3693,
+    lng: -81.5516,
+    ac: true,
+    shaded: true,
+    seating: 'Shaded tiled mosaic benches & indoor gallery',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Quietest Spot in Showcase • Tile Benches • Mosaic Fountain',
+    description: 'The back alleys of Morocco are the quietest spot in World Showcase. Features a cool indoor gallery with intricate Islamic architecture and running water.',
+  },
+  {
+    id: 'ep_japan_garden',
+    park_id: 5,
+    park_name: 'EPCOT',
+    land: 'World Showcase',
+    name: 'Japan Pavilion Hillside Gardens & Katsura Patio',
+    lat: 28.3688,
+    lng: -81.5501,
+    ac: false,
+    shaded: true,
+    seating: 'Shaded garden hillside benches under bamboo canopy',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Koi Ponds • Bamboo Shade • Waterfalls',
+    description: 'Hidden zen garden with koi ponds, miniature waterfalls, and shaded wooden pavilions high above the main walkway.',
+  },
+  {
+    id: 'ep_american_rotunda',
+    park_id: 5,
+    park_name: 'EPCOT',
+    land: 'World Showcase',
+    name: 'American Adventure Grand Rotunda',
+    lat: 28.3683,
+    lng: -81.5487,
+    ac: true,
+    shaded: true,
+    seating: 'Air-conditioned wooden benches & grand colonnade',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Grand Rotunda • Voices of Liberty • Chilled Air',
+    description: 'Massive colonial rotunda with echoing acoustics, Voices of Liberty performances, and museum exhibits.',
+  },
+  {
+    id: 'ep_odyssey_pavilion',
+    park_id: 5,
+    park_name: 'EPCOT',
+    land: 'World Discovery',
+    name: 'Odyssey Pavilion Center Breezeway',
+    lat: 28.3725,
+    lng: -81.5480,
+    ac: true,
+    shaded: true,
+    seating: 'Indoor high-top and low tables with lagoon views',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Waterfront Lagoon View • Low Crowds • Clean Restrooms',
+    description: 'Bridge building connecting Test Track and Mexico. Ice cold air, low crowds between meals, and clean restrooms.',
+  },
+
+  // Disney's Hollywood Studios (Park ID: 7)
+  {
+    id: 'hs_walt_presents',
+    park_id: 7,
+    park_name: "Disney's Hollywood Studios",
+    land: 'Animation Courtyard',
+    name: 'Walt Disney Presents Gallery & Theater',
+    lat: 28.3565,
+    lng: -81.5593,
+    ac: true,
+    shaded: true,
+    seating: 'Carpeted gallery walking space & 15-min theater seats',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: '15-Min Continuous Theater • Carpeted Gallery • Chilled A/C',
+    description: 'Walk through rare archival Disney models, historic costumes, and sit in the continuous theater show for 15 minutes of uninterrupted A/C.',
+  },
+  {
+    id: 'hs_pizzerizzo_2f',
+    park_id: 7,
+    park_name: "Disney's Hollywood Studios",
+    land: 'Grand Avenue',
+    name: 'PizzeRizzo (2nd Floor Deluxe Wedding Room)',
+    lat: 28.3560,
+    lng: -81.5620,
+    ac: true,
+    shaded: true,
+    seating: 'Plentiful booths, tables, and private banquet room',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Empty 2nd Floor • Blasting A/C • Retro Disco Room',
+    description: 'Climb the stairs to the second floor "Deluxe Wedding Room"! Almost nobody is up there, the A/C is blasting, and there is disco music.',
+  },
+  {
+    id: 'hs_launch_bay',
+    park_id: 7,
+    park_name: "Disney's Hollywood Studios",
+    land: 'Animation Courtyard',
+    name: 'Star Wars Launch Bay Relaxation Lounge',
+    lat: 28.3568,
+    lng: -81.5582,
+    ac: true,
+    shaded: true,
+    seating: 'Carpeted benches & movie prop exhibits',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Dim Lighting • Sub-Zero Air • Movie Props',
+    description: 'One of the most air-conditioned, low-light spaces in the park. Great for cooling down kids and catching your breath.',
+  },
+  {
+    id: 'hs_baseline_pergola',
+    park_id: 7,
+    park_name: "Disney's Hollywood Studios",
+    land: 'Grand Avenue',
+    name: 'Baseline Tap House Shaded Pergola',
+    lat: 28.3556,
+    lng: -81.5615,
+    ac: false,
+    shaded: true,
+    seating: 'Wooden picnic tables under shaded tree arbor & fans',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Misting Fans • Tree Arbor Shade • Near Galaxy’s Edge',
+    description: 'Great outdoor vibe with misting fans, dense tree canopies, and cold drinks right outside Galaxy\'s Edge.',
+  },
+  {
+    id: 'hs_backlot_express',
+    park_id: 7,
+    park_name: "Disney's Hollywood Studios",
+    land: 'Echo Lake',
+    name: 'Backlot Express Prop Shop Back Rooms',
+    lat: 28.3572,
+    lng: -81.5615,
+    ac: true,
+    shaded: true,
+    seating: 'Air conditioned prop storage booths & hidden nooks',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Movie Prop Storage Theming • Deep A/C • Booth Seating',
+    description: 'Navigate to the deep rear corners of Backlot Express for cool, dim rooms filled with authentic studio film props.',
+  },
+
+  // Disney's Animal Kingdom (Park ID: 8)
+  {
+    id: 'ak_nomad_lounge',
+    park_id: 8,
+    park_name: "Disney's Animal Kingdom",
+    land: 'Discovery Island',
+    name: 'Nomad Lounge Shaded Wrap-Around Veranda',
+    lat: 28.3582,
+    lng: -81.5915,
+    ac: false,
+    shaded: true,
+    seating: 'Plush couches & deep comfy armchairs over river',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Plush Couches • River Breeze • Ceiling Fans • Outlets',
+    description: 'The outdoor porch has plush couches, ceiling fans, gentle river breezes, and serene views of the Discovery River.',
+  },
+  {
+    id: 'ak_satuli_sanctuary',
+    park_id: 8,
+    park_name: "Disney's Animal Kingdom",
+    land: 'Pandora – The World of Avatar',
+    name: "Satu'li Canteen Indoor Dining Sanctuary",
+    lat: 28.3575,
+    lng: -81.5935,
+    ac: true,
+    shaded: true,
+    seating: 'Air-conditioned Pandora RDA mess hall with charging',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'High-Ceiling A/C • Water Bottle Refill • Pandora Views',
+    description: 'Spacious high ceilings, cold air conditioning, and drinking water bottle refill stations right outside.',
+  },
+  {
+    id: 'ak_harambe_market',
+    park_id: 8,
+    park_name: "Disney's Animal Kingdom",
+    land: 'Africa',
+    name: 'Harambe Market Shaded Courtyard',
+    lat: 28.3605,
+    lng: -81.5925,
+    ac: false,
+    shaded: true,
+    seating: 'Covered canopy seating with African percussion ambience',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Extensive Canopy Shade • Cold Beverages • Breezy',
+    description: 'Extensive shade canopy with breezes and rustic seating tucked away from the main safari crowd.',
+  },
+  {
+    id: 'ak_tree_of_life_grottoes',
+    park_id: 8,
+    park_name: "Disney's Animal Kingdom",
+    land: 'Discovery Island',
+    name: 'Tree of Life Root Grottoes & Flamingo Overlook',
+    lat: 28.3592,
+    lng: -81.5908,
+    ac: false,
+    shaded: true,
+    seating: 'Stone benches shaded by massive jungle roots & trees',
+    outlets: false,
+    restrooms: false,
+    quiet_level: 'Very High',
+    highlight: 'Lush Forest Canopy • Waterfalls • Animal Viewing',
+    description: 'Winding paths right around the base of the Tree of Life with stone grottoes, waterfalls, and peaceful bird sanctuaries.',
+  },
+  {
+    id: 'ak_conservation_station',
+    park_id: 8,
+    park_name: "Disney's Animal Kingdom",
+    land: "Rafiki's Planet Watch",
+    name: 'Conservation Station (Rafiki’s Planet Watch)',
+    lat: 28.3650,
+    lng: -81.5910,
+    ac: true,
+    shaded: true,
+    seating: 'Indoor veterinary pavilion with carpet and seating',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Train Ride Retreat • Huge AC Hall • Animation Classes',
+    description: 'Accessible via a short relaxing train ride. The main building is air-conditioned, spacious, and features the Animation Experience.',
+  },
+
+  // Disneyland Park (Park ID: 16)
+  {
+    id: 'dl_mr_lincoln_lobby',
+    park_id: 16,
+    park_name: 'Disneyland Park',
+    land: 'Main Street, U.S.A.',
+    name: 'Great Moments with Mr. Lincoln Lobby & Gallery',
+    lat: 33.8105,
+    lng: -117.9189,
+    ac: true,
+    shaded: true,
+    seating: 'Plush theater seats & cool carpeted gallery',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Historic Disneyland Models • Plush Theater • Sub-Zero A/C',
+    description: 'Step right inside the Main Street Opera House. The gallery has museum models of the park, chilled air, and plush theater seating.',
+  },
+  {
+    id: 'dl_docking_bay_7',
+    park_id: 16,
+    park_name: 'Disneyland Park',
+    land: "Star Wars: Galaxy's Edge",
+    name: 'Docking Bay 7 Food and Cargo (Indoor Hangars)',
+    lat: 33.8145,
+    lng: -117.9215,
+    ac: true,
+    shaded: true,
+    seating: 'Indoor air conditioned shipping containers & shaded courtyard',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Air-Conditioned Pods • Water Bottle Refill • Charging',
+    description: 'Atmospheric indoor dining hangar with heavy blast doors, cool temps, and filtered water refill taps.',
+  },
+  {
+    id: 'dl_hungry_bear_deck',
+    park_id: 16,
+    park_name: 'Disneyland Park',
+    land: 'Critter Country',
+    name: 'Hungry Bear Barbecue Jamboree Lower Waterfront Deck',
+    lat: 33.8130,
+    lng: -117.9235,
+    ac: false,
+    shaded: true,
+    seating: 'Two levels of covered wooden decks directly above river',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Over-the-Water Decks • Riverboat Views • Heavy Shade',
+    description: 'The lower outdoor deck sits right over the water. Watch the Mark Twain Riverboat and canoe paddlers glide past in deep shade.',
+  },
+  {
+    id: 'dl_tom_sawyer_gazebos',
+    park_id: 16,
+    park_name: 'Disneyland Park',
+    land: 'Frontierland',
+    name: "Pirate's Lair on Tom Sawyer Island (Fort Wilderness)",
+    lat: 33.8125,
+    lng: -117.9220,
+    ac: false,
+    shaded: true,
+    seating: 'Shaded wooden rocking chairs overlooking Rivers of America',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: 'Rocking Chairs • Island Breeze • Water Views',
+    description: 'Take the raft across the river to enjoy breezy shaded porches with wooden rocking chairs and tranquil river views.',
+  },
+  {
+    id: 'dl_space_mountain_breezeway',
+    park_id: 16,
+    park_name: 'Disneyland Park',
+    land: 'Tomorrowland',
+    name: 'Tomorrowland Space Mountain Lower Breezeway',
+    lat: 33.8118,
+    lng: -117.9168,
+    ac: true,
+    shaded: true,
+    seating: 'Shaded benches under concrete pylons & indoor breezeways',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Concrete Shade Canopy • Cool Breezeways • Water Fountains',
+    description: 'Covered passages behind Space Mountain and the Pizza Planet terrace offer cool shelter from the mid-day California sun.',
+  },
+
+  // Disney California Adventure (Park ID: 17)
+  {
+    id: 'dca_animation_building',
+    park_id: 17,
+    park_name: 'Disney California Adventure',
+    land: 'Hollywood Land',
+    name: 'Disney Animation Building Courtyard (Beast’s Library)',
+    lat: 33.8078,
+    lng: -117.9175,
+    ac: true,
+    shaded: true,
+    seating: 'Carpeted central atrium with 360-deg animation & plush couches',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: '🌟 #1 Best Chill Spot in DCA • 360° Screens • Ice-Cold A/C',
+    description: 'Hands down the best relaxation spot in DCA. Sit or lie on the carpet, listen to Disney music, and enjoy high-powered ice cold A/C.',
+  },
+  {
+    id: 'dca_redwood_creek_benches',
+    park_id: 17,
+    park_name: 'Disney California Adventure',
+    land: 'Grizzly Peak',
+    name: 'Redwood Creek Challenge Trail Shaded Forest Benches',
+    lat: 33.8055,
+    lng: -117.9198,
+    ac: false,
+    shaded: true,
+    seating: 'Rustic carved redwood benches under towering pine trees',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Very High',
+    highlight: '10° Cooler Forest Canopy • Babbling Brooks • Rustic Seating',
+    description: 'Dense forest canopy keeps temperatures 5–10 degrees cooler than the rest of the park. Serene waterfalls and babbling brooks.',
+  },
+  {
+    id: 'dca_flos_v8_patio',
+    park_id: 17,
+    park_name: 'Disney California Adventure',
+    land: 'Cars Land',
+    name: "Flo's V-8 Cafe Back Patio & Indoor Diner Booths",
+    lat: 33.8050,
+    lng: -117.9180,
+    ac: true,
+    shaded: true,
+    seating: 'Covered diner booths overlooking the Cadillac Range',
+    outlets: true,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Radiator Springs Racers Views • Shaded Diner • Neon Theming',
+    description: 'The back outdoor covered patio or indoor neon diner booths have spectacular shade and front-row views of Radiator Springs Racers zooming past.',
+  },
+  {
+    id: 'dca_sonoma_terrace',
+    park_id: 17,
+    park_name: 'Disney California Adventure',
+    land: 'Performance Corridor',
+    name: 'Sonoma Terrace & Golden Vine Winery Shaded Arbors',
+    lat: 33.8062,
+    lng: -117.9190,
+    ac: false,
+    shaded: true,
+    seating: 'Grapevine-covered pergolas with cushioned seating',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'High',
+    highlight: 'Tuscan Grapevine Pergolas • Stone Fountains • Center Park',
+    description: 'Romantic shaded terrace with stone fountains and lush Tuscan greenery right in the center of the park.',
+  },
+  {
+    id: 'dca_lamplight_boardwalk',
+    park_id: 17,
+    park_name: 'Disney California Adventure',
+    land: 'Pixar Pier',
+    name: 'Lamplight Lounge Waterfront Boardwalk',
+    lat: 33.8042,
+    lng: -117.9210,
+    ac: true,
+    shaded: true,
+    seating: 'Breezy covered waterfront seating & leather booths',
+    outlets: false,
+    restrooms: true,
+    quiet_level: 'Medium',
+    highlight: 'Waterfront Lagoon Breezes • Shaded Awnings • Pixar Art',
+    description: 'Sit by the water under shaded awnings with cool bay breezes and Pixar animator sketchbook art.',
+  },
+];
+
+/**
+ * Calculates distance and walk time between two GPS coordinates using Haversine formula
+ */
+function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3; // Earth's radius in meters
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distanceMeters = R * c;
+  const distanceFeet = distanceMeters * 3.28084;
+  const distanceMiles = distanceMeters / 1609.34;
+  // Estimated walking speed: 1.2 m/s (4.3 km/h or 2.7 mph) = 72 meters per minute
+  const walkMinutes = Math.max(1, Math.round(distanceMeters / 72));
+
+  return {
+    meters: Math.round(distanceMeters),
+    feet: Math.round(distanceFeet),
+    miles: distanceMiles,
+    walkMinutes: walkMinutes,
+  };
+}
+
+/**
+ * Opens Shaded Rest & Oasis Finder modal
+ */
+function openRestFinderModal(parkId = 6) {
+  const modal = document.getElementById('restModal');
+  if (!modal) return;
+
+  state.selectedRestParkId = parkId;
+
+  // Sync park chip selection
+  document.querySelectorAll('#restParkChips .rec-chip').forEach((chip) => {
+    const pId = parseInt(chip.getAttribute('data-park'), 10);
+    chip.classList.toggle('active', pId === state.selectedRestParkId);
+  });
+
+  modal.classList.remove('hidden');
+
+  // If we don't have GPS coords yet, automatically request once silently or render immediately
+  if (!state.userCoords) {
+    acquireGpsLocation(false);
+  } else {
+    renderRestSpots(state.selectedRestParkId, state.userCoords);
+  }
+}
+
+/**
+ * Closes Rest Finder modal
+ */
+function closeRestFinderModal() {
+  const modal = document.getElementById('restModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+/**
+ * Acquires user's GPS coordinates via browser Geolocation API
+ */
+function acquireGpsLocation(isManualClick = false) {
+  const banner = document.getElementById('gpsStatusBanner');
+  const bannerText = document.getElementById('gpsStatusText');
+
+  if (!navigator.geolocation) {
+    if (banner && bannerText && isManualClick) {
+      banner.classList.remove('hidden');
+      bannerText.textContent = '⚠️ GPS Geolocation is not supported by your browser.';
+    }
+    renderRestSpots(state.selectedRestParkId, null);
+    return;
+  }
+
+  if (banner && bannerText) {
+    banner.classList.remove('hidden');
+    bannerText.innerHTML = '📍 <strong>Acquiring precise GPS location...</strong> Calculating nearest shaded rest spots.';
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      state.userCoords = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        accuracy: position.coords.accuracy,
+      };
+
+      // Check if user is near one of the Disney parks
+      let closestPark = null;
+      let minParkDist = Infinity;
+      const parkCenterCoords = {
+        6: { lat: 28.4177, lng: -81.5812, name: 'Magic Kingdom' },
+        5: { lat: 28.3747, lng: -81.5494, name: 'EPCOT' },
+        7: { lat: 28.3575, lng: -81.5583, name: "Disney's Hollywood Studios" },
+        8: { lat: 28.3597, lng: -81.5913, name: "Disney's Animal Kingdom" },
+        16: { lat: 33.8121, lng: -117.9190, name: 'Disneyland Park' },
+        17: { lat: 33.8061, lng: -117.9200, name: 'Disney California Adventure' },
+      };
+
+      Object.entries(parkCenterCoords).forEach(([pId, center]) => {
+        const d = calculateHaversineDistance(state.userCoords.lat, state.userCoords.lng, center.lat, center.lng);
+        if (d.meters < minParkDist) {
+          minParkDist = d.meters;
+          closestPark = parseInt(pId, 10);
+        }
+      });
+
+      // If user is within 15km of a park, automatically focus that park
+      if (closestPark && minParkDist < 15000) {
+        state.selectedRestParkId = closestPark;
+        document.querySelectorAll('#restParkChips .rec-chip').forEach((chip) => {
+          const pId = parseInt(chip.getAttribute('data-park'), 10);
+          chip.classList.toggle('active', pId === state.selectedRestParkId);
+        });
+      }
+
+      if (banner && bannerText) {
+        banner.classList.remove('hidden');
+        banner.style.background = '#dcfce7';
+        banner.style.borderColor = '#86efac';
+        banner.style.color = '#15803d';
+        bannerText.innerHTML = `📍 <strong>GPS Connected!</strong> Showing nearest rest spots sorted by real-time walking distance.`;
+      }
+
+      renderRestSpots(state.selectedRestParkId, state.userCoords);
+    },
+    (error) => {
+      console.warn('Geolocation acquisition error:', error);
+      if (banner && bannerText) {
+        banner.classList.remove('hidden');
+        banner.style.background = '#fffbeb';
+        banner.style.borderColor = '#fde68a';
+        banner.style.color = '#b45309';
+        bannerText.innerHTML = `📍 <strong>GPS unavailable or permission denied.</strong> Showing all curated rest spots for this park.`;
+      }
+      renderRestSpots(state.selectedRestParkId, null);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 8000,
+      maximumAge: 30000,
+    }
+  );
+}
+
+/**
+ * Renders the curated rest spots list
+ */
+function renderRestSpots(parkId = 6, userCoords = null) {
+  const container = document.getElementById('restSpotsList');
+  if (!container) return;
+
+  const spots = REST_SPOTS_DB.filter((s) => s.park_id === parkId);
+
+  if (spots.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:30px 20px; color:var(--text-muted);">
+        <p>No rest spots found for this park.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Calculate distances if GPS is active
+  const enrichedSpots = spots.map((spot) => {
+    let distanceInfo = null;
+    if (userCoords && userCoords.lat && userCoords.lng) {
+      distanceInfo = calculateHaversineDistance(userCoords.lat, userCoords.lng, spot.lat, spot.lng);
+    }
+    return { ...spot, distanceInfo };
+  });
+
+  // Sort by closest distance if GPS is available
+  if (userCoords) {
+    enrichedSpots.sort((a, b) => {
+      const distA = a.distanceInfo ? a.distanceInfo.meters : 999999;
+      const distB = b.distanceInfo ? b.distanceInfo.meters : 999999;
+      return distA - distB;
+    });
+  }
+
+  container.innerHTML = enrichedSpots
+    .map((spot, index) => {
+      const isClosest = userCoords && index === 0 && spot.distanceInfo && spot.distanceInfo.meters < 5000;
+      const walkBadge = spot.distanceInfo
+        ? `<div class="rest-walk-badge ${isClosest ? 'closest' : ''}">
+            <span>🚶</span>
+            <strong>${spot.distanceInfo.walkMinutes} min walk</strong>
+            <small>(${spot.distanceInfo.meters > 1000 ? `${spot.distanceInfo.miles.toFixed(1)} mi` : `${spot.distanceInfo.feet} ft`})</small>
+          </div>`
+        : '';
+
+      const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}&travelmode=walking`;
+
+      return `
+        <div class="rest-card-item ${isClosest ? 'highlight-closest' : ''}" style="background:var(--bg-surface); border:1px solid ${isClosest ? 'var(--sun-gold)' : 'var(--border-subtle)'}; border-radius:var(--radius-md); padding:16px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+            <div>
+              ${isClosest ? '<div style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; font-weight:700; color:#b45309; background:#fef3c7; padding:2px 8px; border-radius:999px; margin-bottom:6px;">🌟 NEAREST SHADED REST LOCATION</div>' : ''}
+              <h4 style="font-size:1.05rem; font-weight:700; color:var(--text-primary); margin:0;">${escapeHtml(spot.name)}</h4>
+              <div style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
+                🏰 ${escapeHtml(spot.park_name)} • 📍 ${escapeHtml(spot.land)}
+              </div>
+            </div>
+            ${walkBadge}
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            ${spot.ac ? '<span class="rest-tag" style="background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:600;">❄️ Air Conditioned</span>' : '<span class="rest-tag" style="background:#fef3c7; color:#92400e; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:600;">🌴 Breezy Shade &amp; Fans</span>'}
+            ${spot.outlets ? '<span class="rest-tag" style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:600;">⚡ Outlets Available</span>' : ''}
+            ${spot.restrooms ? '<span class="rest-tag" style="background:#f3e8ff; color:#7e22ce; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:600;">🚻 Restrooms Nearby</span>' : ''}
+            <span class="rest-tag" style="background:#f1f5f9; color:#475569; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:600;">💺 ${escapeHtml(spot.seating)}</span>
+            <span class="rest-tag" style="background:#f1f5f9; color:#475569; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:600;">🤫 Quiet: ${escapeHtml(spot.quiet_level)}</span>
+          </div>
+
+          <p style="font-size:0.86rem; color:var(--text-secondary); line-height:1.45; margin:0;">
+            ${escapeHtml(spot.description)}
+          </p>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; padding-top:8px; border-top:1px dashed var(--border-subtle);">
+            <span style="font-size:0.78rem; font-weight:600; color:var(--text-gold);">
+              💡 ${escapeHtml(spot.highlight)}
+            </span>
+            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-secondary" style="font-size:0.78rem; text-decoration:none; padding:4px 10px;">
+              📍 Open Walking Route ↗
+            </a>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+}
+
 // Global window helpers for inline onclick handlers
 window.openSetAlertModal = function (rideId) {
   openSetAlertModal(rideId);
@@ -3260,6 +4104,15 @@ window.deleteAlert = function (alertId) {
   state.alerts = state.alerts.filter((a) => a.id !== alertId);
   saveAlertsToStorage();
 };
+
+window.openRestFinderModal = function (parkId) {
+  openRestFinderModal(parkId);
+};
+
+window.acquireGpsLocation = function () {
+  acquireGpsLocation(true);
+};
+
 
 
 

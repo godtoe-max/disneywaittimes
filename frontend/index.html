@@ -54,6 +54,10 @@
           <span class="muted-label">Next Poll:</span>
           <span id="pollCountdown" class="value-highlight">5:00</span>
         </div>
+        <button id="needRestBtn" class="btn btn-rest" title="Find nearest shaded rest location with GPS">
+          <span class="rest-icon">😴</span>
+          <span class="rest-label">Need a Rest?</span>
+        </button>
         <button id="alertsDrawerBtn" class="btn btn-alerts" title="Manage Ride Wait Alerts">
           <span class="bell-icon">🔔</span>
           <span class="alerts-label">Alerts</span>
@@ -810,6 +814,50 @@
           <span>🔊 Test Sound &amp; Push</span>
         </button>
         <button id="closeActiveAlertsFooterBtn" class="btn btn-primary">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SHADED REST & OASIS FINDER (WITH GPS) -->
+  <div id="restModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="restModalTitle">
+    <div class="modal-card modal-card-wide">
+      <div class="modal-header">
+        <div>
+          <span class="modal-badge" style="background:#dcfce7; color:#15803d;">🌴 SHADED OASIS &amp; REST FINDER</span>
+          <h3 id="restModalTitle" class="modal-title">Nearby Shaded Rest Locations</h3>
+          <p class="modal-meta" id="restModalSubtitle">Find the closest cold A/C, shaded breezeways, seating &amp; quiet spots.</p>
+        </div>
+        <button id="closeRestModalBtn" class="modal-close-btn" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Park selector & GPS trigger -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding-bottom:12px; border-bottom:1px solid var(--border-subtle);">
+          <div class="rec-park-chips" id="restParkChips" style="margin-bottom:0;">
+            <button class="rec-chip active" data-park="6">🏰 Magic Kingdom</button>
+            <button class="rec-chip" data-park="5">🌐 EPCOT</button>
+            <button class="rec-chip" data-park="7">🎬 Hollywood Studios</button>
+            <button class="rec-chip" data-park="8">🌳 Animal Kingdom</button>
+            <button class="rec-chip" data-park="16">✨ Disneyland</button>
+            <button class="rec-chip" data-park="17">🎡 California Adv.</button>
+          </div>
+          <button id="gpsLocationTriggerBtn" class="btn btn-sm btn-primary" title="Calculate real-time walk distance using your phone's GPS">
+            <span>📍 Use My GPS Location</span>
+          </button>
+        </div>
+
+        <div id="gpsStatusBanner" class="permission-notice-box hidden" style="background:#eff6ff; border-color:#bfdbfe; color:#1e40af;">
+          <span id="gpsStatusText">📍 Acquiring GPS coordinates...</span>
+        </div>
+
+        <!-- Rest spots list -->
+        <div id="restSpotsList" class="rest-spots-grid" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="closeRestModalFooterBtn" class="btn btn-primary">Done</button>
       </div>
     </div>
   </div>
