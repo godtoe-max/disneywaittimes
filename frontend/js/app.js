@@ -25,7 +25,7 @@ const state = {
   sortAsc: false,
   chart: null,
   dayChart: null,
-  pollSecondsRemaining: 300,
+  pollSecondsRemaining: 60,
   isSyncing: false,
   rideCurvesCache: null,
   alerts: [],
@@ -123,6 +123,20 @@ const FLAGSHIP_KEYWORDS = [
   'Cosmic Rewind',
 ];
 
+// Audio Context Unlocking for Browser Autoplay Policy
+function unlockAudioContext() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!audioCtx) {
+      audioCtx = new AudioContext();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  } catch (e) {}
+}
+
 // Initialize application on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initLiveClock();
@@ -130,7 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAlertsFromStorage();
   initEventListeners();
   initPollingTimer();
+  initVisibilityWatcher();
   fetchAllData();
+
+  window.addEventListener('click', unlockAudioContext, { passive: true });
+  window.addEventListener('touchstart', unlockAudioContext, { passive: true });
 });
 
 /* ==========================================================================
@@ -177,14 +195,34 @@ function initPollingTimer() {
   setInterval(() => {
     state.pollSecondsRemaining -= 1;
     if (state.pollSecondsRemaining <= 0) {
-      state.pollSecondsRemaining = 300;
+      state.pollSecondsRemaining = 60;
       fetchAllData(true);
     }
 
     const mins = Math.floor(state.pollSecondsRemaining / 60);
     const secs = state.pollSecondsRemaining % 60;
-    countdownEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+    if (countdownEl) {
+      countdownEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
   }, 1000);
+}
+
+function initVisibilityWatcher() {
+  // When mobile phone screen turns back on or user returns to the tab, immediately refresh
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      state.pollSecondsRemaining = 60;
+      fetchAllData(true);
+    }
+  });
+
+  window.addEventListener('focus', () => {
+    fetchAllData(true);
+  });
+
+  window.addEventListener('online', () => {
+    fetchAllData(true);
+  });
 }
 
 /* ==========================================================================
@@ -2735,6 +2773,15 @@ function initServiceWorker() {
       .catch((err) => {
         console.warn('Service Worker registration failed:', err);
       });
+
+    navigator.serviceWorker.ready
+      .then((reg) => {
+        swRegistration = reg;
+        console.log('Disney Waits Service Worker ready & active.');
+      })
+      .catch((err) => {
+        console.warn('Service Worker ready error:', err);
+      });
   }
 }
 
@@ -2772,12 +2819,12 @@ function sendPushNotification(title, body, data = {}) {
   // 2. Hardware vibration (buzzes phone in pocket if supported)
   if ('vibrate' in navigator) {
     try {
-      navigator.vibrate([300, 150, 300]);
+      navigator.vibrate([400, 200, 400]);
     } catch (e) {}
   }
 
-  // 3. In-App visual Toast
-  showToast(title, body, '🔔');
+  // 3. In-App visual Toast (prominent, 8s duration)
+  showToast(title, body, '🔔', 8000);
 
   // 4. System-level OS / Lock Screen Device Notification via Service Worker
   if ('Notification' in window && Notification.permission === 'granted') {
@@ -2785,14 +2832,25 @@ function sendPushNotification(title, body, data = {}) {
       body: body,
       icon: 'https://emojicdn.elk.sh/🏰',
       badge: 'https://emojicdn.elk.sh/🔔',
-      vibrate: [300, 150, 300],
+      vibrate: [400, 200, 400],
       tag: `disney-alert-${Date.now()}`,
       renotify: true,
       requireInteraction: true,
       data: { url: window.location.href, ...data },
     };
 
-    if (swRegistration && swRegistration.showNotification) {
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready
+        .then((reg) => {
+          reg.showNotification(title, notificationOptions).catch((err) => {
+            console.warn('sw.showNotification failed, falling back:', err);
+            tryDirectNotification(title, notificationOptions);
+          });
+        })
+        .catch(() => {
+          tryDirectNotification(title, notificationOptions);
+        });
+    } else if (swRegistration && swRegistration.showNotification) {
       swRegistration.showNotification(title, notificationOptions).catch((err) => {
         console.warn('swRegistration.showNotification failed, falling back:', err);
         tryDirectNotification(title, notificationOptions);

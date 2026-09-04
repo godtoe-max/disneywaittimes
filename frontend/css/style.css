@@ -2554,6 +2554,10 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (max-width: 860px) {
@@ -2572,6 +2576,18 @@ body {
   flex-direction: column;
   gap: 18px;
   transition: var(--transition-fast);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (max-width: 680px) {
+  .settings-box {
+    padding: 18px 14px;
+    border-radius: var(--radius-lg);
+  }
 }
 
 .settings-box:hover {
@@ -2583,6 +2599,15 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.settings-box-header > div {
+  min-width: 0;
+  flex: 1;
 }
 
 .box-icon-wrap {
@@ -2610,11 +2635,13 @@ body {
   font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 2px;
+  word-break: break-word;
 }
 
 .settings-box-desc {
   font-size: 0.84rem;
   color: var(--text-muted);
+  word-break: break-word;
 }
 
 .settings-form {
@@ -2624,6 +2651,7 @@ body {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 }
 
 .form-row {
@@ -2632,6 +2660,7 @@ body {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (max-width: 680px) {
@@ -2649,6 +2678,7 @@ body {
   min-width: 0;
   max-width: 100%;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .settings-label {
@@ -2664,6 +2694,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   background: var(--bg-surface-soft);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -2682,6 +2714,7 @@ body {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 }
 
 .slider-header-row {
@@ -2692,6 +2725,33 @@ body {
   gap: 8px;
   width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
+}
+
+.quick-preset-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.preset-threshold-chip {
+  flex: 1 1 auto;
+  min-width: fit-content;
+  text-align: center;
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
 }
 
 .btn-block {
@@ -2699,6 +2759,7 @@ body {
   justify-content: center;
   padding: 12px;
   font-size: 0.95rem;
+  box-sizing: border-box;
 }
 
 .btn-gold {
@@ -2722,6 +2783,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .crowd-target-chip {
@@ -2735,6 +2800,10 @@ body {
   cursor: pointer;
   text-align: left;
   transition: var(--transition-fast);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .crowd-target-chip:hover {

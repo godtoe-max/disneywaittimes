@@ -57,12 +57,12 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.error(f"Error during initial sync: {exc}")
 
-    # Start scheduled worker (runs every 5 minutes)
-    logger.info("Starting background scheduler (polling every 5 minutes)...")
+    # Start scheduled worker (runs every 1 minute)
+    logger.info("Starting background scheduler (polling every 1 minute)...")
     scheduler.add_job(
         poll_all_parks,
         "interval",
-        minutes=5,
+        minutes=1,
         id="disney_wait_times_poll",
         replace_existing=True,
     )
