@@ -9,6 +9,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Disney Waits">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="https://emojicdn.elk.sh/🏰?size=192">
   
   <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -541,6 +543,28 @@
           <div class="rec-summary-pill" id="settingsSummaryPill">
             <span class="sparkle-emoji">🔔</span>
             <span id="settingsTotalAlertsCount">0 Active Watchers</span>
+          </div>
+        </div>
+
+        <!-- DEVICE LOCK-SCREEN NOTIFICATION STATUS & SETUP BANNER -->
+        <div class="device-push-banner" id="devicePushBanner">
+          <div class="push-banner-content">
+            <div class="push-banner-icon" id="pushBannerIcon">🔔</div>
+            <div class="push-banner-text">
+              <h4 id="pushBannerTitle">Enable Device Lock-Screen Notifications</h4>
+              <p id="pushBannerDesc">Receive instant alerts with sound and vibration on your phone's lock screen even when your screen is off or you're using other apps.</p>
+              <div class="ios-install-tip hidden" id="iosPwaTip">
+                <span>📱 <strong>iPhone Tip:</strong> Tap Safari's <strong>Share</strong> button (box with up arrow) &rarr; <strong>"Add to Home Screen"</strong> to enable native lock screen alerts and icon badges!</span>
+              </div>
+            </div>
+          </div>
+          <div class="push-banner-actions">
+            <button type="button" id="enableDeviceAlertsBtn" class="btn btn-primary">
+              <span>🔔 Enable Lock-Screen Alerts</span>
+            </button>
+            <button type="button" id="testDeviceAlertsBtn" class="btn btn-secondary">
+              <span>🔊 Test Sound &amp; Device Buzz</span>
+            </button>
           </div>
         </div>
 

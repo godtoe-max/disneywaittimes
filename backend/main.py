@@ -276,6 +276,22 @@ if os.path.isdir(FRONTEND_DIR):
         app.mount("/data", StaticFiles(directory=data_dir), name="data")
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
+@app.get("/sw.js")
+async def serve_sw():
+    """Serve Service Worker at root scope for device lock screen notifications."""
+    sw_file = os.path.join(FRONTEND_DIR, "sw.js")
+    if os.path.isfile(sw_file):
+        return FileResponse(sw_file, media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="Service worker not found")
+
+@app.get("/manifest.json")
+async def serve_manifest():
+    """Serve Web App Manifest for mobile PWA support."""
+    manifest_file = os.path.join(FRONTEND_DIR, "manifest.json")
+    if os.path.isfile(manifest_file):
+        return FileResponse(manifest_file, media_type="application/manifest+json")
+    raise HTTPException(status_code=404, detail="Manifest not found")
+
 @app.get("/")
 async def serve_index():
     """Serve frontend single-page dashboard."""
@@ -286,3 +302,4 @@ async def serve_index():
         status_code=404,
         content={"message": "Frontend not built yet. Index file not found at " + index_file},
     )
+

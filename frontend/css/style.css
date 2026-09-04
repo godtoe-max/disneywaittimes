@@ -2779,5 +2779,77 @@ body {
   border-top: 1px dashed var(--border-subtle);
 }
 
+/* Device Lock-Screen Notification Banner */
+.device-push-banner {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  border: 1.5px solid #bfdbfe;
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.device-push-banner.active {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-color: #86efac;
+}
+
+.push-banner-content {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.push-banner-icon {
+  font-size: 2rem;
+  background: #ffffff;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-xs);
+  flex-shrink: 0;
+}
+
+.push-banner-text h4 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.push-banner-text p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.ios-install-tip {
+  margin-top: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.push-banner-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+
 
 

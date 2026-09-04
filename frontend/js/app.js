@@ -126,6 +126,7 @@ const FLAGSHIP_KEYWORDS = [
 // Initialize application on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initLiveClock();
+  initServiceWorker();
   loadAlertsFromStorage();
   initEventListeners();
   initPollingTimer();
@@ -2724,30 +2725,157 @@ function showToast(title, desc, icon = '🔔', durationMs = 6000) {
   }
 }
 
+let swRegistration = null;
+
+function initServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('sw.js')
+      .then((reg) => {
+        swRegistration = reg;
+        console.log('Disney Waits Service Worker registered with scope:', reg.scope);
+      })
+      .catch((err) => {
+        console.warn('Service Worker registration failed:', err);
+      });
+  }
+}
+
 async function requestPushPermission() {
-  if (!('Notification' in window)) return false;
-  if (Notification.permission === 'granted') return true;
-  if (Notification.permission !== 'denied') {
+  if (!('Notification' in window)) {
+    showToast('Notifications Unavailable', 'This browser does not support web push notifications.', '⚠️');
+    return false;
+  }
+
+  if (Notification.permission === 'granted') {
+    updatePushBannerStatus();
+    return true;
+  }
+
+  try {
     const permission = await Notification.requestPermission();
-    return permission === 'granted';
+    updatePushBannerStatus();
+    if (permission === 'granted') {
+      sendPushNotification(
+        '🏰 Device Lock-Screen Alerts Active!',
+        'You will now receive alerts directly on your device screen even when this app is in the background! ✨'
+      );
+      return true;
+    }
+  } catch (e) {
+    console.warn('Error requesting notification permission:', e);
   }
   return false;
 }
 
-function sendPushNotification(title, body) {
+function sendPushNotification(title, body, data = {}) {
+  // 1. Play magical audio chime
   playChimeSound();
+
+  // 2. Hardware vibration (buzzes phone in pocket if supported)
+  if ('vibrate' in navigator) {
+    try {
+      navigator.vibrate([300, 150, 300]);
+    } catch (e) {}
+  }
+
+  // 3. In-App visual Toast
   showToast(title, body, '🔔');
 
+  // 4. System-level OS / Lock Screen Device Notification via Service Worker
   if ('Notification' in window && Notification.permission === 'granted') {
-    try {
-      new Notification(title, {
-        body: body,
-        icon: 'https://emojicdn.elk.sh/🏰',
-        badge: 'https://emojicdn.elk.sh/🔔',
-        tag: `disney-alert-${Date.now()}`,
+    const notificationOptions = {
+      body: body,
+      icon: 'https://emojicdn.elk.sh/🏰',
+      badge: 'https://emojicdn.elk.sh/🔔',
+      vibrate: [300, 150, 300],
+      tag: `disney-alert-${Date.now()}`,
+      renotify: true,
+      requireInteraction: true,
+      data: { url: window.location.href, ...data },
+    };
+
+    if (swRegistration && swRegistration.showNotification) {
+      swRegistration.showNotification(title, notificationOptions).catch((err) => {
+        console.warn('swRegistration.showNotification failed, falling back:', err);
+        tryDirectNotification(title, notificationOptions);
       });
-    } catch (e) {
-      console.warn('Push notification creation failed:', e);
+    } else if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SHOW_NOTIFICATION',
+        title: title,
+        options: notificationOptions,
+      });
+    } else {
+      tryDirectNotification(title, notificationOptions);
+    }
+  }
+}
+
+function tryDirectNotification(title, options) {
+  try {
+    new Notification(title, options);
+  } catch (e) {
+    console.warn('Direct Notification constructor failed:', e);
+  }
+}
+
+function updatePushBannerStatus() {
+  const banner = document.getElementById('devicePushBanner');
+  const icon = document.getElementById('pushBannerIcon');
+  const title = document.getElementById('pushBannerTitle');
+  const desc = document.getElementById('pushBannerDesc');
+  const enableBtn = document.getElementById('enableDeviceAlertsBtn');
+  const iosTip = document.getElementById('iosPwaTip');
+
+  // Check iOS device
+  const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+  if (iosTip) {
+    if (isIos && !isStandalone) {
+      iosTip.classList.remove('hidden');
+    } else {
+      iosTip.classList.add('hidden');
+    }
+  }
+
+  if (!('Notification' in window)) {
+    if (banner && title && desc) {
+      banner.className = 'device-push-banner';
+      if (icon) icon.textContent = 'ℹ️';
+      title.textContent = 'Browser Notifications Not Supported';
+      desc.textContent = isIos
+        ? "On iOS, tap Safari's Share button -> 'Add to Home Screen' to enable full lock-screen notifications."
+        : 'In-app chimes and alerts are active, but this browser does not support OS-level background push.';
+      if (enableBtn) enableBtn.classList.add('hidden');
+    }
+    return;
+  }
+
+  if (Notification.permission === 'granted') {
+    if (banner && title && desc) {
+      banner.className = 'device-push-banner active';
+      if (icon) icon.textContent = '✅';
+      title.textContent = 'Device Lock-Screen Notifications Active!';
+      desc.textContent = 'Your device will alert you with chimes, vibration, and lock-screen banners even when you are away from the app or your screen is locked.';
+      if (enableBtn) enableBtn.classList.add('hidden');
+    }
+  } else if (Notification.permission === 'denied') {
+    if (banner && title && desc) {
+      banner.className = 'device-push-banner';
+      if (icon) icon.textContent = '⚠️';
+      title.textContent = 'Device Notifications Blocked in Browser Settings';
+      desc.textContent = 'To receive lock-screen alerts when wait times drop, please click the lock/settings icon in your browser address bar and enable Notifications.';
+      if (enableBtn) enableBtn.classList.add('hidden');
+    }
+  } else {
+    if (banner && title && desc) {
+      banner.className = 'device-push-banner';
+      if (icon) icon.textContent = '🔔';
+      title.textContent = 'Enable Device Lock-Screen Notifications';
+      desc.textContent = 'Receive instant alerts with sound and vibration on your phone\'s lock screen even when your screen is off or you\'re using other apps.';
+      if (enableBtn) enableBtn.classList.remove('hidden');
     }
   }
 }
@@ -2766,6 +2894,8 @@ function initSettingsTabListeners() {
   const saveCrowdBtn = document.getElementById('settingsSaveCrowdAlertBtn');
   const testBtn = document.getElementById('settingsTestChimeBtn');
   const enablePushBtn = document.getElementById('settingsEnablePushBtn');
+  const enableDeviceAlertsBtn = document.getElementById('enableDeviceAlertsBtn');
+  const testDeviceAlertsBtn = document.getElementById('testDeviceAlertsBtn');
 
   if (parkSelect) {
     parkSelect.addEventListener('change', () => {
@@ -2827,12 +2957,25 @@ function initSettingsTabListeners() {
     testBtn.addEventListener('click', testNotification);
   }
 
+  if (testDeviceAlertsBtn) {
+    testDeviceAlertsBtn.addEventListener('click', testNotification);
+  }
+
   if (enablePushBtn) {
     enablePushBtn.addEventListener('click', async () => {
       const granted = await requestPushPermission();
       if (granted) {
         enablePushBtn.classList.add('hidden');
         showToast('Push Notifications Active', 'You will now receive alerts directly on your device screen! ✨', '✅');
+      }
+    });
+  }
+
+  if (enableDeviceAlertsBtn) {
+    enableDeviceAlertsBtn.addEventListener('click', async () => {
+      const granted = await requestPushPermission();
+      if (granted) {
+        showToast('Device Notifications Active', 'Lock-screen alerts and vibration are enabled! ✨', '✅');
       }
     });
   }
@@ -2844,6 +2987,7 @@ function renderSettingsTab() {
   populateSettingsRidesDropdown(parkId);
   updateSettingsSelectedParkCrowd();
   renderSettingsActiveAlertsList();
+  updatePushBannerStatus();
 
   // Push notification permission button visibility
   const enablePushBtn = document.getElementById('settingsEnablePushBtn');
@@ -3155,26 +3299,15 @@ function evaluateAlerts() {
   }
 }
 
-function testNotification() {
-  playChimeSound();
-  showToast('🔊 Test Notification Alert', 'Magical chime and alerts are working perfectly! ✨', '🔔');
-  if ('Notification' in window) {
-    if (Notification.permission === 'granted') {
-      new Notification('🏰 Disney Wait Alert Test', {
-        body: 'Alerts are working on your device! You will get notified when wait times or park crowd levels drop. ✨',
-        icon: 'https://emojicdn.elk.sh/🏰',
-      });
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then((perm) => {
-        if (perm === 'granted') {
-          new Notification('🏰 Disney Wait Alert Test', {
-            body: 'Alerts are working on your device! You will get notified when wait times or park crowd levels drop. ✨',
-            icon: 'https://emojicdn.elk.sh/🏰',
-          });
-        }
-      });
-    }
+async function testNotification() {
+  if ('Notification' in window && Notification.permission !== 'granted') {
+    await requestPushPermission();
   }
+  
+  sendPushNotification(
+    '🏰 Disney Wait Alert Test',
+    'Magical chime, vibration, and device notifications are active! You will be alerted when wait times drop. ✨'
+  );
 }
 
 // Quick modal helpers
