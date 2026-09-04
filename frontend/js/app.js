@@ -155,38 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
    Clock & Timers
    ========================================================================== */
 function initLiveClock() {
-  const orlandoClockEl = document.getElementById('orlandoClock');
-  const anaheimClockEl = document.getElementById('anaheimClock');
-
-  function updateClock() {
-    const now = new Date();
-    // Orlando: US Eastern Time
-    const orlandoFormatter = new Intl.DateTimeFormat([], {
-      timeZone: 'America/New_York',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-    });
-    if (orlandoClockEl) {
-      orlandoClockEl.textContent = `${orlandoFormatter.format(now)} Orlando`;
-    }
-
-    // Anaheim: US Pacific Time
-    const anaheimFormatter = new Intl.DateTimeFormat([], {
-      timeZone: 'America/Los_Angeles',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-    });
-    if (anaheimClockEl) {
-      anaheimClockEl.textContent = `${anaheimFormatter.format(now)} Anaheim`;
-    }
-  }
-
-  updateClock();
-  setInterval(updateClock, 1000);
+  // Clocks removed to keep top header clean, spacious and distraction-free in-park
 }
 
 function initPollingTimer() {
