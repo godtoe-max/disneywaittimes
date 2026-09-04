@@ -449,27 +449,140 @@ body {
 }
 
 /* ==========================================================================
-   Parks Grid Cards
+   Parks Carousel & Horizontal Scroll Section
    ========================================================================== */
+.parks-carousel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.parks-carousel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.parks-carousel-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.parks-carousel-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.parks-carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.parks-swipe-hint {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg-surface-soft);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.carousel-arrow-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-subtle);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition-fast);
+  user-select: none;
+}
+
+.carousel-arrow-btn:hover {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  border-color: var(--blue-primary);
+  transform: scale(1.05);
+}
+
+.carousel-arrow-btn:active {
+  transform: scale(0.95);
+}
+
+/* Horizontal Scroll Track for Parks */
 .parks-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 4px 18px;
+  margin: 0 -4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  width: calc(100% + 8px);
+  max-width: calc(100% + 8px);
+  box-sizing: border-box;
+}
+
+.parks-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.parks-grid::-webkit-scrollbar-track {
+  background: rgba(226, 232, 240, 0.4);
+  border-radius: 999px;
+}
+
+.parks-grid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.parks-grid::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .park-card {
+  flex: 0 0 285px;
+  width: 285px;
+  max-width: 82vw;
+  scroll-snap-align: start;
   position: relative;
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   transition: var(--transition-normal);
   cursor: pointer;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
 }
 
 .park-card::before {
@@ -483,9 +596,14 @@ body {
 }
 
 .park-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
   border-color: var(--blue-primary);
+}
+
+.park-card.selected-park {
+  border-color: var(--blue-primary);
+  box-shadow: 0 0 0 2px var(--blue-primary), var(--shadow-md);
 }
 
 .park-card-header {
@@ -2373,35 +2491,44 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px 18px;
+  gap: 16px;
+  padding: 16px 20px;
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xs);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
   transition: var(--transition-fast);
+  flex-wrap: wrap;
 }
 
 .active-alert-item:hover {
   border-color: var(--blue-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.active-alert-item.goal-met {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
 }
 
 .alert-item-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  flex: 1;
+  min-width: 220px;
 }
 
 .alert-item-title {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 1.08rem;
   font-weight: 800;
   color: var(--text-primary);
 }
 
 .alert-item-meta {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
 }
 
 .alert-item-threshold-pill {
@@ -2412,23 +2539,42 @@ body {
   color: var(--blue-primary);
   font-size: 0.78rem;
   font-weight: 800;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  margin-top: 4px;
+  margin-top: 2px;
   width: fit-content;
 }
 
 .alert-item-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.alert-test-btn {
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.alert-test-btn:hover {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  border-color: var(--blue-primary);
 }
 
 .alert-delete-btn {
-  background: var(--coral-light);
+  background: #ffe4e6;
   border: 1px solid rgba(244, 63, 94, 0.3);
   color: #be123c;
-  padding: 6px 10px;
+  padding: 6px 14px;
   border-radius: var(--radius-full);
   font-size: 0.8rem;
   font-weight: 700;
@@ -2438,6 +2584,7 @@ body {
 
 .alert-delete-btn:hover {
   background: #fecdd3;
+  transform: translateY(-1px);
 }
 
 /* In-App Toast Notifications */

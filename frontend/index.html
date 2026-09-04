@@ -127,12 +127,25 @@
       </div>
     </section>
 
-    <!-- 6 Parks Overview Cards Grid (Swipeable on Mobile) -->
-    <section class="parks-grid" id="parksCardsContainer">
-      <div class="park-card-skeleton"></div>
-      <div class="park-card-skeleton"></div>
-      <div class="park-card-skeleton"></div>
-      <div class="park-card-skeleton"></div>
+    <!-- 6 Parks Overview Carousel (Horizontal scrollable sideways on mobile & desktop) -->
+    <section class="parks-carousel-section" id="parksSectionWrapper">
+      <div class="parks-carousel-header">
+        <div class="parks-carousel-title-wrap">
+          <span class="magical-badge">🏰 THEME PARKS DIRECTORY</span>
+          <h3 class="parks-carousel-title">Select a Park</h3>
+        </div>
+        <div class="parks-carousel-controls">
+          <span class="parks-swipe-hint">👈 Swipe to select a park 👉</span>
+          <button type="button" class="carousel-arrow-btn" id="parksScrollLeftBtn" aria-label="Scroll left">‹</button>
+          <button type="button" class="carousel-arrow-btn" id="parksScrollRightBtn" aria-label="Scroll right">›</button>
+        </div>
+      </div>
+      <div class="parks-grid" id="parksCardsContainer">
+        <div class="park-card-skeleton"></div>
+        <div class="park-card-skeleton"></div>
+        <div class="park-card-skeleton"></div>
+        <div class="park-card-skeleton"></div>
+      </div>
     </section>
 
     <!-- Desktop Tabs Navigation -->
@@ -531,18 +544,23 @@
       </div>
     </section>
 
-    <!-- TAB 5: ALERTS, CROWD WATCH & NOTIFICATION SETTINGS -->
+    <!-- TAB 5: DEDICATED ALERTS & WATCHLIST REVIEW PAGE -->
     <section class="tab-pane" id="tab-settings">
       <div class="card settings-card">
         <div class="settings-hero">
           <div class="hero-text-wrap">
-            <div class="magical-badge">⚙️ ALERTS &amp; NOTIFICATIONS</div>
-            <h2 class="card-title">Alert Center &amp; Crowd Watch</h2>
-            <p class="card-desc">Configure automated notifications when your favorite rides drop to a short wait time, or when park crowd levels drop to Light or Empty!</p>
+            <div class="magical-badge">🔔 MY ACTIVE ALERTS &amp; WATCHLIST</div>
+            <h2 class="card-title">Alert Center &amp; Notification Watchers</h2>
+            <p class="card-desc">Review your live wait time thresholds and park crowd level watchers below.</p>
           </div>
-          <div class="rec-summary-pill" id="settingsSummaryPill">
-            <span class="sparkle-emoji">🔔</span>
-            <span id="settingsTotalAlertsCount">0 Active Watchers</span>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <button type="button" id="toggleAddAlertCardBtn" class="btn btn-primary" style="padding:8px 16px; font-size:0.88rem;">
+              <span>➕ Set New Alert</span>
+            </button>
+            <div class="rec-summary-pill" id="settingsSummaryPill">
+              <span class="sparkle-emoji">🔔</span>
+              <span id="settingsTotalAlertsCount">0 Active Watchers</span>
+            </div>
           </div>
         </div>
 
@@ -568,22 +586,123 @@
           </div>
         </div>
 
-        <div class="settings-grid-layout">
-          <!-- CARD 1: SET RIDE WAIT TIME ALERT -->
-          <div class="settings-box">
-            <div class="settings-box-header">
-              <div class="box-icon-wrap bg-blue-subtle">🎢</div>
-              <div>
-                <h3 class="settings-box-title">Attraction Wait Time Alert</h3>
-                <p class="settings-box-desc">Choose any ride and target standby threshold.</p>
+        <!-- ACTIVE ALERTS REVIEW SECTION (DISPLAYED AT THE VERY TOP FOR EASY REVIEW) -->
+        <div class="settings-active-section" style="margin-top: 10px;">
+          <div class="section-title-wrap" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+            <div>
+              <h3 class="section-heading" style="font-size: 1.25rem;">📋 Currently Active Watchers</h3>
+              <p class="section-desc">Live comparison of current theme park lines against your goal thresholds.</p>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="settingsTestChimeBtn" class="btn btn-sm btn-secondary">
+                <span>🔊 Test Chime &amp; Push</span>
+              </button>
+              <button id="settingsEnablePushBtn" class="btn btn-sm btn-primary hidden">
+                <span>🔔 Enable Browser Push</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="settingsActiveAlertsContainer" class="active-alerts-list" style="margin-top: 12px;">
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- CREATE NEW ALERT FORMS (COLLAPSIBLE / ACCORDION OR EXPANDED VIA BUTTON) -->
+        <div id="createAlertFormsSection" style="margin-top: 36px; padding-top: 24px; border-top: 1px dashed var(--border-subtle);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:18px;">
+            <div>
+              <h3 style="font-family:var(--font-display); font-size:1.25rem; font-weight:800; color:var(--text-primary); margin:0;">
+                ➕ Create New Wait Time or Crowd Alert
+              </h3>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:2px;">
+                Choose an attraction or park below to add a new live alert.
+              </p>
+            </div>
+          </div>
+
+          <div class="settings-grid-layout">
+            <!-- CARD 1: SET RIDE WAIT TIME ALERT -->
+            <div class="settings-box">
+              <div class="settings-box-header">
+                <div class="box-icon-wrap bg-blue-subtle">🎢</div>
+                <div>
+                  <h3 class="settings-box-title">Attraction Wait Time Alert</h3>
+                  <p class="settings-box-desc">Choose any ride and target standby threshold.</p>
+                </div>
+              </div>
+
+              <div class="settings-form">
+                <div class="form-row">
+                  <div class="form-col">
+                    <label for="settingsParkSelect" class="settings-label">1. Select Park</label>
+                    <select id="settingsParkSelect" class="select-input">
+                      <option value="6" selected>🏰 Magic Kingdom</option>
+                      <option value="5">🌐 EPCOT</option>
+                      <option value="7">🎬 Hollywood Studios</option>
+                      <option value="8">🌳 Animal Kingdom</option>
+                      <option value="16">✨ Disneyland</option>
+                      <option value="17">🎡 California Adv.</option>
+                    </select>
+                  </div>
+
+                  <div class="form-col">
+                    <label for="settingsRideSelect" class="settings-label">2. Select Attraction</label>
+                    <select id="settingsRideSelect" class="select-input">
+                      <!-- Injected dynamically via JS -->
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Live selected ride standby display -->
+                <div class="settings-live-stat-banner" id="settingsSelectedRideLiveBox">
+                  <span class="muted-label">Current Standby Line:</span>
+                  <span id="settingsSelectedRideWaitVal" class="text-gold font-bold">-- min</span>
+                </div>
+
+                <div class="settings-slider-wrap">
+                  <div class="slider-header-row">
+                    <label for="settingsThresholdSlider" class="settings-label">3. Notify when wait drops to or below:</label>
+                    <span id="settingsThresholdDisplay" class="threshold-badge">30 mins</span>
+                  </div>
+                  <input type="range" id="settingsThresholdSlider" min="5" max="120" step="5" value="30" class="threshold-slider">
+                  
+                  <div class="quick-preset-chips" id="settingsPresetChips">
+                    <button type="button" class="preset-threshold-chip" data-threshold="15">&le; 15 min (Walk-on)</button>
+                    <button type="button" class="preset-threshold-chip active" data-threshold="30">&le; 30 min</button>
+                    <button type="button" class="preset-threshold-chip" data-threshold="45">&le; 45 min</button>
+                    <button type="button" class="preset-threshold-chip" data-threshold="60">&le; 60 min</button>
+                  </div>
+                </div>
+
+                <div class="modal-toggle-row">
+                  <label class="checkbox-container">
+                    <input type="checkbox" id="settingsNotifyReopenCheckbox" checked>
+                    <span class="checkbox-checkmark"></span>
+                    Also notify if ride reopens from downtime
+                  </label>
+                </div>
+
+                <button id="settingsSaveRideAlertBtn" class="btn btn-primary btn-block">
+                  <span>➕ Add Ride Wait Alert</span>
+                </button>
               </div>
             </div>
 
-            <div class="settings-form">
-              <div class="form-row">
+            <!-- CARD 2: SET PARK CROWD LEVEL ALERT -->
+            <div class="settings-box">
+              <div class="settings-box-header">
+                <div class="box-icon-wrap bg-gold-subtle">🏰</div>
+                <div>
+                  <h3 class="settings-box-title">Park Crowd Level Alert</h3>
+                  <p class="settings-box-desc">Get notified when a park's overall crowd drops.</p>
+                </div>
+              </div>
+
+              <div class="settings-form">
                 <div class="form-col">
-                  <label for="settingsParkSelect" class="settings-label">1. Select Park</label>
-                  <select id="settingsParkSelect" class="select-input">
+                  <label for="settingsCrowdParkSelect" class="settings-label">1. Select Park</label>
+                  <select id="settingsCrowdParkSelect" class="select-input">
                     <option value="6" selected>🏰 Magic Kingdom</option>
                     <option value="5">🌐 EPCOT</option>
                     <option value="7">🎬 Hollywood Studios</option>
@@ -594,129 +713,42 @@
                 </div>
 
                 <div class="form-col">
-                  <label for="settingsRideSelect" class="settings-label">2. Select Attraction</label>
-                  <select id="settingsRideSelect" class="select-input">
-                    <!-- Injected dynamically via JS -->
-                  </select>
+                  <label class="settings-label">2. Target Crowd Level to Trigger Alert</label>
+                  <div class="crowd-target-selector" id="settingsCrowdTargetSelector">
+                    <button type="button" class="crowd-target-chip active" data-level="empty">
+                      <span class="crowd-dot dot-empty"></span>
+                      <div>
+                        <strong>🟢 Empty / Walk-on</strong>
+                        <small>Avg wait &lt; 25m</small>
+                      </div>
+                    </button>
+                    <button type="button" class="crowd-target-chip" data-level="light">
+                      <span class="crowd-dot dot-light"></span>
+                      <div>
+                        <strong>🔵 Light (Below Normal)</strong>
+                        <small>Avg wait &lt; 39m</small>
+                      </div>
+                    </button>
+                    <button type="button" class="crowd-target-chip" data-level="normal">
+                      <span class="crowd-dot dot-normal"></span>
+                      <div>
+                        <strong>🟡 Normal (Typical)</strong>
+                        <small>Avg wait &lt; 52m</small>
+                      </div>
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Live selected ride standby display -->
-              <div class="settings-live-stat-banner" id="settingsSelectedRideLiveBox">
-                <span class="muted-label">Current Standby Line:</span>
-                <span id="settingsSelectedRideWaitVal" class="text-gold font-bold">-- min</span>
-              </div>
-
-              <div class="settings-slider-wrap">
-                <div class="slider-header-row">
-                  <label for="settingsThresholdSlider" class="settings-label">3. Notify when wait drops to or below:</label>
-                  <span id="settingsThresholdDisplay" class="threshold-badge">30 mins</span>
+                <div class="settings-live-stat-banner" id="settingsSelectedParkCrowdBox">
+                  <span class="muted-label">Live Park Crowd:</span>
+                  <span id="settingsSelectedParkCrowdVal" class="crowd-badge light">🔵 Light (Below Normal)</span>
                 </div>
-                <input type="range" id="settingsThresholdSlider" min="5" max="120" step="5" value="30" class="threshold-slider">
-                
-                <div class="quick-preset-chips" id="settingsPresetChips">
-                  <button type="button" class="preset-threshold-chip" data-threshold="15">&le; 15 min (Walk-on)</button>
-                  <button type="button" class="preset-threshold-chip active" data-threshold="30">&le; 30 min</button>
-                  <button type="button" class="preset-threshold-chip" data-threshold="45">&le; 45 min</button>
-                  <button type="button" class="preset-threshold-chip" data-threshold="60">&le; 60 min</button>
-                </div>
-              </div>
 
-              <div class="modal-toggle-row">
-                <label class="checkbox-container">
-                  <input type="checkbox" id="settingsNotifyReopenCheckbox" checked>
-                  <span class="checkbox-checkmark"></span>
-                  Also notify if ride reopens from downtime
-                </label>
-              </div>
-
-              <button id="settingsSaveRideAlertBtn" class="btn btn-primary btn-block">
-                <span>➕ Add Ride Wait Alert</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- CARD 2: SET PARK CROWD LEVEL ALERT -->
-          <div class="settings-box">
-            <div class="settings-box-header">
-              <div class="box-icon-wrap bg-gold-subtle">🏰</div>
-              <div>
-                <h3 class="settings-box-title">Park Crowd Level Alert</h3>
-                <p class="settings-box-desc">Get notified when a park's overall crowd drops.</p>
+                <button id="settingsSaveCrowdAlertBtn" class="btn btn-gold btn-block">
+                  <span>➕ Add Park Crowd Alert</span>
+                </button>
               </div>
             </div>
-
-            <div class="settings-form">
-              <div class="form-col">
-                <label for="settingsCrowdParkSelect" class="settings-label">1. Select Park</label>
-                <select id="settingsCrowdParkSelect" class="select-input">
-                  <option value="6" selected>🏰 Magic Kingdom</option>
-                  <option value="5">🌐 EPCOT</option>
-                  <option value="7">🎬 Hollywood Studios</option>
-                  <option value="8">🌳 Animal Kingdom</option>
-                  <option value="16">✨ Disneyland</option>
-                  <option value="17">🎡 California Adv.</option>
-                </select>
-              </div>
-
-              <div class="form-col">
-                <label class="settings-label">2. Target Crowd Level to Trigger Alert</label>
-                <div class="crowd-target-selector" id="settingsCrowdTargetSelector">
-                  <button type="button" class="crowd-target-chip active" data-level="empty">
-                    <span class="crowd-dot dot-empty"></span>
-                    <div>
-                      <strong>🟢 Empty / Walk-on</strong>
-                      <small>Avg wait &lt; 25m</small>
-                    </div>
-                  </button>
-                  <button type="button" class="crowd-target-chip" data-level="light">
-                    <span class="crowd-dot dot-light"></span>
-                    <div>
-                      <strong>🔵 Light (Below Normal)</strong>
-                      <small>Avg wait &lt; 39m</small>
-                    </div>
-                  </button>
-                  <button type="button" class="crowd-target-chip" data-level="normal">
-                    <span class="crowd-dot dot-normal"></span>
-                    <div>
-                      <strong>🟡 Normal (Typical)</strong>
-                      <small>Avg wait &lt; 52m</small>
-                    </div>
-                  </button>
-                </div>
-              </div>
-
-              <div class="settings-live-stat-banner" id="settingsSelectedParkCrowdBox">
-                <span class="muted-label">Live Park Crowd:</span>
-                <span id="settingsSelectedParkCrowdVal" class="crowd-badge light">🔵 Light (Below Normal)</span>
-              </div>
-
-              <button id="settingsSaveCrowdAlertBtn" class="btn btn-gold btn-block">
-                <span>➕ Add Park Crowd Alert</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 3: ACTIVE ALERTS & WATCHLIST -->
-        <div class="settings-active-section" style="margin-top: 30px;">
-          <div class="section-title-wrap" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div>
-              <h3 class="section-heading" style="font-size: 1.25rem;">📋 Active Watchlist &amp; Alerts</h3>
-              <p class="section-desc">Real-time alerts currently monitoring queues and crowd volumes.</p>
-            </div>
-            <div style="display:flex; gap:8px;">
-              <button id="settingsTestChimeBtn" class="btn btn-sm btn-secondary">
-                <span>🔊 Test Sound &amp; Push</span>
-              </button>
-              <button id="settingsEnablePushBtn" class="btn btn-sm btn-primary hidden">
-                <span>🔔 Enable Browser Push</span>
-              </button>
-            </div>
-          </div>
-
-          <div id="settingsActiveAlertsContainer" class="active-alerts-list" style="margin-top: 16px;">
-            <!-- Injected dynamically via JS -->
           </div>
         </div>
       </div>

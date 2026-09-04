@@ -231,13 +231,30 @@ function initVisibilityWatcher() {
 function initEventListeners() {
   // Sync now button
   const syncBtn = document.getElementById('syncNowBtn');
-  syncBtn.addEventListener('click', triggerManualSync);
+  if (syncBtn) syncBtn.addEventListener('click', triggerManualSync);
+
+  // Parks Carousel Scroll Buttons
+  const parksScrollLeftBtn = document.getElementById('parksScrollLeftBtn');
+  const parksScrollRightBtn = document.getElementById('parksScrollRightBtn');
+  const parksCardsContainer = document.getElementById('parksCardsContainer');
+
+  if (parksScrollLeftBtn && parksCardsContainer) {
+    parksScrollLeftBtn.addEventListener('click', () => {
+      parksCardsContainer.scrollBy({ left: -300, behavior: 'smooth' });
+    });
+  }
+
+  if (parksScrollRightBtn && parksCardsContainer) {
+    parksScrollRightBtn.addEventListener('click', () => {
+      parksCardsContainer.scrollBy({ left: 300, behavior: 'smooth' });
+    });
+  }
 
   // Desktop Tab switching
   document.querySelectorAll('.tab-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
-      switchTab(targetTab);
+      switchTab(targetTab, true);
     });
   });
 
@@ -245,7 +262,7 @@ function initEventListeners() {
   document.querySelectorAll('.bottom-nav-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
-      switchTab(targetTab);
+      switchTab(targetTab, true);
     });
   });
 
@@ -293,20 +310,24 @@ function initEventListeners() {
   const searchInput = document.getElementById('attractionSearch');
   const clearBtn = document.getElementById('clearSearchBtn');
 
-  searchInput.addEventListener('input', (e) => {
-    state.searchQuery = e.target.value.toLowerCase().trim();
-    clearBtn.classList.toggle('hidden', state.searchQuery.length === 0);
-    renderAttractionsTable();
-  });
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      state.searchQuery = e.target.value.toLowerCase().trim();
+      if (clearBtn) clearBtn.classList.toggle('hidden', state.searchQuery.length === 0);
+      renderAttractionsTable();
+    });
+  }
 
-  clearBtn.addEventListener('click', () => {
-    searchInput.value = '';
-    state.searchQuery = '';
-    clearBtn.classList.add('hidden');
-    renderAttractionsTable();
-  });
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      state.searchQuery = '';
+      clearBtn.classList.add('hidden');
+      renderAttractionsTable();
+    });
+  }
 
-  // Resort Switcher
+  // Resort Switcher: updates state, updates banner and cards, and smoothly scrolls to parks info
   document.querySelectorAll('.resort-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.resort-btn').forEach((b) => b.classList.remove('active'));
@@ -317,6 +338,12 @@ function initEventListeners() {
       renderAttractionsTable();
       renderDowntimes();
       renderRecommendations();
+
+      // Smoothly navigate the user directly into that resort's parks overview
+      const parksSection = document.getElementById('parksSectionWrapper') || document.getElementById('parksCardsContainer');
+      if (parksSection) {
+        parksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   });
 
@@ -549,7 +576,7 @@ function initEventListeners() {
   });
 }
 
-function switchTab(tabId) {
+function switchTab(tabId, scrollIntoView = false) {
   state.activeTab = tabId;
 
   // Desktop buttons
@@ -578,6 +605,13 @@ function switchTab(tabId) {
   }
   if (tabId === 'tab-settings') {
     renderSettingsTab();
+  }
+
+  if (scrollIntoView) {
+    const pane = document.getElementById(tabId);
+    if (pane) {
+      pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 
@@ -1026,6 +1060,7 @@ function renderResortBanner() {
 
 function renderParksGrid() {
   const container = document.getElementById('parksCardsContainer');
+  if (!container) return;
   container.innerHTML = '';
 
   const displayParks = state.selectedResort === 'all'
@@ -1042,9 +1077,10 @@ function renderParksGrid() {
     };
 
     const crowd = park.crowd_level || { level: 'normal', badge_text: '🟡 Normal (Typical)' };
+    const isSelected = state.parkFilter === String(park.id);
 
     const card = document.createElement('div');
-    card.className = 'park-card';
+    card.className = `park-card ${isSelected ? 'selected-park' : ''}`;
     card.style.setProperty('--accent-start', meta.accentStart);
     card.style.setProperty('--accent-end', meta.accentEnd);
 
@@ -1085,14 +1121,23 @@ function renderParksGrid() {
       </div>
     `;
 
-    // Clicking a park card filters the attraction list by this park
+    // Clicking a park card filters the attraction list and recommendations by this park
     card.addEventListener('click', () => {
+      document.querySelectorAll('.park-card').forEach((c) => c.classList.remove('selected-park'));
+      card.classList.add('selected-park');
       state.parkFilter = String(park.id);
+      state.recParkFilter = String(park.id);
+
       document.querySelectorAll('.filter-pill').forEach((pill) => {
         pill.classList.toggle('active', pill.getAttribute('data-park-filter') === String(park.id));
       });
-      switchTab('tab-attractions');
+      document.querySelectorAll('#recParkChips .rec-chip').forEach((chip) => {
+        chip.classList.toggle('active', chip.getAttribute('data-park') === String(park.id));
+      });
+
+      switchTab('tab-attractions', true);
       renderAttractionsTable();
+      renderRecommendations();
     });
 
     container.appendChild(card);
@@ -2952,6 +2997,16 @@ function initSettingsTabListeners() {
   const enableDeviceAlertsBtn = document.getElementById('enableDeviceAlertsBtn');
   const testDeviceAlertsBtn = document.getElementById('testDeviceAlertsBtn');
 
+  const toggleAddBtn = document.getElementById('toggleAddAlertCardBtn');
+  if (toggleAddBtn) {
+    toggleAddBtn.addEventListener('click', () => {
+      const createSection = document.getElementById('createAlertFormsSection');
+      if (createSection) {
+        createSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
   if (parkSelect) {
     parkSelect.addEventListener('change', () => {
       populateSettingsRidesDropdown(parseInt(parkSelect.value, 10));
@@ -3222,12 +3277,15 @@ function renderSettingsActiveAlertsList() {
 
   if (!state.alerts || state.alerts.length === 0) {
     container.innerHTML = `
-      <div class="empty-state" style="padding: 30px 20px; text-align: center; background:var(--bg-surface); border:1px dashed var(--border-subtle); border-radius:var(--radius-lg);">
-        <div class="empty-state-icon" style="font-size: 2.2rem; margin-bottom: 8px;">🔔</div>
-        <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">No Active Alerts Configured</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 400px; margin: 0 auto;">
-          Use the cards above to configure ride wait drops or park crowd level notifications.
+      <div class="empty-state" style="padding: 36px 20px; text-align: center; background:var(--bg-surface); border:1.5px dashed var(--border-subtle); border-radius:var(--radius-xl);">
+        <div class="empty-state-icon" style="font-size: 2.6rem; margin-bottom: 8px;">🔔</div>
+        <h4 style="font-size: 1.15rem; color: var(--text-primary); font-weight:800; margin-bottom: 4px;">No Active Alerts Configured Yet</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); max-width: 440px; margin: 0 auto 16px;">
+          You don't have any wait time drop watchers right now. Select an attraction or park crowd level below to start receiving real-time alerts!
         </p>
+        <button type="button" onclick="document.getElementById('createAlertFormsSection').scrollIntoView({behavior:'smooth', block:'start'})" class="btn btn-primary btn-sm">
+          <span>➕ Set Your First Wait Alert</span>
+        </button>
       </div>
     `;
     return;
@@ -3244,12 +3302,14 @@ function renderSettingsActiveAlertsList() {
           <div class="alert-item-info">
             <span class="alert-item-title">🏰 ${escapeHtml(alert.park_name)} (Park Crowd Alert)</span>
             <span class="alert-item-meta">Live Crowd: <strong class="text-cyan">${escapeHtml(currentCrowd)} (${currentAvg})</strong></span>
-            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-              <span class="alert-item-threshold-pill" style="background:var(--sun-light); color:#b45309;">🎯 Target: ${escapeHtml(alert.target_label || alert.target_level)}</span>
+            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px; flex-wrap:wrap;">
+              <span class="alert-item-threshold-pill" style="background:var(--sun-light); color:#b45309;">🎯 Goal: ${escapeHtml(alert.target_label || alert.target_level)}</span>
+              <span class="badge badge-light" style="font-size:0.75rem; font-weight:700;">👁️ Watching Live Crowd</span>
             </div>
           </div>
           <div class="alert-item-actions">
-            <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Delete Alert">🗑️ Remove</button>
+            <button class="alert-test-btn" onclick="window.testSingleAlert('${alert.id}')" title="Test Alert Notification">🔊 Test</button>
+            <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Remove Alert">🗑️ Remove</button>
           </div>
         </div>
       `;
@@ -3260,17 +3320,22 @@ function renderSettingsActiveAlertsList() {
       const isUnderThreshold = liveRide && liveRide.is_open && liveRide.wait_time <= alert.threshold;
 
       return `
-        <div class="active-alert-item" data-alert-id="${alert.id}">
+        <div class="active-alert-item ${isUnderThreshold ? 'goal-met' : ''}" data-alert-id="${alert.id}">
           <div class="alert-item-info">
             <span class="alert-item-title">🎢 ${escapeHtml(alert.ride_name)}</span>
-            <span class="alert-item-meta">🏰 ${escapeHtml(alert.park_name)} • Live: <strong class="${isUnderThreshold ? 'text-success' : 'text-cyan'}">${liveWait}</strong></span>
-            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
+            <span class="alert-item-meta">🏰 ${escapeHtml(alert.park_name)} • Live Standby: <strong class="${isUnderThreshold ? 'text-success' : 'text-cyan'}">${liveWait}</strong></span>
+            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px; flex-wrap:wrap;">
               <span class="alert-item-threshold-pill">🎯 Goal: &le; ${alert.threshold} min</span>
-              ${alert.notify_reopen ? '<span class="status-badge open" style="font-size:0.7rem; padding: 2px 6px;">✨ Reopen Alert</span>' : ''}
+              ${isUnderThreshold 
+                ? `<span class="badge badge-success" style="font-size:0.75rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:3px 8px; border-radius:999px;">🟢 GOAL REACHED (${liveWait} &le; ${alert.threshold}m)!</span>`
+                : `<span class="badge badge-light" style="font-size:0.75rem; font-weight:700; background:#f1f5f9; color:#475569; padding:3px 8px; border-radius:999px;">⏳ Watching (${liveWait} &rarr; &le; ${alert.threshold}m)</span>`
+              }
+              ${alert.notify_reopen ? '<span class="status-badge open" style="font-size:0.7rem; padding: 2px 6px;">✨ Reopen Alert Active</span>' : ''}
             </div>
           </div>
           <div class="alert-item-actions">
-            <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Delete Alert">🗑️ Remove</button>
+            <button class="alert-test-btn" onclick="window.testSingleAlert('${alert.id}')" title="Test Alert Notification">🔊 Test</button>
+            <button class="alert-delete-btn" onclick="window.deleteAlert('${alert.id}')" title="Remove Alert">🗑️ Remove</button>
           </div>
         </div>
       `;
@@ -4299,6 +4364,22 @@ window.openRestFinderModal = function (parkId) {
 
 window.acquireGpsLocation = function () {
   acquireGpsLocation(true);
+};
+
+window.testSingleAlert = function (alertId) {
+  const alert = (state.alerts || []).find((a) => a.id === alertId);
+  if (!alert) return;
+  if (alert.type === 'park_crowd') {
+    sendPushNotification(
+      `🏰 Crowd Alert Test: ${alert.park_name}!`,
+      `Testing crowd alert: Target ${alert.target_label || alert.target_level}! ✨`
+    );
+  } else {
+    sendPushNotification(
+      `🔔 Wait Alert Test: ${alert.ride_name}!`,
+      `Testing wait alert: Goal ≤ ${alert.threshold}m at ${alert.park_name}! 🚀`
+    );
+  }
 };
 
 
