@@ -597,8 +597,15 @@ function switchTab(tabId, scrollIntoView = false) {
   if (tabId === 'tab-trends' && state.chart) {
     setTimeout(() => state.chart.resize(), 100);
   }
-  if (tabId === 'tab-history' && state.dayChart) {
-    setTimeout(() => state.dayChart.resize(), 100);
+  if (tabId === 'tab-history') {
+    const parkId = state.histSelectedParkId || 6;
+    loadLeastBusyDays(parkId);
+    renderWishlistGrid(parkId);
+    renderHistoryArchive();
+    renderHistoricalCalendar();
+    if (state.dayChart) {
+      setTimeout(() => state.dayChart.resize(), 100);
+    }
   }
   if (tabId === 'tab-recommendations') {
     renderRecommendations();
@@ -2495,10 +2502,22 @@ function renderWishlistResults(data) {
    Least Busy Days of the Year Showcase
    ========================================================================== */
 async function loadLeastBusyDays(parkId = 6) {
+  state.histSelectedParkId = parkId;
   const container = document.getElementById('leastBusyContainer');
   if (!container) return;
 
-  container.innerHTML = `<div class="park-card-skeleton" style="height: 220px; border-radius: 16px;"></div>`;
+  if (!state.leastBusyCache) state.leastBusyCache = {};
+
+  if (state.leastBusyCache[parkId]) {
+    renderLeastBusyDays(state.leastBusyCache[parkId]);
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="park-card-skeleton" style="height: 220px; border-radius: 16px; display:flex; align-items:center; justify-content:center;">
+      <span style="color:var(--text-muted); font-weight:600;">✨ Analyzing Lowest Crowd Days &amp; Sweet Spots...</span>
+    </div>
+  `;
 
   try {
     let data = null;
@@ -2525,13 +2544,15 @@ async function loadLeastBusyDays(parkId = 6) {
     }
 
     if (!data) throw new Error('Failed to fetch least busy days');
+    state.leastBusyCache[parkId] = data;
     renderLeastBusyDays(data);
   } catch (err) {
     console.error('Error loading least busy days:', err);
     container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-state-icon">⚠️</div>
-        <p>Could not load least busy days analysis for this park.</p>
+      <div class="empty-state" style="padding: 24px; text-align: center;">
+        <div class="empty-state-icon" style="font-size: 2rem; margin-bottom: 8px;">⚠️</div>
+        <p style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Could not load least busy days analysis for this park.</p>
+        <button type="button" class="btn btn-sm btn-primary" onclick="loadLeastBusyDays(${parkId})">🔄 Retry Loading</button>
       </div>
     `;
   }
@@ -2549,53 +2570,63 @@ function renderLeastBusyDays(data) {
   const lowestAvgWait = topLeast.length > 0 ? `${topLeast[0].avg_wait} min` : '20 min';
 
   // Build top 10 least busy days table
-  const leastDaysRowsHtml = topLeast.map((d, idx) => `
-    <tr>
-      <td><strong>#${idx + 1}</strong></td>
-      <td><strong>${escapeHtml(d.formatted_date)}</strong></td>
-      <td><span class="text-gold" style="font-weight:700;">${d.avg_wait} min</span></td>
-      <td><span class="text-danger">${d.peak_wait} min</span></td>
-      <td><span class="crowd-badge ${d.crowd_level.level}">${d.crowd_level.badge_text}</span></td>
-      <td><span class="muted-label">${escapeHtml(d.holiday)}</span></td>
-      <td>${d.weather_high}°F</td>
-    </tr>
-  `).join('');
+  const leastDaysRowsHtml = topLeast.map((d, idx) => {
+    const crowdLvl = (typeof d.crowd_level === 'object' && d.crowd_level) ? (d.crowd_level.level || 'empty') : (d.crowd_level || 'empty');
+    const crowdBadge = (typeof d.crowd_level === 'object' && d.crowd_level) ? (d.crowd_level.badge_text || '🟢 Empty') : `🟢 ${d.crowd_level || 'Empty'}`;
+
+    return `
+      <tr>
+        <td><strong>#${idx + 1}</strong></td>
+        <td><strong>${escapeHtml(d.formatted_date || d.date || '')}</strong></td>
+        <td><span class="text-gold" style="font-weight:700;">${d.avg_wait || '--'} min</span></td>
+        <td><span class="text-danger">${d.peak_wait || '--'} min</span></td>
+        <td><span class="crowd-badge ${crowdLvl}">${crowdBadge}</span></td>
+        <td><span class="muted-label">${escapeHtml(d.holiday || 'Regular Day')}</span></td>
+        <td>${d.weather_high ? `${d.weather_high}°F` : '--'}</td>
+      </tr>
+    `;
+  }).join('');
 
   // Build DOW rankings list
-  const dowRowsHtml = dowRankings.map((dow, idx) => `
-    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:rgba(0,0,0,0.25); border-radius:8px; margin-bottom:6px; border:1px solid var(--border-subtle);">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-weight:700; color:${idx === 0 ? '#10b981' : (idx === dowRankings.length - 1 ? '#ef4444' : 'var(--text-secondary)')};">#${idx + 1}</span>
-        <strong>${dow.day_name}</strong>
+  const dowRowsHtml = dowRankings.map((dow, idx) => {
+    const dowLvl = (typeof dow.crowd_level === 'object' && dow.crowd_level) ? (dow.crowd_level.level || 'normal') : (dow.crowd_level || 'normal');
+    const dowBadge = (typeof dow.crowd_level === 'object' && dow.crowd_level) ? (dow.crowd_level.badge_text || '🟡 Normal') : `🟡 ${dow.crowd_level || 'Normal'}`;
+
+    return `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:rgba(0,0,0,0.25); border-radius:8px; margin-bottom:6px; border:1px solid var(--border-subtle);">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-weight:700; color:${idx === 0 ? '#10b981' : (idx === dowRankings.length - 1 ? '#ef4444' : 'var(--text-secondary)')};">#${idx + 1}</span>
+          <strong>${dow.day_name || ''}</strong>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="crowd-badge ${dowLvl}">${dowBadge}</span>
+          <span style="font-weight:700; color:var(--gold-400); min-width:60px; text-align:right;">${dow.avg_wait || '--'} min</span>
+        </div>
       </div>
-      <div style="display:flex; align-items:center; gap:12px;">
-        <span class="crowd-badge ${dow.crowd_level.level}">${dow.crowd_level.badge_text}</span>
-        <span style="font-weight:700; color:var(--gold-400); min-width:60px; text-align:right;">${dow.avg_wait} min</span>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   // Build sweet spot cards
   const sweetSpotsHtml = sweetSpots.map((ss) => `
     <div class="sweet-spot-card">
       <div class="sweet-spot-header">
-        <h5 class="sweet-spot-title">${escapeHtml(ss.title)}</h5>
-        <span class="crowd-badge" style="background:${ss.crowd_color}25; color:${ss.crowd_color}; border:1px solid ${ss.crowd_color}50;">
-          ${escapeHtml(ss.crowd_badge)}
+        <h5 class="sweet-spot-title">${escapeHtml(ss.title || '')}</h5>
+        <span class="crowd-badge" style="background:${ss.crowd_color || '#10b981'}25; color:${ss.crowd_color || '#10b981'}; border:1px solid ${ss.crowd_color || '#10b981'}50;">
+          ${escapeHtml(ss.crowd_badge || 'Sweet Spot')}
         </span>
       </div>
-      <div class="sweet-spot-window">📅 ${escapeHtml(ss.window)} • Avg: ${escapeHtml(ss.avg_wait_range)}</div>
-      <p class="sweet-spot-highlight">${escapeHtml(ss.highlight)}</p>
+      <div class="sweet-spot-window">📅 ${escapeHtml(ss.window || '')} • Avg: ${escapeHtml(ss.avg_wait_range || '')}</div>
+      <p class="sweet-spot-highlight">${escapeHtml(ss.highlight || '')}</p>
     </div>
   `).join('');
 
   // Build attraction savings table
   const attCompRowsHtml = attractionComps.map((ac) => `
     <tr>
-      <td><strong>${escapeHtml(ac.ride_name)}</strong></td>
-      <td><span class="text-success" style="font-weight:700;">${ac.least_busy_wait} min</span></td>
-      <td><span class="text-danger" style="font-weight:700;">${ac.peak_day_wait} min</span></td>
-      <td><span class="badge badge-success">Save ~${ac.minutes_saved_standby} min</span></td>
+      <td><strong>${escapeHtml(ac.ride_name || '')}</strong></td>
+      <td><span class="text-success" style="font-weight:700;">${ac.least_busy_wait || '--'} min</span></td>
+      <td><span class="text-danger" style="font-weight:700;">${ac.peak_day_wait || '--'} min</span></td>
+      <td><span class="badge badge-success">Save ~${ac.minutes_saved_standby || 0} min</span></td>
     </tr>
   `).join('');
 
