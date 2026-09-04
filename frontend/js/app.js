@@ -55,24 +55,24 @@ const PARK_META = {
     resort: 'Walt Disney World',
     tag: 'Fantasyland, Tomorrowland & More',
     icon: '🏰',
-    accentStart: '#0284c7',
-    accentEnd: '#38bdf8',
+    accentStart: '#3b82f6',
+    accentEnd: '#fbbf24',
   },
   5: {
     name: 'EPCOT',
     resort: 'Walt Disney World',
     tag: 'World Discovery, Showcase & Nature',
     icon: '🌐',
-    accentStart: '#7c3aed',
-    accentEnd: '#a855f7',
+    accentStart: '#8b5cf6',
+    accentEnd: '#06b6d4',
   },
   7: {
     name: "Disney's Hollywood Studios",
     resort: 'Walt Disney World',
     tag: 'Star Wars, Toy Story & Sunset Blvd',
     icon: '🎬',
-    accentStart: '#ea580c',
-    accentEnd: '#f97316',
+    accentStart: '#f97316',
+    accentEnd: '#ec4899',
   },
   8: {
     name: "Disney's Animal Kingdom",
@@ -80,23 +80,23 @@ const PARK_META = {
     tag: 'Pandora, Africa & Asia',
     icon: '🌳',
     accentStart: '#059669',
-    accentEnd: '#10b981',
+    accentEnd: '#34d399',
   },
   16: {
     name: 'Disneyland Park',
     resort: 'Disneyland Resort',
     tag: "Main Street, Galaxy's Edge & Fantasyland",
     icon: '✨',
-    accentStart: '#db2777',
-    accentEnd: '#f472b6',
+    accentStart: '#ec4899',
+    accentEnd: '#c084fc',
   },
   17: {
     name: 'Disney California Adventure',
     resort: 'Disneyland Resort',
     tag: 'Cars Land, Avengers Campus & Pixar Pier',
     icon: '🎡',
-    accentStart: '#0284c7',
-    accentEnd: '#06b6d4',
+    accentStart: '#0ea5e9',
+    accentEnd: '#fb923c',
   },
 };
 
@@ -1156,10 +1156,11 @@ function renderWaitCurveChart(data) {
     return null;
   });
 
-  // Create cyan gradient for today's curve fill
-  const cyanGrad = ctx.createLinearGradient(0, 0, 0, 350);
-  cyanGrad.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
-  cyanGrad.addColorStop(1, 'rgba(56, 189, 248, 0.00)');
+  // Create whimsical magic gradient for today's curve fill
+  const magicGrad = ctx.createLinearGradient(0, 0, 0, 350);
+  magicGrad.addColorStop(0, 'rgba(192, 132, 252, 0.45)');
+  magicGrad.addColorStop(0.6, 'rgba(56, 189, 248, 0.15)');
+  magicGrad.addColorStop(1, 'rgba(56, 189, 248, 0.00)');
 
   // Destroy previous chart if exists
   if (state.chart) {
@@ -1174,28 +1175,28 @@ function renderWaitCurveChart(data) {
         {
           label: "Today's Live Wait",
           data: todayPoints,
-          borderColor: '#38BDF8',
-          backgroundColor: cyanGrad,
-          borderWidth: 3,
-          pointBackgroundColor: '#38BDF8',
+          borderColor: '#C084FC',
+          backgroundColor: magicGrad,
+          borderWidth: 3.5,
+          pointBackgroundColor: '#F472B6',
           pointBorderColor: '#FFFFFF',
           pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
+          pointRadius: 5.5,
+          pointHoverRadius: 8,
           fill: true,
-          tension: 0.3,
+          tension: 0.32,
           spanGaps: true,
         },
         {
           label: 'Historical Hourly Average',
           data: historicalPoints,
-          borderColor: '#F59E0B',
-          borderWidth: 2.2,
+          borderColor: '#FBBF24',
+          borderWidth: 2.4,
           borderDash: [6, 4],
-          pointBackgroundColor: '#F59E0B',
-          pointBorderColor: '#0E1626',
-          pointRadius: 4,
-          pointHoverRadius: 6,
+          pointBackgroundColor: '#FBBF24',
+          pointBorderColor: '#181338',
+          pointRadius: 4.5,
+          pointHoverRadius: 7,
           fill: false,
           tension: 0.35,
           spanGaps: true,
