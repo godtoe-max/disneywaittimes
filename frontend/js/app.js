@@ -25,7 +25,7 @@ const state = {
   sortAsc: false,
   chart: null,
   dayChart: null,
-  pollSecondsRemaining: 60,
+  pollSecondsRemaining: 300,
   isSyncing: false,
   rideCurvesCache: null,
   alerts: [],
@@ -195,7 +195,7 @@ function initPollingTimer() {
   setInterval(() => {
     state.pollSecondsRemaining -= 1;
     if (state.pollSecondsRemaining <= 0) {
-      state.pollSecondsRemaining = 60;
+      state.pollSecondsRemaining = 300;
       fetchAllData(true);
     }
 
@@ -211,7 +211,7 @@ function initVisibilityWatcher() {
   // When mobile phone screen turns back on or user returns to the tab, immediately refresh
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      state.pollSecondsRemaining = 60;
+      state.pollSecondsRemaining = 300;
       fetchAllData(true);
     }
   });
@@ -1574,7 +1574,7 @@ function renderAttractionsTable() {
       </td>
       <td class="text-right">${waitBadgeHtml}</td>
       <td class="text-center" style="white-space:nowrap;">
-        <button class="btn-bell-mini" onclick="window.openSetAlertModal(${r.id})" title="Set wait alert" style="margin-right:6px;">🔔</button>
+        <button class="btn-bell-mini" onclick="event.stopPropagation(); window.openSetAlertModal(${r.id})" title="Set wait alert for ${escapeHtml(r.name)}" style="margin-right:6px;">🔔 Alert</button>
         <button class="action-btn-mini" data-ride-id="${r.id}">View Curve</button>
       </td>
     `;
@@ -1642,7 +1642,7 @@ function renderAttractionsCards(filtered) {
               ? '<span class="status-badge open" style="font-size:0.7rem; padding:2px 8px;"><span class="status-dot open"></span> Open</span>'
               : '<span class="status-badge closed" style="font-size:0.7rem; padding:2px 8px;"><span class="status-dot closed"></span> Down</span>'
           }
-          <button class="btn-bell-mini" onclick="event.stopPropagation(); window.openSetAlertModal(${r.id})" title="Set wait alert">🔔</button>
+          <button class="btn-bell-mini" onclick="event.stopPropagation(); window.openSetAlertModal(${r.id})" title="Set wait alert for ${escapeHtml(r.name)}">🔔 Set Alert</button>
         </div>
       </div>
     `;
@@ -1700,7 +1700,10 @@ function renderDowntimes() {
       </div>
       <div class="downtime-meta">
         <span>Reported status: Closed</span>
-        <button class="action-btn-mini" data-ride-id="${dt.ride_id}">View History</button>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <button class="btn-bell-mini" onclick="event.stopPropagation(); window.openSetAlertModal(${dt.ride_id})" title="Notify when reopened">🔔 Alert When Open</button>
+          <button class="action-btn-mini" data-ride-id="${dt.ride_id}">View History</button>
+        </div>
       </div>
     `;
 
@@ -3432,8 +3435,28 @@ async function testNotification() {
 
 // Quick modal helpers
 function openSetAlertModal(rideId) {
-  const ride = state.rides.find((r) => r.id === Number(rideId));
-  if (!ride) return;
+  if (!rideId) return;
+
+  let ride = (state.rides || []).find((r) => String(r.id) === String(rideId) || Number(r.id) === Number(rideId));
+  if (!ride) {
+    const dt = (state.downtimes || []).find((d) => String(d.ride_id) === String(rideId) || Number(d.ride_id) === Number(rideId));
+    if (dt) {
+      ride = {
+        id: dt.ride_id,
+        name: dt.ride_name,
+        park_id: dt.park_id,
+        park_name: dt.park_name,
+        land_name: dt.land_name || 'General',
+        wait_time: 0,
+        is_open: false,
+      };
+    }
+  }
+
+  if (!ride) {
+    console.warn('Ride not found for alert modal:', rideId);
+    return;
+  }
 
   state.currentAlertRideId = ride.id;
 
@@ -3459,7 +3482,7 @@ function openSetAlertModal(rideId) {
     }
   }
 
-  const existingAlert = state.alerts.find((a) => a.type === 'ride' && a.ride_id === ride.id);
+  const existingAlert = (state.alerts || []).find((a) => a.type === 'ride' && (String(a.ride_id) === String(ride.id) || Number(a.ride_id) === Number(ride.id)));
   const defaultThreshold = existingAlert ? existingAlert.threshold : (ride.wait_time > 30 ? Math.min(60, Math.floor(ride.wait_time / 10) * 10 - 10) : 25);
   const finalThreshold = Math.max(5, defaultThreshold || 30);
 
@@ -3490,7 +3513,21 @@ function closeSetAlertModal() {
 async function saveCurrentAlert() {
   if (!state.currentAlertRideId) return;
 
-  const ride = state.rides.find((r) => r.id === state.currentAlertRideId);
+  let ride = (state.rides || []).find((r) => String(r.id) === String(state.currentAlertRideId) || Number(r.id) === Number(state.currentAlertRideId));
+  if (!ride) {
+    const dt = (state.downtimes || []).find((d) => String(d.ride_id) === String(state.currentAlertRideId) || Number(d.ride_id) === Number(state.currentAlertRideId));
+    if (dt) {
+      ride = {
+        id: dt.ride_id,
+        name: dt.ride_name,
+        park_id: dt.park_id,
+        park_name: dt.park_name,
+        land_name: dt.land_name || 'General',
+        wait_time: 0,
+        is_open: false,
+      };
+    }
+  }
   if (!ride) return;
 
   const slider = document.getElementById('thresholdSlider');
@@ -3502,7 +3539,7 @@ async function saveCurrentAlert() {
     await requestPushPermission();
   }
 
-  const existingIdx = state.alerts.findIndex((a) => a.type === 'ride' && a.ride_id === ride.id);
+  const existingIdx = (state.alerts || []).findIndex((a) => a.type === 'ride' && (String(a.ride_id) === String(ride.id) || Number(a.ride_id) === Number(ride.id)));
   const newAlert = {
     id: existingIdx >= 0 ? state.alerts[existingIdx].id : `ride_alert_${Date.now()}`,
     type: 'ride',
