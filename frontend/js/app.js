@@ -607,6 +607,8 @@ function switchTab(tabId, scrollIntoView = false) {
     renderSettingsTab();
   }
 
+  renderTriggeredAlertsBanner();
+
   if (scrollIntoView) {
     const pane = document.getElementById(tabId);
     if (pane) {
@@ -755,6 +757,11 @@ async function fetchAllData(isBackground = false) {
     state.downtimes = downtimes || [];
     state.historyOverview = hist || {};
 
+    updateAlertsCountBadge();
+    renderSettingsActiveAlertsList();
+    renderTriggeredAlertsBanner();
+    evaluateAlerts();
+
     renderResortBanner();
     renderParksGrid();
     renderAttractionsDropdown();
@@ -774,11 +781,6 @@ async function fetchAllData(isBackground = false) {
     } else if (state.selectedRideId) {
       loadRideChartData(state.selectedRideId);
     }
-
-    // Update active alerts list with live standby wait times & evaluate threshold alerts
-    updateAlertsCountBadge();
-    renderSettingsActiveAlertsList();
-    evaluateAlerts();
   } catch (err) {
     console.error('Error fetching dashboard data:', err);
   }
@@ -971,6 +973,8 @@ function renderRecommendations() {
       </div>
     </div>
   `).join('');
+
+  renderTriggeredAlertsBanner();
 }
 
 window.openRideInTrends = function (rideId) {
@@ -3464,15 +3468,21 @@ function evaluateAlerts() {
 }
 
 /**
- * Persistent Top Banner for Reached / Triggered Alerts
+ * Persistent Top Banner & Main Page Reached Alerts
  */
 function renderTriggeredAlertsBanner() {
   const container = document.getElementById('triggeredAlertsBannerStrip');
-  if (!container) return;
+  const recSection = document.getElementById('recTriggeredAlertsSection');
+  const recList = document.getElementById('recTriggeredAlertsList');
 
   if (!state.alerts || state.alerts.length === 0) {
-    container.innerHTML = '';
-    container.classList.add('hidden');
+    if (container) {
+      container.innerHTML = '';
+      container.classList.add('hidden');
+    }
+    if (recSection) {
+      recSection.classList.add('hidden');
+    }
     return;
   }
 
@@ -3494,6 +3504,7 @@ function renderTriggeredAlertsBanner() {
           alertId: alert.id,
           type: 'park_crowd',
           title: alert.park_name,
+          parkName: alert.park_name,
           badgeWait: `${park.avg_wait_time}m avg`,
           badgeGoal: `${alert.target_label || alert.target_level}`,
           parkId: alert.park_id,
@@ -3517,42 +3528,92 @@ function renderTriggeredAlertsBanner() {
           type: 'ride',
           rideId: ride.id,
           title: ride.name,
-          badgeWait: `${waitTime}m`,
-          badgeGoal: `≤ ${targetThreshold}m`,
+          parkName: ride.park_name || alert.park_name || '',
+          badgeWait: `${waitTime} min`,
+          badgeGoal: `≤ ${targetThreshold} min`,
+          waitTime: waitTime,
+          threshold: targetThreshold,
         });
       }
     }
   });
 
   if (triggeredItems.length === 0) {
-    container.innerHTML = '';
-    container.classList.add('hidden');
+    if (container) {
+      container.innerHTML = '';
+      container.classList.add('hidden');
+    }
+    if (recSection) {
+      recSection.classList.add('hidden');
+    }
     return;
   }
 
-  container.classList.remove('hidden');
-  container.innerHTML = `
-    <div class="triggered-banner-left">
-      <span class="triggered-bell-mini">🔔</span>
-      <span class="triggered-banner-label">GOAL REACHED:</span>
-      <div class="triggered-chips-row">
-        ${triggeredItems
-          .map((item) => `
-            <div class="triggered-compact-chip">
-              <span class="triggered-chip-name">${item.type === 'ride' ? '🎢 ' : '🏰 '}${escapeHtml(item.title)}</span>
-              <span class="triggered-chip-wait">${escapeHtml(item.badgeWait)} (Goal ${escapeHtml(item.badgeGoal)})</span>
-              <button type="button" class="triggered-chip-dismiss" onclick="window.deleteAlert('${item.alertId}')" title="Dismiss Alert for ${escapeHtml(item.title)}">&times;</button>
-            </div>
-          `)
-          .join('')}
+  // 1. Render Top Sticky Banner Strip
+  if (container) {
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="triggered-banner-left">
+        <span class="triggered-bell-mini">🔔</span>
+        <span class="triggered-banner-label">GOAL REACHED:</span>
+        <div class="triggered-chips-row">
+          ${triggeredItems
+            .map((item) => `
+              <div class="triggered-compact-chip">
+                <span class="triggered-chip-name">${item.type === 'ride' ? '🎢 ' : '🏰 '}${escapeHtml(item.title)}</span>
+                <span class="triggered-chip-wait">${escapeHtml(item.badgeWait)} (Goal ${escapeHtml(item.badgeGoal)})</span>
+                <button type="button" class="triggered-chip-dismiss" onclick="window.deleteAlert('${item.alertId}')" title="Dismiss Alert for ${escapeHtml(item.title)}">&times;</button>
+              </div>
+            `)
+            .join('')}
+        </div>
       </div>
-    </div>
-    <div class="triggered-banner-actions">
-      <button type="button" onclick="switchTab('tab-settings', true)" class="btn-banner-link" title="Open Alerts Center">
-        🔔 Alerts Tab
-      </button>
-    </div>
-  `;
+      <div class="triggered-banner-actions">
+        <button type="button" onclick="switchTab('tab-settings', true)" class="btn-banner-link" title="Open Alerts Center">
+          🔔 Alerts Center (${triggeredItems.length})
+        </button>
+      </div>
+    `;
+  }
+
+  // 2. Render Main "Ride Now" Recommendations Goal Reached Section
+  if (recSection && recList) {
+    recSection.classList.remove('hidden');
+    recList.innerHTML = triggeredItems
+      .map((item) => `
+        <div class="rec-goal-card">
+          <div class="rec-goal-card-header">
+            <div class="rec-goal-title-wrap">
+              <span class="rec-goal-icon">${item.type === 'ride' ? '🎢' : '🏰'}</span>
+              <div>
+                <h4 class="rec-goal-title">${escapeHtml(item.title)}</h4>
+                <span class="rec-goal-park">${escapeHtml(item.parkName || '')}</span>
+              </div>
+            </div>
+            <span class="badge badge-success" style="font-size:0.75rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:3px 8px; border-radius:999px;">🟢 GOAL REACHED!</span>
+          </div>
+          <div class="rec-goal-card-body">
+            <div class="rec-goal-metric">
+              <span class="rec-goal-metric-label">Live Standby Wait:</span>
+              <span class="rec-goal-metric-val text-success font-bold">${escapeHtml(item.badgeWait)}</span>
+            </div>
+            <div class="rec-goal-metric">
+              <span class="rec-goal-metric-label">Your Target Goal:</span>
+              <span class="rec-goal-metric-val text-cyan font-bold">${escapeHtml(item.badgeGoal)}</span>
+            </div>
+          </div>
+          <div class="rec-goal-card-actions">
+            <button type="button" class="btn-outline-danger" onclick="window.deleteAlert('${item.alertId}')">
+              🗑️ Dismiss Alert
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="switchTab('tab-settings', true)">
+              🔔 Manage in Alerts Tab
+            </button>
+          </div>
+        </div>
+      `)
+      .join('');
+  }
 }
 
 async function testNotification() {

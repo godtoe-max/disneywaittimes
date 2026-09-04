@@ -3176,15 +3176,18 @@ body {
 }
 
 /* ==========================================================================
-   Persistent Top Triggered Alerts Compact Banner Strip
+   Persistent Top Triggered Alerts Compact Banner Strip (Sticky Top)
    ========================================================================== */
 .triggered-alerts-banner-strip {
+  position: sticky;
+  top: 0;
+  z-index: 999;
   margin-bottom: 12px;
   background: linear-gradient(135deg, #fefce8 0%, #ecfdf5 100%);
-  border: 1.5px solid #34d399;
+  border: 1.5px solid #10b981;
   border-radius: var(--radius-lg);
-  padding: 8px 14px;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.12);
+  padding: 10px 16px;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.2);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3199,12 +3202,12 @@ body {
 
 @keyframes bannerPulse {
   0% {
-    border-color: #34d399;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.12);
+    border-color: #10b981;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.16);
   }
   100% {
     border-color: #f59e0b;
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.24);
   }
 }
 
@@ -3216,7 +3219,7 @@ body {
 }
 
 .triggered-bell-mini {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3225,7 +3228,7 @@ body {
 
 .triggered-banner-label {
   font-family: var(--font-display);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: #065f46;
   white-space: nowrap;
@@ -3240,13 +3243,13 @@ body {
 
 .triggered-compact-chip {
   background: #ffffff;
-  border: 1px solid #86efac;
+  border: 1.5px solid #86efac;
   border-radius: var(--radius-full);
-  padding: 3px 8px 3px 10px;
+  padding: 4px 10px 4px 12px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
+  gap: 8px;
+  font-size: 0.82rem;
   color: var(--text-primary);
   box-shadow: var(--shadow-xs);
   transition: var(--transition-fast);
@@ -3266,19 +3269,19 @@ body {
   background: #dcfce7;
   color: #15803d;
   font-weight: 800;
-  padding: 1px 6px;
+  padding: 2px 8px;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.76rem;
 }
 
 .triggered-chip-dismiss {
   background: none;
   border: none;
   color: #94a3b8;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 800;
   cursor: pointer;
-  padding: 0 2px;
+  padding: 0 3px;
   line-height: 1;
   transition: color 0.15s;
 }
@@ -3298,9 +3301,9 @@ body {
   color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
   cursor: pointer;
   transition: var(--transition-fast);
   white-space: nowrap;
@@ -3309,6 +3312,152 @@ body {
 .btn-banner-link:hover {
   background: #059669;
 }
+
+/* Main Page Recommendations Goal Reached Section */
+.rec-triggered-alerts-section {
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.8) 0%, rgba(254, 252, 232, 0.7) 100%);
+  border: 1.5px solid #34d399;
+  border-radius: var(--radius-xl);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
+}
+
+.rec-triggered-alerts-section.hidden {
+  display: none !important;
+}
+
+.rec-triggered-alerts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rec-triggered-badge {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #065f46;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+.rec-triggered-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.rec-triggered-alerts-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.rec-goal-card {
+  background: #ffffff;
+  border: 1.5px solid #86efac;
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rec-goal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #10b981;
+}
+
+.rec-goal-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rec-goal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rec-goal-icon {
+  font-size: 1.4rem;
+}
+
+.rec-goal-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.rec-goal-park {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.rec-goal-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+}
+
+.rec-goal-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.rec-goal-metric-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.rec-goal-metric-val {
+  font-weight: 800;
+}
+
+.rec-goal-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.btn-outline-danger {
+  background: #fff;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+}
+
+.btn-outline-danger:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
 
 
 

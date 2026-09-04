@@ -21,7 +21,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
 </head>
 <body>
   <!-- Ambient background glow elements & starry night sparkles -->
@@ -31,7 +31,7 @@
   <div class="stars-particle-container"></div>
 
   <div class="app-container">
-    <!-- PERSISTENT TRIGGERED ALERTS COMPACT TOP BANNER -->
+    <!-- PERSISTENT TRIGGERED ALERTS COMPACT TOP BANNER (STICKY) -->
     <div id="triggeredAlertsBannerStrip" class="triggered-alerts-banner-strip hidden" aria-live="assertive"></div>
 
     <!-- Top Magical Header -->
@@ -192,6 +192,13 @@
             <span class="sparkle-emoji">⚡</span>
             <span id="recSummaryCount">Calculating bargains...</span>
           </div>
+        <!-- Triggered Active Goal Watchers Section (Shows Reached Alerts Front-and-Center on Main Page) -->
+        <div id="recTriggeredAlertsSection" class="rec-triggered-alerts-section hidden">
+          <div class="rec-triggered-alerts-header">
+            <span class="rec-triggered-badge">🎯 YOUR GOALS REACHED RIGHT NOW</span>
+            <span class="rec-triggered-subtitle">Rides currently at or below your target wait threshold!</span>
+          </div>
+          <div id="recTriggeredAlertsList" class="rec-triggered-alerts-list"></div>
         </div>
 
         <!-- Filter bar for Park & Strategy -->
@@ -921,6 +928,6 @@
     </div>
   </div>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=3.0"></script>
 </body>
 </html>
