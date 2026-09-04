@@ -775,7 +775,9 @@ async function fetchAllData(isBackground = false) {
       loadRideChartData(state.selectedRideId);
     }
 
-    // Evaluate wait time threshold alerts against fresh live data
+    // Update active alerts list with live standby wait times & evaluate threshold alerts
+    updateAlertsCountBadge();
+    renderSettingsActiveAlertsList();
     evaluateAlerts();
   } catch (err) {
     console.error('Error fetching dashboard data:', err);
@@ -3195,7 +3197,7 @@ async function saveSettingsRideAlert() {
     await requestPushPermission();
   }
 
-  const existingIdx = state.alerts.findIndex((a) => a.type === 'ride' && a.ride_id === ride.id);
+  const existingIdx = (state.alerts || []).findIndex((a) => a.type === 'ride' && (String(a.ride_id) === String(ride.id) || Number(a.ride_id) === Number(ride.id) || (a.ride_name && ride.name && a.ride_name.toLowerCase().trim() === ride.name.toLowerCase().trim())));
   const newAlert = {
     id: existingIdx >= 0 ? state.alerts[existingIdx].id : `ride_alert_${Date.now()}`,
     type: 'ride',
