@@ -31,6 +31,9 @@
   <div class="stars-particle-container"></div>
 
   <div class="app-container">
+    <!-- PERSISTENT TRIGGERED ALERTS COMPACT TOP BANNER -->
+    <div id="triggeredAlertsBannerStrip" class="triggered-alerts-banner-strip hidden" aria-live="assertive"></div>
+
     <!-- Top Magical Header -->
     <header class="app-header">
       <div class="header-brand">
@@ -73,9 +76,6 @@
         </button>
       </div>
     </header>
-
-    <!-- PERSISTENT TRIGGERED ALERTS TOP BANNER -->
-    <div id="triggeredAlertsBannerStrip" class="triggered-alerts-banner-strip hidden" aria-live="assertive"></div>
 
     <!-- Resort Toggle Switcher (Thumb-friendly Carousel) -->
     <div class="resort-selector-container">
@@ -174,8 +174,8 @@
         Historical Archive &amp; Sweet Spots
       </button>
       <button class="tab-btn" data-tab="tab-settings" id="tabSettingsBtn">
-        <span class="tab-icon">⚙️</span>
-        Alerts &amp; Settings (<span id="settingsAlertsCountBadge">0</span>)
+        <span class="tab-icon">🔔</span>
+        Alerts Center (<span id="settingsAlertsCountBadge">0</span>)
       </button>
     </nav>
 
@@ -787,7 +787,7 @@
       <span class="nav-label">Best Days</span>
     </button>
     <button class="bottom-nav-btn" data-tab="tab-settings">
-      <span class="nav-icon">⚙️</span>
+      <span class="nav-icon">🔔</span>
       <span class="nav-label">Alerts</span>
     </button>
   </nav>

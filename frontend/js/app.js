@@ -2716,6 +2716,8 @@ function loadAlertsFromStorage() {
     state.alerts = [];
   }
   updateAlertsCountBadge();
+  renderSettingsActiveAlertsList();
+  renderTriggeredAlertsBanner();
 }
 
 function saveAlertsToStorage() {
@@ -3490,9 +3492,8 @@ function renderTriggeredAlertsBanner() {
           alertId: alert.id,
           type: 'park_crowd',
           title: alert.park_name,
-          subtitle: `Park Crowd Goal Reached (${park.crowd_level.badge_text})`,
           badgeWait: `${park.avg_wait_time}m avg`,
-          badgeGoal: `Goal: ${alert.target_label || alert.target_level}`,
+          badgeGoal: `${alert.target_label || alert.target_level}`,
           parkId: alert.park_id,
         });
       }
@@ -3514,9 +3515,8 @@ function renderTriggeredAlertsBanner() {
           type: 'ride',
           rideId: ride.id,
           title: ride.name,
-          subtitle: `🏰 ${ride.park_name} • ${ride.land_name || 'General'}`,
-          badgeWait: `${waitTime} min standby`,
-          badgeGoal: `Goal: ≤ ${targetThreshold}m`,
+          badgeWait: `${waitTime}m`,
+          badgeGoal: `≤ ${targetThreshold}m`,
         });
       }
     }
@@ -3530,48 +3530,25 @@ function renderTriggeredAlertsBanner() {
 
   container.classList.remove('hidden');
   container.innerHTML = `
-    <div class="triggered-banner-header">
-      <div class="triggered-banner-title-box">
-        <div class="triggered-bell-pulse">🔔</div>
-        <div>
-          <h3 class="triggered-banner-title">
-            🌟 GOAL REACHED! (${triggeredItems.length} Alert${triggeredItems.length === 1 ? '' : 's'} Active Right Now)
-          </h3>
-          <p class="triggered-banner-subtitle">
-            Standby wait times have dropped into your target window! Alerts will chime every 5 minutes until dismissed.
-          </p>
-        </div>
-      </div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <button type="button" onclick="switchTab('tab-settings', true)" class="btn btn-sm btn-primary" style="font-size:0.8rem; padding:6px 12px;">
-          ⚙️ Manage All Alerts
-        </button>
+    <div class="triggered-banner-left">
+      <span class="triggered-bell-mini">🔔</span>
+      <span class="triggered-banner-label">GOAL REACHED:</span>
+      <div class="triggered-chips-row">
+        ${triggeredItems
+          .map((item) => `
+            <div class="triggered-compact-chip">
+              <span class="triggered-chip-name">${item.type === 'ride' ? '🎢 ' : '🏰 '}${escapeHtml(item.title)}</span>
+              <span class="triggered-chip-wait">${escapeHtml(item.badgeWait)} (Goal ${escapeHtml(item.badgeGoal)})</span>
+              <button type="button" class="triggered-chip-dismiss" onclick="window.deleteAlert('${item.alertId}')" title="Dismiss Alert for ${escapeHtml(item.title)}">&times;</button>
+            </div>
+          `)
+          .join('')}
       </div>
     </div>
-
-    <div class="triggered-cards-grid">
-      ${triggeredItems
-        .map((item) => `
-          <div class="triggered-alert-card">
-            <div class="triggered-card-info">
-              <span class="triggered-card-title">${escapeHtml(item.title)}</span>
-              <span class="triggered-card-meta">${escapeHtml(item.subtitle)}</span>
-              <div class="triggered-card-badges">
-                <span class="triggered-card-wait-badge">🟢 ${escapeHtml(item.badgeWait)}</span>
-                <span class="triggered-card-goal-badge">${escapeHtml(item.badgeGoal)}</span>
-              </div>
-            </div>
-            <div class="triggered-card-actions">
-              ${
-                item.type === 'ride'
-                  ? `<button type="button" class="btn-curve-alert" onclick="window.openRideInTrends(${item.rideId})" title="View wait time curve">📈 Curve</button>`
-                  : ''
-              }
-              <button type="button" class="btn-dismiss-alert" onclick="window.deleteAlert('${item.alertId}')" title="Remove this alert">🗑️ Dismiss</button>
-            </div>
-          </div>
-        `)
-        .join('')}
+    <div class="triggered-banner-actions">
+      <button type="button" onclick="switchTab('tab-settings', true)" class="btn-banner-link" title="Open Alerts Center">
+        🔔 Alerts Tab
+      </button>
     </div>
   `;
 }
