@@ -541,9 +541,6 @@ function switchTab(tabId) {
   if (tabId === 'tab-settings') {
     renderSettingsTab();
   }
-
-  // Scroll to top of tab view smoothly
-  window.scrollTo({ top: 320, behavior: 'smooth' });
 }
 
 /* ==========================================================================
