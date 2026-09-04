@@ -351,17 +351,127 @@ function switchTab(tabId) {
    ========================================================================== */
 async function fetchAllData(isBackground = false) {
   try {
-    const [parksRes, ridesRes, downtimesRes, histRes] = await Promise.all([
-      fetch('/api/parks'),
-      fetch('/api/rides'),
-      fetch('/api/downtimes'),
-      fetch('/api/history/overview'),
-    ]);
+    let parks = null, rides = null, downtimes = null, hist = null;
 
-    state.parks = await parksRes.json();
-    state.rides = await ridesRes.json();
-    state.downtimes = await downtimesRes.json();
-    state.historyOverview = await histRes.json();
+    // First try relative /api/ endpoints (FastAPI or Netlify Functions)
+    try {
+      const [parksRes, ridesRes, downtimesRes, histRes] = await Promise.all([
+        fetch('/api/parks'),
+        fetch('/api/rides'),
+        fetch('/api/downtimes'),
+        fetch('/api/history/overview'),
+      ]);
+
+      if (parksRes.ok && ridesRes.ok) {
+        parks = await parksRes.json();
+        rides = await ridesRes.json();
+        downtimes = await downtimesRes.json();
+        hist = await histRes.json();
+      }
+    } catch (apiErr) {
+      console.warn('Backend API endpoint unavailable, falling back to client-side data & direct API:', apiErr);
+    }
+
+    // Fallback: If API returned 404/error, load from static JSON and fetch Queue-Times directly
+    if (!parks || parks.length === 0) {
+      try {
+        const histRes = await fetch('data/history_overview.json').catch(() => null);
+        if (histRes && histRes.ok) {
+          hist = await histRes.json();
+        }
+      } catch (e) {}
+
+      const parkDefs = [
+        { id: 6, name: 'Magic Kingdom', resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 38.0 },
+        { id: 5, name: 'EPCOT', resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 32.0 },
+        { id: 7, name: "Disney's Hollywood Studios", resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 40.0 },
+        { id: 8, name: "Disney's Animal Kingdom", resort: 'Walt Disney World', timezone: 'America/New_York', baseline: 32.0 },
+        { id: 16, name: 'Disneyland Park', resort: 'Disneyland Resort', timezone: 'America/Los_Angeles', baseline: 38.0 },
+        { id: 17, name: 'Disney California Adventure', resort: 'Disneyland Resort', timezone: 'America/Los_Angeles', baseline: 40.0 },
+      ];
+
+      parks = [];
+      rides = [];
+      downtimes = [];
+
+      for (const p of parkDefs) {
+        try {
+          const qRes = await fetch(`https://queue-times.com/parks/${p.id}/queue_times.json`);
+          if (!qRes.ok) continue;
+          const qData = await qRes.json();
+          let parkTotal = 0, parkOpen = 0, parkDown = 0, totalWait = 0, maxWait = 0, topRide = 'None';
+          const allParkRides = [];
+
+          (qData.lands || []).forEach((l) => {
+            (l.rides || []).forEach((r) => allParkRides.push({ ...r, land_name: l.name }));
+          });
+          (qData.rides || []).forEach((r) => allParkRides.push({ ...r, land_name: 'General' }));
+
+          allParkRides.forEach((r) => {
+            parkTotal++;
+            const isOpen = Boolean(r.is_open);
+            const waitTime = isOpen ? (r.wait_time || 0) : 0;
+            if (isOpen) {
+              parkOpen++;
+              totalWait += waitTime;
+              if (waitTime > maxWait) {
+                maxWait = waitTime;
+                topRide = r.name;
+              }
+            } else {
+              parkDown++;
+              downtimes.push({
+                ride_id: r.id,
+                ride_name: r.name,
+                park_id: p.id,
+                park_name: p.name,
+                land_name: r.land_name,
+                down_since: r.updated_at || new Date().toISOString(),
+                downtime_minutes: 10,
+              });
+            }
+            rides.push({
+              id: r.id,
+              name: r.name,
+              park_id: p.id,
+              park_name: p.name,
+              land_name: r.land_name,
+              wait_time: waitTime,
+              is_open: isOpen,
+              last_updated: r.updated_at || new Date().toISOString(),
+            });
+          });
+
+          const avgWait = parkOpen > 0 ? Math.round((totalWait / parkOpen) * 10) / 10 : 0;
+          let crowdLevel = { level: 'normal', tier: 'NORMAL', badge_text: '🟡 Normal (Typical)' };
+          if (avgWait < 18) crowdLevel = { level: 'empty', tier: 'EMPTY', badge_text: '🟢 Empty (Walk-on)' };
+          else if (avgWait < 33) crowdLevel = { level: 'light', tier: 'LIGHT', badge_text: '🔵 Light (Below Normal)' };
+          else if (avgWait > 46) crowdLevel = { level: 'busy', tier: 'BUSY', badge_text: '🔴 Busy (Heavy Queues)' };
+
+          parks.push({
+            id: p.id,
+            name: p.name,
+            resort: p.resort,
+            timezone: p.timezone,
+            total_rides: parkTotal,
+            open_rides: parkOpen,
+            down_rides: parkDown,
+            avg_wait_time: avgWait,
+            max_wait_time: maxWait,
+            top_ride_name: topRide,
+            crowd_level: crowdLevel,
+            last_updated: new Date().toISOString(),
+          });
+        } catch (err) {
+          console.warn(`Direct fetch failed for park ${p.id}:`, err);
+        }
+      }
+    }
+
+    state.parks = parks || [];
+    state.rides = rides || [];
+    state.downtimes = downtimes || [];
+    state.historyOverview = hist || {};
 
     renderResortBanner();
     renderParksGrid();
@@ -396,8 +506,7 @@ async function triggerManualSync() {
   syncBtnText.textContent = 'Syncing...';
 
   try {
-    const res = await fetch('/api/sync', { method: 'POST' });
-    const result = await res.json();
+    await fetch('/api/sync', { method: 'POST' }).catch(() => null);
     state.pollSecondsRemaining = 300;
     await fetchAllData();
   } catch (err) {
@@ -611,12 +720,32 @@ async function loadRideChartData(rideId) {
   overlay.classList.remove('hidden');
 
   try {
-    const res = await fetch(`/api/rides/${rideId}/history`);
-    if (!res.ok) throw new Error('Failed to load ride history');
-    const data = await res.json();
+    let data = null;
+    try {
+      const res = await fetch(`/api/rides/${rideId}/history`);
+      if (res.ok) data = await res.json();
+    } catch (e) {}
 
-    updateChartStatsStrip(data);
-    renderWaitCurveChart(data);
+    if (!data) {
+      try {
+        const staticRes = await fetch('data/ride_curves.json');
+        if (staticRes.ok) {
+          const curvesMap = await staticRes.json();
+          data = curvesMap[String(rideId)];
+        }
+      } catch (e) {}
+    }
+
+    if (data) {
+      // If current_wait is missing from static curve, match with live state.rides
+      if (data.current_wait === undefined) {
+        const liveRide = state.rides.find(r => r.id === Number(rideId));
+        data.current_wait = liveRide ? liveRide.wait_time : 0;
+        data.is_open = liveRide ? liveRide.is_open : true;
+      }
+      updateChartStatsStrip(data);
+      renderWaitCurveChart(data);
+    }
   } catch (err) {
     console.error('Error loading ride chart data:', err);
   } finally {
@@ -1571,12 +1700,27 @@ async function renderHistoricalCalendar() {
   if (!tbody) return;
 
   try {
-    const res = await fetch(`/api/history/calendar?limit=40&holiday_only=${holidayOnly}`);
-    if (!res.ok) throw new Error('Failed to fetch calendar');
-    const days = await res.json();
+    let days = null;
+    try {
+      const res = await fetch(`/api/history/calendar?limit=40&holiday_only=${holidayOnly}`);
+      if (res.ok) days = await res.json();
+    } catch (e) {}
+
+    if (!days) {
+      try {
+        const staticRes = await fetch('data/calendar.json');
+        if (staticRes.ok) {
+          days = await staticRes.json();
+          if (holidayOnly) {
+            days = days.filter(d => d.holiday && d.holiday !== 'None');
+          }
+          days = days.slice(0, 40);
+        }
+      } catch (e) {}
+    }
 
     tbody.innerHTML = '';
-    if (days.length === 0) {
+    if (!days || days.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No calendar records found.</td></tr>';
       return;
     }
@@ -1774,9 +1918,30 @@ async function loadLeastBusyDays(parkId = 6) {
   container.innerHTML = `<div class="park-card-skeleton" style="height: 220px; border-radius: 16px;"></div>`;
 
   try {
-    const res = await fetch(`/api/history/parks/${parkId}/least-busy-days`);
-    if (!res.ok) throw new Error('Failed to fetch least busy days');
-    const data = await res.json();
+    let data = null;
+    try {
+      const res = await fetch(`/api/history/parks/${parkId}/least-busy-days`);
+      if (res.ok) data = await res.json();
+    } catch (e) {}
+
+    if (!data) {
+      try {
+        const staticRes = await fetch(`data/least_busy_${parkId}.json`);
+        if (staticRes.ok) data = await staticRes.json();
+      } catch (e) {}
+    }
+
+    if (!data) {
+      try {
+        const staticAllRes = await fetch('data/least_busy_all.json');
+        if (staticAllRes.ok) {
+          const allMap = await staticAllRes.json();
+          data = allMap[String(parkId)];
+        }
+      } catch (e) {}
+    }
+
+    if (!data) throw new Error('Failed to fetch least busy days');
     renderLeastBusyDays(data);
   } catch (err) {
     console.error('Error loading least busy days:', err);

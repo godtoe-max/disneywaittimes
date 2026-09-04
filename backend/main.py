@@ -265,6 +265,15 @@ async def trigger_sync():
 
 # Frontend Static Assets & Page
 if os.path.isdir(FRONTEND_DIR):
+    css_dir = os.path.join(FRONTEND_DIR, "css")
+    js_dir = os.path.join(FRONTEND_DIR, "js")
+    data_dir = os.path.join(FRONTEND_DIR, "data")
+    if os.path.isdir(css_dir):
+        app.mount("/css", StaticFiles(directory=css_dir), name="css")
+    if os.path.isdir(js_dir):
+        app.mount("/js", StaticFiles(directory=js_dir), name="js")
+    if os.path.isdir(data_dir):
+        app.mount("/data", StaticFiles(directory=data_dir), name="data")
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 @app.get("/")
