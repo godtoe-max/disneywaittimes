@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# SQLite local databases (bundled history is in frontend/data/)
+*.db
+*.db-wal
+*.db-shm
+disney_wait_times.db
+wait_times.db
+
+# Logs & temp
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

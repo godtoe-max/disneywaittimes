@@ -1,0 +1,1282 @@
+{
+  "129": {
+    "name": "Seven Dwarfs Mine Train",
+    "park_id": 6,
+    "tier": "E",
+    "tier_label": "E-Ticket Headliner",
+    "ratio": 1.0,
+    "pph": 1500,
+    "ll_type": "single_pass",
+    "typical_min_wait": 35
+  },
+  "11527": {
+    "name": "TRON Lightcycle / Run",
+    "park_id": 6,
+    "tier": "E",
+    "tier_label": "E-Ticket Mega-Thrill",
+    "ratio": 1.1,
+    "pph": 1600,
+    "ll_type": "single_pass",
+    "typical_min_wait": 45
+  },
+  "13630": {
+    "name": "Tiana's Bayou Adventure",
+    "park_id": 6,
+    "tier": "E",
+    "tier_label": "E-Ticket Headliner",
+    "ratio": 0.95,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 30
+  },
+  "138": {
+    "name": "Space Mountain",
+    "park_id": 6,
+    "tier": "E",
+    "tier_label": "E-Ticket Classic Coaster",
+    "ratio": 0.85,
+    "pph": 1700,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "130": {
+    "name": "Big Thunder Mountain Railroad",
+    "park_id": 6,
+    "tier": "E",
+    "tier_label": "E-Ticket Mountain Coaster",
+    "ratio": 0.8,
+    "pph": 1900,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "136": {
+    "name": "Peter Pan's Flight",
+    "park_id": 6,
+    "tier": "E-ANOMALY",
+    "tier_label": "E-Capacity Bottleneck",
+    "ratio": 0.85,
+    "pph": 800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 35
+  },
+  "140": {
+    "name": "Haunted Mansion",
+    "park_id": 6,
+    "tier": "D",
+    "tier_label": "D-Ticket Classic Omnimover",
+    "ratio": 0.6,
+    "pph": 2600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "137": {
+    "name": "Pirates of the Caribbean",
+    "park_id": 6,
+    "tier": "D",
+    "tier_label": "D-Ticket High-Capacity Classic",
+    "ratio": 0.55,
+    "pph": 3000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "134": {
+    "name": "Jungle Cruise",
+    "park_id": 6,
+    "tier": "D",
+    "tier_label": "D-Ticket Adventure Classic",
+    "ratio": 0.65,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "146": {
+    "name": "Meet Mickey at Town Square Theater",
+    "park_id": 6,
+    "tier": "D",
+    "tier_label": "D-Ticket Character Meet",
+    "ratio": 0.5,
+    "pph": 700,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "6700": {
+    "name": "Meet Cinderella and a Visiting Princess",
+    "park_id": 6,
+    "tier": "D",
+    "tier_label": "D-Ticket Character Meet",
+    "ratio": 0.55,
+    "pph": 600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "6699": {
+    "name": "Meet Princess Tiana and a Visiting Princess",
+    "park_id": 6,
+    "tier": "D",
+    "tier_label": "D-Ticket Character Meet",
+    "ratio": 0.5,
+    "pph": 600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "131": {
+    "name": "Buzz Lightyear's Space Ranger Spin",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket Interactive Dark Ride",
+    "ratio": 0.4,
+    "pph": 2100,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "142": {
+    "name": "The Many Adventures of Winnie the Pooh",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket Family Dark Ride",
+    "ratio": 0.38,
+    "pph": 1400,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "127": {
+    "name": "Under the Sea - Journey of The Little Mermaid",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket Omnimover",
+    "ratio": 0.3,
+    "pph": 2200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "133": {
+    "name": "'it's a small world'",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket High-Capacity Boat Ride",
+    "ratio": 0.32,
+    "pph": 3000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "128": {
+    "name": "Enchanted Tales with Belle",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket Interactive Storytelling",
+    "ratio": 0.35,
+    "pph": 700,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "143": {
+    "name": "Tomorrowland Speedway",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket Driving Track",
+    "ratio": 0.32,
+    "pph": 1200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "125": {
+    "name": "Monsters, Inc. Laugh Floor",
+    "park_id": 6,
+    "tier": "C",
+    "tier_label": "C-Ticket Interactive Comedy Show",
+    "ratio": 0.25,
+    "pph": 1600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "132": {
+    "name": "Dumbo the Flying Elephant",
+    "park_id": 6,
+    "tier": "B",
+    "tier_label": "B-Ticket Classic Spinner",
+    "ratio": 0.22,
+    "pph": 1100,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "135": {
+    "name": "Mad Tea Party",
+    "park_id": 6,
+    "tier": "B",
+    "tier_label": "B-Ticket Spinner",
+    "ratio": 0.18,
+    "pph": 1300,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 5
+  },
+  "141": {
+    "name": "The Magic Carpets of Aladdin",
+    "park_id": 6,
+    "tier": "B",
+    "tier_label": "B-Ticket Spinner",
+    "ratio": 0.2,
+    "pph": 900,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 5
+  },
+  "126": {
+    "name": "The Barnstormer",
+    "park_id": 6,
+    "tier": "B",
+    "tier_label": "B-Ticket Junior Coaster",
+    "ratio": 0.22,
+    "pph": 850,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "248": {
+    "name": "Astro Orbiter",
+    "park_id": 6,
+    "tier": "B",
+    "tier_label": "B-Ticket Elevated Spinner",
+    "ratio": 0.25,
+    "pph": 650,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "161": {
+    "name": "Prince Charming Regal Carrousel",
+    "park_id": 6,
+    "tier": "B",
+    "tier_label": "B-Ticket Carrousel",
+    "ratio": 0.15,
+    "pph": 1400,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "1190": {
+    "name": "Tomorrowland Transit Authority PeopleMover",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Continuous Transit",
+    "ratio": 0.08,
+    "pph": 4200,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "457": {
+    "name": "Walt Disney's Carousel of Progress",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Revolving Theater",
+    "ratio": 0.05,
+    "pph": 3600,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "356": {
+    "name": "The Hall of Presidents",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Historical Theater",
+    "ratio": 0.05,
+    "pph": 2800,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "334": {
+    "name": "Walt Disney's Enchanted Tiki Room",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Audio-Animatronic Show",
+    "ratio": 0.05,
+    "pph": 2500,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "1214": {
+    "name": "Country Bear Musical Jamboree",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Musical Revue",
+    "ratio": 0.06,
+    "pph": 2200,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "171": {
+    "name": "Mickey's PhilharMagic",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket 3D Theater Show",
+    "ratio": 0.1,
+    "pph": 3200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 5
+  },
+  "355": {
+    "name": "Swiss Family Treehouse",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Walk-Through",
+    "ratio": 0.02,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 0
+  },
+  "1181": {
+    "name": "Walt Disney World Railroad - Fantasyland",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Scenic Railway",
+    "ratio": 0.1,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "1189": {
+    "name": "Walt Disney World Railroad - Main Street, U.S.A.",
+    "park_id": 6,
+    "tier": "A",
+    "tier_label": "A-Ticket Scenic Railway",
+    "ratio": 0.1,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "10916": {
+    "name": "Guardians of the Galaxy: Cosmic Rewind",
+    "park_id": 5,
+    "tier": "E",
+    "tier_label": "E-Ticket OmniCoaster",
+    "ratio": 1.25,
+    "pph": 2000,
+    "ll_type": "single_pass",
+    "typical_min_wait": 50
+  },
+  "2679": {
+    "name": "Frozen Ever After",
+    "park_id": 5,
+    "tier": "E",
+    "tier_label": "E-Ticket World Showcase Headliner",
+    "ratio": 1.15,
+    "pph": 1200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 40
+  },
+  "10914": {
+    "name": "Remy's Ratatouille Adventure",
+    "park_id": 5,
+    "tier": "E",
+    "tier_label": "E-Ticket Trackless 3D Dark Ride",
+    "ratio": 1.1,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 40
+  },
+  "160": {
+    "name": "Test Track",
+    "park_id": 5,
+    "tier": "E",
+    "tier_label": "E-Ticket High-Speed Thrill",
+    "ratio": 1.05,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 35
+  },
+  "16467": {
+    "name": "Soarin' Across America",
+    "park_id": 5,
+    "tier": "E",
+    "tier_label": "E-Ticket Flight Simulator",
+    "ratio": 1.0,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "159": {
+    "name": "Spaceship Earth",
+    "park_id": 5,
+    "tier": "D",
+    "tier_label": "D-Ticket Iconic Omnimover",
+    "ratio": 0.65,
+    "pph": 2800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "158": {
+    "name": "Mission: SPACE",
+    "park_id": 5,
+    "tier": "D",
+    "tier_label": "D-Ticket Centrifuge Simulator",
+    "ratio": 0.5,
+    "pph": 1500,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "6701": {
+    "name": "Meet Anna and Elsa at Royal Sommerhus",
+    "park_id": 5,
+    "tier": "D",
+    "tier_label": "D-Ticket Character Meet",
+    "ratio": 0.55,
+    "pph": 600,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "155": {
+    "name": "Journey Into Imagination With Figment",
+    "park_id": 5,
+    "tier": "C",
+    "tier_label": "C-Ticket Classic Dark Ride",
+    "ratio": 0.25,
+    "pph": 2200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 5
+  },
+  "156": {
+    "name": "Living with the Land",
+    "park_id": 5,
+    "tier": "C",
+    "tier_label": "C-Ticket Boat Tour",
+    "ratio": 0.28,
+    "pph": 2400,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 5
+  },
+  "153": {
+    "name": "The Seas with Nemo & Friends",
+    "park_id": 5,
+    "tier": "C",
+    "tier_label": "C-Ticket Omnimover",
+    "ratio": 0.22,
+    "pph": 2200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 5
+  },
+  "152": {
+    "name": "Turtle Talk With Crush",
+    "park_id": 5,
+    "tier": "C",
+    "tier_label": "C-Ticket Interactive Show",
+    "ratio": 0.2,
+    "pph": 1200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "466": {
+    "name": "Gran Fiesta Tour Starring The Three Caballeros",
+    "park_id": 5,
+    "tier": "C",
+    "tier_label": "C-Ticket World Showcase Boat Ride",
+    "ratio": 0.18,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "12387": {
+    "name": "Journey of Water, Inspired by Moana",
+    "park_id": 5,
+    "tier": "A",
+    "tier_label": "A-Ticket Interactive Trail",
+    "ratio": 0.1,
+    "pph": 1800,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "7323": {
+    "name": "Awesome Planet",
+    "park_id": 5,
+    "tier": "A",
+    "tier_label": "A-Ticket Nature Film",
+    "ratio": 0.05,
+    "pph": 1500,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "6369": {
+    "name": "Star Wars: Rise of the Resistance",
+    "park_id": 7,
+    "tier": "E",
+    "tier_label": "E-Ticket Multi-System Mega-Experience",
+    "ratio": 1.25,
+    "pph": 1700,
+    "ll_type": "single_pass",
+    "typical_min_wait": 55
+  },
+  "5476": {
+    "name": "Slinky Dog Dash",
+    "park_id": 7,
+    "tier": "E",
+    "tier_label": "E-Ticket Family Coaster Anchor",
+    "ratio": 1.0,
+    "pph": 1400,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 45
+  },
+  "6361": {
+    "name": "Mickey & Minnie's Runaway Railway",
+    "park_id": 7,
+    "tier": "E",
+    "tier_label": "E-Ticket Trackless Dark Ride",
+    "ratio": 0.85,
+    "pph": 1900,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 30
+  },
+  "123": {
+    "name": "The Twilight Zone Tower of Terror",
+    "park_id": 7,
+    "tier": "E",
+    "tier_label": "E-Ticket Drop Tower Classic",
+    "ratio": 0.85,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 30
+  },
+  "6368": {
+    "name": "Millennium Falcon: Smugglers Run",
+    "park_id": 7,
+    "tier": "E",
+    "tier_label": "E-Ticket Interactive Simulator",
+    "ratio": 0.8,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "16342": {
+    "name": "Rock 'n' Roller Coaster",
+    "park_id": 7,
+    "tier": "E",
+    "tier_label": "E-Ticket Launch Coaster",
+    "ratio": 0.8,
+    "pph": 1700,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "117": {
+    "name": "Toy Story Mania!",
+    "park_id": 7,
+    "tier": "D",
+    "tier_label": "D-Ticket 4D Arcade Ride",
+    "ratio": 0.65,
+    "pph": 2200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "5477": {
+    "name": "Alien Swirling Saucers",
+    "park_id": 7,
+    "tier": "D",
+    "tier_label": "D-Ticket Spinner",
+    "ratio": 0.45,
+    "pph": 900,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "120": {
+    "name": "Star Tours - The Adventures Continue",
+    "park_id": 7,
+    "tier": "D",
+    "tier_label": "D-Ticket Motion Simulator",
+    "ratio": 0.35,
+    "pph": 2000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "1174": {
+    "name": "For the First Time in Forever: A Frozen Sing-Along",
+    "park_id": 7,
+    "tier": "A",
+    "tier_label": "A-Ticket Theater Show",
+    "ratio": 0.1,
+    "pph": 2200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "6702": {
+    "name": "Indiana Jones Epic Stunt Spectacular!",
+    "park_id": 7,
+    "tier": "A",
+    "tier_label": "A-Ticket Live Stunt Show",
+    "ratio": 0.1,
+    "pph": 2000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "4439": {
+    "name": "Avatar Flight of Passage",
+    "park_id": 8,
+    "tier": "E",
+    "tier_label": "E-Ticket Immersive Flying Simulator Anchor",
+    "ratio": 1.0,
+    "pph": 1600,
+    "ll_type": "single_pass",
+    "typical_min_wait": 50
+  },
+  "4438": {
+    "name": "Na'vi River Journey",
+    "park_id": 8,
+    "tier": "E",
+    "tier_label": "E-Ticket Bioluminescent Boat Ride",
+    "ratio": 0.7,
+    "pph": 1300,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "110": {
+    "name": "Expedition Everest - Legend of the Forbidden Mountain",
+    "park_id": 8,
+    "tier": "E",
+    "tier_label": "E-Ticket Mountain Coaster",
+    "ratio": 0.65,
+    "pph": 2000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "113": {
+    "name": "Kilimanjaro Safaris",
+    "park_id": 8,
+    "tier": "E",
+    "tier_label": "E-Ticket Real Wildlife Safari",
+    "ratio": 0.65,
+    "pph": 2600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "112": {
+    "name": "Kali River Rapids",
+    "park_id": 8,
+    "tier": "D",
+    "tier_label": "D-Ticket White Water Rafting",
+    "ratio": 0.45,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "116": {
+    "name": "Meet Favorite Disney Pals at Adventurers Outpost",
+    "park_id": 8,
+    "tier": "D",
+    "tier_label": "D-Ticket Character Meet",
+    "ratio": 0.4,
+    "pph": 600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "657": {
+    "name": "Festival of the Lion King",
+    "park_id": 8,
+    "tier": "A",
+    "tier_label": "A-Ticket Acrobatic Musical Show",
+    "ratio": 0.1,
+    "pph": 2800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "10920": {
+    "name": "Finding Nemo: The Big Blue... and Beyond!",
+    "park_id": 8,
+    "tier": "A",
+    "tier_label": "A-Ticket Musical Theater Show",
+    "ratio": 0.1,
+    "pph": 2400,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 10
+  },
+  "284": {
+    "name": "Space Mountain",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Sci-Fi Coaster",
+    "ratio": 1.0,
+    "pph": 1600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 30
+  },
+  "326": {
+    "name": "Indiana Jones\u2122 Adventure",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Motion Vehicle Thrill",
+    "ratio": 0.95,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 30
+  },
+  "6340": {
+    "name": "Star Wars: Rise of the Resistance",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Immersive Mega-Attraction",
+    "ratio": 1.25,
+    "pph": 1700,
+    "ll_type": "single_pass",
+    "typical_min_wait": 45
+  },
+  "279": {
+    "name": "Matterhorn Bobsleds",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Classic Mountain Coaster",
+    "ratio": 0.85,
+    "pph": 1500,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "323": {
+    "name": "Big Thunder Mountain Railroad",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Runaway Mine Train",
+    "ratio": 0.75,
+    "pph": 2000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "6339": {
+    "name": "Millennium Falcon: Smugglers Run",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Interactive Cockpit Flight",
+    "ratio": 0.8,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "11526": {
+    "name": "Mickey & Minnie's Runaway Railway",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Trackless Cartoon Dark Ride",
+    "ratio": 0.85,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "14168": {
+    "name": "Tiana's Bayou Adventure",
+    "park_id": 16,
+    "tier": "E",
+    "tier_label": "E-Ticket Musical Flume Drop",
+    "ratio": 1.05,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 35
+  },
+  "281": {
+    "name": "Peter Pan's Flight",
+    "park_id": 16,
+    "tier": "E-ANOMALY",
+    "tier_label": "Low-Capacity Nostalgic Dark Ride",
+    "ratio": 0.9,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 35
+  },
+  "325": {
+    "name": "Haunted Mansion",
+    "park_id": 16,
+    "tier": "D",
+    "tier_label": "D-Ticket Classic Omnimover",
+    "ratio": 0.7,
+    "pph": 2400,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "289": {
+    "name": "Pirates of the Caribbean",
+    "park_id": 16,
+    "tier": "D",
+    "tier_label": "D-Ticket Classic High-Capacity Boat Ride",
+    "ratio": 0.65,
+    "pph": 2800,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "296": {
+    "name": "Jungle Cruise",
+    "park_id": 16,
+    "tier": "D",
+    "tier_label": "D-Ticket Guided River Cruise",
+    "ratio": 0.55,
+    "pph": 1800,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "286": {
+    "name": "Star Tours - The Adventures Continue",
+    "park_id": 16,
+    "tier": "D",
+    "tier_label": "D-Ticket Motion Simulator Flight",
+    "ratio": 0.5,
+    "pph": 1600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "273": {
+    "name": "Buzz Lightyear Astro Blasters",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Interactive Laser Ride",
+    "ratio": 0.45,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "285": {
+    "name": "Alice in Wonderland",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Two-Level Dark Ride",
+    "ratio": 0.5,
+    "pph": 900,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "276": {
+    "name": "Finding Nemo Submarine Voyage",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Submarine Lagoon Expedition",
+    "ratio": 0.45,
+    "pph": 1000,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "332": {
+    "name": "Roger Rabbit's Car Toon Spin",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Spinning Dark Ride",
+    "ratio": 0.45,
+    "pph": 1200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "280": {
+    "name": "Mr. Toad's Wild Ride",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Classic Dark Ride",
+    "ratio": 0.4,
+    "pph": 900,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "283": {
+    "name": "Snow White's Enchanted Wish",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Fantasyland Storybook Ride",
+    "ratio": 0.4,
+    "pph": 900,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "282": {
+    "name": "Pinocchio's Daring Journey",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Fantasyland Dark Ride",
+    "ratio": 0.35,
+    "pph": 900,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "275": {
+    "name": "Dumbo the Flying Elephant",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Beloved Aerial Spinner",
+    "ratio": 0.45,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "307": {
+    "name": "\"it's a small world\"",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Global Musical Boat Cruise",
+    "ratio": 0.4,
+    "pph": 3000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "324": {
+    "name": "Chip 'n' Dale's GADGETcoaster",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Family Junior Coaster",
+    "ratio": 0.35,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "306": {
+    "name": "The Many Adventures of Winnie the Pooh",
+    "park_id": 16,
+    "tier": "C",
+    "tier_label": "C-Ticket Gentle Honey Pot Tour",
+    "ratio": 0.3,
+    "pph": 1000,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "278": {
+    "name": "Mad Tea Party",
+    "park_id": 16,
+    "tier": "B",
+    "tier_label": "B-Ticket Whimsical Spinning Teacups",
+    "ratio": 0.25,
+    "pph": 900,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "287": {
+    "name": "Astro Orbitor",
+    "park_id": 16,
+    "tier": "B",
+    "tier_label": "B-Ticket Elevated Rocket Spinner",
+    "ratio": 0.3,
+    "pph": 700,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "317": {
+    "name": "Autopia",
+    "park_id": 16,
+    "tier": "B",
+    "tier_label": "B-Ticket Highway Motorway",
+    "ratio": 0.35,
+    "pph": 1200,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "303": {
+    "name": "Casey Jr. Circus Train",
+    "park_id": 16,
+    "tier": "B",
+    "tier_label": "B-Ticket Charming Scenic Railway",
+    "ratio": 0.25,
+    "pph": 600,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "305": {
+    "name": "Storybook Land Canal Boats",
+    "park_id": 16,
+    "tier": "B",
+    "tier_label": "B-Ticket Miniature Village Canal Tour",
+    "ratio": 0.25,
+    "pph": 600,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "674": {
+    "name": "Disneyland Railroad",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Grand Circle Steam Tour",
+    "ratio": 0.15,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "274": {
+    "name": "Disneyland Monorail",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Highway in the Sky",
+    "ratio": 0.15,
+    "pph": 1500,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "288": {
+    "name": "Walt Disney's Enchanted Tiki Room",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Tropical Bird Musical",
+    "ratio": 0.08,
+    "pph": 2400,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "690": {
+    "name": "Great Moments with Mr. Lincoln",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Patriotic Historic Presentation",
+    "ratio": 0.05,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "687": {
+    "name": "Sleeping Beauty Castle Walkthrough",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Castle Interior Exhibit",
+    "ratio": 0.05,
+    "pph": 1000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "456": {
+    "name": "Mark Twain Riverboat",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Rivers of America Paddlewheeler",
+    "ratio": 0.1,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "328": {
+    "name": "Sailing Ship Columbia",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Historic Tall Ship Voyage",
+    "ratio": 0.1,
+    "pph": 1500,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "304": {
+    "name": "Davy Crockett's Explorer Canoes",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Hand-Powered River Canoe",
+    "ratio": 0.1,
+    "pph": 600,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "12428": {
+    "name": "Adventureland Treehouse",
+    "park_id": 16,
+    "tier": "A",
+    "tier_label": "A-Ticket Walkthrough Jungle Canopy",
+    "ratio": 0.05,
+    "pph": 1200,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "295": {
+    "name": "Radiator Springs Racers",
+    "park_id": 17,
+    "tier": "E",
+    "tier_label": "E-Ticket Route 66 Slot-Car Thrill",
+    "ratio": 1.0,
+    "pph": 1800,
+    "ll_type": "single_pass",
+    "typical_min_wait": 45
+  },
+  "329": {
+    "name": "Guardians of the Galaxy - Mission: BREAKOUT!",
+    "park_id": 17,
+    "tier": "E",
+    "tier_label": "E-Ticket Randomized Cosmic Drop Tower",
+    "ratio": 0.85,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 30
+  },
+  "322": {
+    "name": "Incredicoaster",
+    "park_id": 17,
+    "tier": "E",
+    "tier_label": "E-Ticket High-Speed Looping Coaster",
+    "ratio": 0.7,
+    "pph": 2000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "8843": {
+    "name": "WEB SLINGERS: A Spider-Man Adventure",
+    "park_id": 17,
+    "tier": "E",
+    "tier_label": "E-Ticket Interactive 3D Web-Shooter",
+    "ratio": 0.75,
+    "pph": 1500,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 25
+  },
+  "17129": {
+    "name": "Soarin' Across America",
+    "park_id": 17,
+    "tier": "E",
+    "tier_label": "E-Ticket IMAX Hang-Glider Flight",
+    "ratio": 0.65,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "302": {
+    "name": "Grizzly River Run",
+    "park_id": 17,
+    "tier": "E",
+    "tier_label": "E-Ticket White-Water Rapid Rafting",
+    "ratio": 0.65,
+    "pph": 1800,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "313": {
+    "name": "Toy Story Midway Mania!",
+    "park_id": 17,
+    "tier": "D",
+    "tier_label": "D-Ticket 4D Carnival Arcade Ride",
+    "ratio": 0.6,
+    "pph": 1600,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 20
+  },
+  "291": {
+    "name": "Monsters, Inc. Mike & Sulley to the Rescue!",
+    "park_id": 17,
+    "tier": "D",
+    "tier_label": "D-Ticket Monstropolis Taxi Cab Dark Ride",
+    "ratio": 0.5,
+    "pph": 1400,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "319": {
+    "name": "Goofy's Sky School",
+    "park_id": 17,
+    "tier": "D",
+    "tier_label": "D-Ticket Wild Mouse Roller Coaster",
+    "ratio": 0.45,
+    "pph": 1000,
+    "ll_type": "multi_pass",
+    "typical_min_wait": 15
+  },
+  "316": {
+    "name": "The Little Mermaid - Ariel's Undersea Adventure",
+    "park_id": 17,
+    "tier": "C",
+    "tier_label": "C-Ticket Musical Clamshell Omnimover",
+    "ratio": 0.3,
+    "pph": 2400,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "2608": {
+    "name": "Luigi's Rollickin' Roadsters",
+    "park_id": 17,
+    "tier": "C",
+    "tier_label": "C-Ticket Trackless Dancing Convertibles",
+    "ratio": 0.35,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "4723": {
+    "name": "Mater's Junkyard Jamboree",
+    "park_id": 17,
+    "tier": "C",
+    "tier_label": "C-Ticket Square-Dancing Tractor Whip",
+    "ratio": 0.35,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "311": {
+    "name": "Pixar Pal-A-Round - Swinging",
+    "park_id": 17,
+    "tier": "C",
+    "tier_label": "C-Ticket Intense Sliding Ferris Wheel",
+    "ratio": 0.45,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 15
+  },
+  "5557": {
+    "name": "Pixar Pal-A-Round - Non-Swinging",
+    "park_id": 17,
+    "tier": "C",
+    "tier_label": "C-Ticket Traditional Ferris Wheel",
+    "ratio": 0.35,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "301": {
+    "name": "Silly Symphony Swings",
+    "park_id": 17,
+    "tier": "C",
+    "tier_label": "C-Ticket Wave Swinger Over the Lagoon",
+    "ratio": 0.25,
+    "pph": 800,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "300": {
+    "name": "Jumpin' Jellyfish",
+    "park_id": 17,
+    "tier": "B",
+    "tier_label": "B-Ticket Parachute Jump",
+    "ratio": 0.2,
+    "pph": 600,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "298": {
+    "name": "Golden Zephyr",
+    "park_id": 17,
+    "tier": "B",
+    "tier_label": "B-Ticket Retro Rocket Spinner",
+    "ratio": 0.15,
+    "pph": 600,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "6643": {
+    "name": "Inside Out Emotional Whirlwind",
+    "park_id": 17,
+    "tier": "B",
+    "tier_label": "B-Ticket Family Balloon Spinner",
+    "ratio": 0.25,
+    "pph": 700,
+    "ll_type": "none",
+    "typical_min_wait": 10
+  },
+  "310": {
+    "name": "Jessie's Critter Carousel",
+    "park_id": 17,
+    "tier": "B",
+    "tier_label": "B-Ticket Seaside Carousel",
+    "ratio": 0.2,
+    "pph": 900,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "321": {
+    "name": "Animation Academy",
+    "park_id": 17,
+    "tier": "A",
+    "tier_label": "A-Ticket Disney Artist Drawing Class",
+    "ratio": 0.1,
+    "pph": 1000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "294": {
+    "name": "Turtle Talk with Crush",
+    "park_id": 17,
+    "tier": "A",
+    "tier_label": "A-Ticket Interactive Animated Comedy",
+    "ratio": 0.1,
+    "pph": 1200,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  },
+  "6440": {
+    "name": "Mickey's PhilharMagic",
+    "park_id": 17,
+    "tier": "A",
+    "tier_label": "A-Ticket 3D Musical Concert",
+    "ratio": 0.08,
+    "pph": 2000,
+    "ll_type": "none",
+    "typical_min_wait": 5
+  }
+}

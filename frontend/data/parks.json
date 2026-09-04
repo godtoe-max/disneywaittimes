@@ -1,0 +1,38 @@
+[
+  {
+    "id": 5,
+    "name": "EPCOT",
+    "resort": "Walt Disney World",
+    "timezone": "America/New_York"
+  },
+  {
+    "id": 6,
+    "name": "Magic Kingdom",
+    "resort": "Walt Disney World",
+    "timezone": "America/New_York"
+  },
+  {
+    "id": 7,
+    "name": "Disney's Hollywood Studios",
+    "resort": "Walt Disney World",
+    "timezone": "America/New_York"
+  },
+  {
+    "id": 8,
+    "name": "Disney's Animal Kingdom",
+    "resort": "Walt Disney World",
+    "timezone": "America/New_York"
+  },
+  {
+    "id": 16,
+    "name": "Disneyland Park",
+    "resort": "Disneyland Resort",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "id": 17,
+    "name": "Disney California Adventure",
+    "resort": "Disneyland Resort",
+    "timezone": "America/Los_Angeles"
+  }
+]
