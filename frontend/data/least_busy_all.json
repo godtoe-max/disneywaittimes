@@ -630,7 +630,7 @@
         "formatted_date": "Friday, Sep 04, 2026",
         "short_date": "Sep 04",
         "day_of_week": "Friday",
-        "avg_wait": 12.4,
+        "avg_wait": 12.5,
         "peak_wait": 90,
         "min_wait": 0,
         "crowd_level": {
@@ -643,7 +643,7 @@
           "bg_color": "rgba(16, 185, 129, 0.15)",
           "icon": "\ud83d\udfe2",
           "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
-          "pct_of_normal": 27.6
+          "pct_of_normal": 27.8
         },
         "holiday": "Regular Operating Day",
         "season": "REGULAR",
@@ -1250,7 +1250,7 @@
         "formatted_date": "Friday, Sep 04, 2026",
         "short_date": "Sep 04",
         "day_of_week": "Friday",
-        "avg_wait": 10.4,
+        "avg_wait": 10.5,
         "peak_wait": 120,
         "min_wait": 0,
         "crowd_level": {
@@ -1263,7 +1263,7 @@
           "bg_color": "rgba(16, 185, 129, 0.15)",
           "icon": "\ud83d\udfe2",
           "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
-          "pct_of_normal": 21.7
+          "pct_of_normal": 21.9
         },
         "holiday": "Regular Operating Day",
         "season": "REGULAR",
@@ -2386,7 +2386,7 @@
         "formatted_date": "Friday, Sep 04, 2026",
         "short_date": "Sep 04",
         "day_of_week": "Friday",
-        "avg_wait": 6.0,
+        "avg_wait": 6.2,
         "peak_wait": 45,
         "min_wait": 0,
         "crowd_level": {
@@ -2399,7 +2399,7 @@
           "bg_color": "rgba(16, 185, 129, 0.15)",
           "icon": "\ud83d\udfe2",
           "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
-          "pct_of_normal": 13.3
+          "pct_of_normal": 13.8
         },
         "holiday": "Regular Operating Day",
         "season": "REGULAR",
@@ -2980,7 +2980,7 @@
         "formatted_date": "Friday, Sep 04, 2026",
         "short_date": "Sep 04",
         "day_of_week": "Friday",
-        "avg_wait": 5.1,
+        "avg_wait": 5.3,
         "peak_wait": 80,
         "min_wait": 0,
         "crowd_level": {
@@ -2993,7 +2993,7 @@
           "bg_color": "rgba(16, 185, 129, 0.15)",
           "icon": "\ud83d\udfe2",
           "description": "Near-zero lines across major rides! Exceptional walk-on conditions.",
-          "pct_of_normal": 10.6
+          "pct_of_normal": 11.0
         },
         "holiday": "Regular Operating Day",
         "season": "REGULAR",
@@ -3410,7 +3410,7 @@
       {
         "day_index": 4,
         "day_name": "Friday",
-        "avg_wait": 50.0,
+        "avg_wait": 50.1,
         "samples": 10,
         "crowd_level": {
           "level": "normal",
@@ -3422,7 +3422,7 @@
           "bg_color": "rgba(245, 158, 11, 0.15)",
           "icon": "\ud83d\udfe1",
           "description": "Standard crowd volume. Headliners have typical lines (45-75m), secondary rides are manageable.",
-          "pct_of_normal": 104.2
+          "pct_of_normal": 104.4
         }
       },
       {
