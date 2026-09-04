@@ -191,5 +191,18 @@ class TestDisneyWaitTimesTracker(unittest.TestCase):
         self.assertIn("top_least_busy_days", data_dl)
         self.assertGreater(len(data_dl["top_least_busy_days"]), 0)
 
+    def test_10_cloud_push_dispatcher_logic(self):
+        """Test cloud push dispatcher subscription loading and structure."""
+        from backend.cloud_push_dispatcher import (
+            VAPID_PUBLIC_KEY,
+            VAPID_PRIVATE_KEY,
+            load_subscriptions,
+            save_subscriptions
+        )
+        self.assertTrue(len(VAPID_PUBLIC_KEY) > 20)
+        self.assertTrue(len(VAPID_PRIVATE_KEY) > 20)
+        subs = load_subscriptions()
+        self.assertIsInstance(subs, list)
+
 if __name__ == "__main__":
     unittest.main()

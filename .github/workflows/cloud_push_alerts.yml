@@ -1,0 +1,32 @@
+name: Disney Wait Times Cloud Push Dispatcher
+
+on:
+  schedule:
+    # Run every 5 minutes during active US Disney park hours (13:00 UTC to 05:00 UTC)
+    - cron: '*/5 13-23,0-5 * * *'
+  workflow_dispatch: # Allows manual one-click test trigger
+
+jobs:
+  dispatch_push_alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Cloud Push Dispatcher
+        env:
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY || 'BEx8URoFAQgYpSFA5dLFzRPe8jSspI7Dxd1Q-2mJgMtWl1COYwixDdcQDvm-vxPOEyqr65spANBvT_S--DQc6RY' }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY || 'uULVajWg8ZrPA1MFw8noOWbp1sdSKPGBozA_pFyTurU' }}
+        run: |
+          python backend/cloud_push_dispatcher.py

@@ -35,6 +35,39 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
+// Handle incoming Web Push notifications from Apple (APNs) and Google (FCM)
+self.addEventListener('push', (event) => {
+  let title = '🏰 Disney Wait Alert';
+  let options = {
+    body: 'A ride wait time threshold goal has been reached!',
+    icon: 'https://emojicdn.elk.sh/🏰?size=192',
+    badge: 'https://emojicdn.elk.sh/🔔?size=96',
+    vibrate: [400, 200, 400],
+    tag: `disney-goal-${Date.now()}`,
+    renotify: true,
+    requireInteraction: true,
+    data: { url: self.location.origin },
+  };
+
+  if (event.data) {
+    try {
+      const payload = event.data.json();
+      title = payload.title || title;
+      options.body = payload.body || payload.message || options.body;
+      if (payload.icon) options.icon = payload.icon;
+      if (payload.badge) options.badge = payload.badge;
+      if (payload.data) options.data = payload.data;
+      if (payload.tag) options.tag = payload.tag;
+    } catch (e) {
+      options.body = event.data.text() || options.body;
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
 // Listen for messages from the main window thread
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
@@ -43,9 +76,9 @@ self.addEventListener('message', (event) => {
     
     self.registration.showNotification(title, {
       body: options.body || '',
-      icon: options.icon || 'https://emojicdn.elk.sh/🏰',
-      badge: options.badge || 'https://emojicdn.elk.sh/🔔',
-      vibrate: options.vibrate || [300, 150, 300],
+      icon: options.icon || 'https://emojicdn.elk.sh/🏰?size=192',
+      badge: options.badge || 'https://emojicdn.elk.sh/🔔?size=96',
+      vibrate: options.vibrate || [400, 200, 400],
       tag: options.tag || `disney-alert-${Date.now()}`,
       renotify: true,
       requireInteraction: true,
@@ -66,4 +99,5 @@ self.addEventListener('periodicsync', (event) => {
     );
   }
 });
+
 

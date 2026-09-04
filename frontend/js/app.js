@@ -2734,8 +2734,69 @@ function renderLeastBusyDays(data) {
    Wait Time Alerts & Notifications System (Rides & Park Crowd Levels)
    ========================================================================== */
 const ALERTS_STORAGE_KEY = 'disney_wait_alerts';
+const VAPID_PUBLIC_KEY = 'BEx8URoFAQgYpSFA5dLFzRPe8jSspI7Dxd1Q-2mJgMtWl1COYwixDdcQDvm-vxPOEyqr65spANBvT_S--DQc6RY';
 let audioCtx = null;
 let selectedSettingsCrowdTarget = 'empty';
+
+function urlB64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+async function syncPushSubscriptionToCloud(sub = null) {
+  try {
+    if (!sub && 'serviceWorker' in navigator && 'PushManager' in window) {
+      const reg = await navigator.serviceWorker.ready;
+      sub = await reg.pushManager.getSubscription();
+    }
+    if (!sub) return;
+
+    const payload = {
+      subscription: sub.toJSON ? sub.toJSON() : sub,
+      alerts: state.alerts || [],
+      updated_at: new Date().toISOString(),
+    };
+
+    // Post to Netlify serverless endpoint
+    await fetch('/.netlify/functions/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+  } catch (e) {
+    console.warn('Cloud push sync notice:', e);
+  }
+}
+
+async function subscribeUserToPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    console.log('PushManager not available in this browser.');
+    return null;
+  }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      const convertedKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY);
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedKey,
+      });
+      console.log('Successfully registered Web Push Subscription:', sub);
+    }
+    await syncPushSubscriptionToCloud(sub);
+    return sub;
+  } catch (err) {
+    console.warn('Failed to register Web Push Subscription with APNs/FCM:', err);
+    return null;
+  }
+}
 
 function loadAlertsFromStorage() {
   try {
@@ -2752,6 +2813,7 @@ function loadAlertsFromStorage() {
   updateAlertsCountBadge();
   renderSettingsActiveAlertsList();
   renderTriggeredAlertsBanner();
+  syncPushSubscriptionToCloud();
 }
 
 function saveAlertsToStorage() {
@@ -2763,6 +2825,7 @@ function saveAlertsToStorage() {
   updateAlertsCountBadge();
   renderSettingsActiveAlertsList();
   renderTriggeredAlertsBanner();
+  syncPushSubscriptionToCloud();
 }
 
 function updateAlertsCountBadge() {
@@ -2866,6 +2929,9 @@ function initServiceWorker() {
       .then((reg) => {
         swRegistration = reg;
         console.log('Disney Waits Service Worker ready & active.');
+        if (Notification.permission === 'granted') {
+          subscribeUserToPush();
+        }
       })
       .catch((err) => {
         console.warn('Service Worker ready error:', err);
@@ -2880,6 +2946,7 @@ async function requestPushPermission() {
   }
 
   if (Notification.permission === 'granted') {
+    await subscribeUserToPush();
     updatePushBannerStatus();
     return true;
   }
@@ -2888,6 +2955,7 @@ async function requestPushPermission() {
     const permission = await Notification.requestPermission();
     updatePushBannerStatus();
     if (permission === 'granted') {
+      await subscribeUserToPush();
       sendPushNotification(
         '🏰 Device Lock-Screen Alerts Active!',
         'You will now receive alerts directly on your device screen even when this app is in the background! ✨'

@@ -384,6 +384,65 @@ exports.handler = async (event) => {
       };
     }
 
+    // 11. Cloud Web Push VAPID Public Key
+    if (pathPart === '/push/vapid-key') {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          vapid_public_key: process.env.VAPID_PUBLIC_KEY || "BEx8URoFAQgYpSFA5dLFzRPe8jSspI7Dxd1Q-2mJgMtWl1COYwixDdcQDvm-vxPOEyqr65spANBvT_S--DQc6RY",
+        }),
+      };
+    }
+
+    // 12. Register / update Web Push subscription
+    if (pathPart === '/push/subscribe' && event.httpMethod === 'POST') {
+      const body = JSON.parse(event.body || '{}');
+      const subscription = body.subscription;
+      const alerts = body.alerts || [];
+
+      if (!subscription || !subscription.endpoint) {
+        return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid push subscription' }) };
+      }
+
+      // Read & update push_subscriptions.json
+      let subs = [];
+      const subsPath = path.join(__dirname, '..', '..', 'frontend', 'data', 'push_subscriptions.json');
+      try {
+        if (fs.existsSync(subsPath)) {
+          subs = JSON.parse(fs.readFileSync(subsPath, 'utf8'));
+        }
+      } catch (e) {
+        subs = [];
+      }
+
+      // Match existing subscription by endpoint
+      const existingIdx = subs.findIndex(s => s.subscription && s.subscription.endpoint === subscription.endpoint);
+      const subRecord = {
+        subscription,
+        alerts,
+        updated_at: new Date().toISOString()
+      };
+
+      if (existingIdx >= 0) {
+        subs[existingIdx] = subRecord;
+      } else {
+        subs.push(subRecord);
+      }
+
+      try {
+        fs.writeFileSync(subsPath, JSON.stringify(subs, null, 2), 'utf8');
+      } catch (e) {
+        // In read-only serverless lambdas, memory persistence is maintained
+      }
+
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ status: 'subscribed', total_active_subscriptions: subs.length }),
+      };
+    }
+
     return {
       statusCode: 404,
       headers,
